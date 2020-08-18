@@ -27,6 +27,7 @@ subprojects {
     apply plugin: 'java-library'
     apply plugin: 'java'
     apply plugin: 'groovy'
+    apply plugin: 'maven-publish'
 
     dependencies {
         implementation 'org.springframework.boot:spring-boot-starter'
@@ -37,6 +38,24 @@ subprojects {
         testImplementation 'org.spockframework:spock-spring:1.2-groovy-2.4'
         testImplementation('org.springframework.boot:spring-boot-starter-test') {
             exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+        }
+    }
+
+    publishing {
+        repositories {
+            maven {
+                name = "GitHubPackages"
+                url = uri("https://maven.pkg.github.com/raynigon/unit-api-starter")
+                credentials {
+                    username = System.getenv("USERNAME") ?: null
+                    password = System.getenv("TOKEN") ?: null
+                }
+            }
+        }
+        publications {
+            gpr(MavenPublication) {
+                from(components.java)
+            }
         }
     }
 
