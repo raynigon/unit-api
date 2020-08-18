@@ -1,0 +1,4 @@
+rootProject.name = 'unit-api-starter'
+
+include 'jackson-starter'
+// include 'jpa-starter'
