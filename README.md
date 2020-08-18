@@ -1,4 +1,5 @@
 # unit-api-starter
+![CI](https://github.com/raynigon/unit-api-starter/workflows/CI/badge.svg)
 
 Spring Boot Starter for the java unit-api.
 
