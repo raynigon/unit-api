@@ -11,7 +11,7 @@ plugins {
 }
 
 allprojects {
-    group = 'com.example'
+    group = 'com.github.raynigon.unit-api-starter'
     version = '0.0.1-SNAPSHOT'
     sourceCompatibility = '1.8'
 }
@@ -21,6 +21,7 @@ subprojects {
     apply plugin: 'io.spring.dependency-management'
     apply plugin: 'java-library'
     apply plugin: 'java'
+    apply plugin: 'groovy'
 
     repositories {
         mavenCentral()
@@ -33,6 +34,9 @@ subprojects {
     dependencies {
         implementation 'org.springframework.boot:spring-boot-starter'
 
+        testImplementation 'org.codehaus.groovy:groovy-all:2.5.8'
+        testImplementation 'org.spockframework:spock-core:1.2-groovy-2.4'
+        testImplementation 'org.spockframework:spock-spring:1.2-groovy-2.4'
         testImplementation('org.springframework.boot:spring-boot-starter-test') {
             exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
         }
