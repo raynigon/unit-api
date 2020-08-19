@@ -12,17 +12,17 @@ class UnitApiJacksonModuleSpec extends Specification {
         def mapper = new ObjectMapper()
 
         when:
-        mapper.registerModule(new UnitApiJacksonModule())
+        mapper.registerModule(new UnitApiModule())
 
         then:
-        mapper.getRegisteredModuleIds() == ([UnitApiJacksonModule.class.getName()] as Set)
+        mapper.getRegisteredModuleIds() == ([UnitApiModule.class.getName()] as Set)
     }
 
     def 'basic deserialization'() {
 
         given:
         def mapper = new ObjectMapper()
-        mapper.registerModule(new UnitApiJacksonModule())
+        mapper.registerModule(new UnitApiModule())
 
         and:
         def source = mapper.writeValueAsString([
