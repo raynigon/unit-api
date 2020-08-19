@@ -3,8 +3,8 @@ package com.github.raynigon.unit_api_starter.jackson;
 import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.github.raynigon.unit_api_starter.BuildVersion;
-import com.github.raynigon.unit_api_starter.jackson.deserializers.QuantityDeserializer;
-import com.github.raynigon.unit_api_starter.jackson.serializers.QuantitySerializer;
+import com.github.raynigon.unit_api_starter.jackson.deserializer.QuantityDeserializer;
+import com.github.raynigon.unit_api_starter.jackson.serializer.QuantitySerializer;
 
 import javax.measure.Quantity;
 

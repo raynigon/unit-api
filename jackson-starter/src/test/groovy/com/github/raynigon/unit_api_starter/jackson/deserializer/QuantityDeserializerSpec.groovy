@@ -1,4 +1,4 @@
-package com.github.raynigon.unit_api_starter.jackson.deserializers
+package com.github.raynigon.unit_api_starter.jackson.deserializer
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.raynigon.unit_api_starter.jackson.UnitApiModule
@@ -18,7 +18,8 @@ class QuantityDeserializerSpec extends Specification {
         def source = mapper.writeValueAsString([
                 "id"         : "1",
                 "speed"      : 100,
-                "temperature": 30.0
+                "temperature": 30.0,
+                "distance"   : 10
         ])
 
         when:
@@ -31,6 +32,7 @@ class QuantityDeserializerSpec extends Specification {
         result.id == "1"
         result.speed.to(Units.KILOMETRE_PER_HOUR).value.toInteger() == 100
         result.temperature.to(Units.CELSIUS).value.toInteger() == 30
+        result.distance.to(Units.METRE).value.toInteger() == 10_000
     }
 
     def 'string deserialization'() {
@@ -43,7 +45,8 @@ class QuantityDeserializerSpec extends Specification {
         def source = mapper.writeValueAsString([
                 "id"         : "1",
                 "speed"      : "100 km/h",
-                "temperature": "30 ℃"
+                "temperature": "30 ℃",
+                "distance"   : "10 km"
         ])
 
         when:
@@ -56,5 +59,6 @@ class QuantityDeserializerSpec extends Specification {
         result.id == "1"
         result.speed.to(Units.KILOMETRE_PER_HOUR).value.toInteger() == 100
         result.temperature.to(Units.CELSIUS).value.toInteger() == 30
+        result.distance.to(Units.METRE).value.toInteger() == 10_000
     }
 }

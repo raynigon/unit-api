@@ -1,4 +1,4 @@
-package com.github.raynigon.unit_api_starter.jackson.serializers;
+package com.github.raynigon.unit_api_starter.jackson.serializer;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.BeanProperty;
@@ -6,8 +6,9 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.ContextualSerializer;
-import com.github.raynigon.unit_api_starter.jackson.annotations.JsonUnit;
-import com.github.raynigon.unit_api_starter.jackson.annotations.QuantityShape;
+import com.github.raynigon.unit_api_starter.jackson.annotation.JsonUnit;
+import com.github.raynigon.unit_api_starter.jackson.annotation.QuantityShape;
+import com.github.raynigon.unit_api_starter.jackson.service.UnitResolverService;
 import tech.units.indriya.unit.Units;
 
 import javax.measure.Quantity;
@@ -32,7 +33,7 @@ public class QuantitySerializer extends JsonSerializer<Quantity> implements Cont
     @SuppressWarnings({"unchecked", "rawtypes"})
     public JsonSerializer<?> createContextual(SerializerProvider prov, BeanProperty property) throws JsonMappingException {
         Class<Quantity> quantityType = (Class<Quantity>) property.getType().getBindings().getBoundType(0).getRawClass();
-        unit = Units.getInstance().getUnit(quantityType);
+        unit = UnitResolverService.getInstance().getUnit(quantityType);
 
         JsonUnit unitWrapper = property.getAnnotation(JsonUnit.class);
         if (unitWrapper == null) return new QuantitySerializer(unit, shape);
@@ -40,7 +41,8 @@ public class QuantitySerializer extends JsonSerializer<Quantity> implements Cont
         shape = unitWrapper.shape();
 
         String unitName = unitWrapper.unit();
-        if (!"".equalsIgnoreCase(unitName)) unit = Units.getInstance().getUnit(unitName);
+        if (!"".equalsIgnoreCase(unitName)) unit = UnitResolverService.getInstance().getUnit(unitName);
+        if (unit == null) throw new RuntimeException("Unknown Unit: "+unitName);
 
         return new QuantitySerializer(unit, shape);
     }
@@ -49,7 +51,7 @@ public class QuantitySerializer extends JsonSerializer<Quantity> implements Cont
     @SuppressWarnings({"unchecked", "rawtypes"})
     public void serialize(Quantity value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
         if (this.unit!=null){
-            value = value.to((Unit) unit);
+            value = value.to(unit);
         }
         switch (shape){
             case NUMBER:

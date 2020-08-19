@@ -1,12 +1,7 @@
-package com.github.raynigon.unit_api_starter.jackson.annotations;
+package com.github.raynigon.unit_api_starter.jackson.annotation;
 
-import tech.units.indriya.unit.Units;
-
-import javax.measure.Unit;
-import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 public @interface JsonUnit {

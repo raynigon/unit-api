@@ -1,12 +1,12 @@
-package com.github.raynigon.unit_api_starter.jackson.deserializers;
+package com.github.raynigon.unit_api_starter.jackson.deserializer;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.JsonTokenId;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.deser.ContextualDeserializer;
-import com.fasterxml.jackson.databind.deser.std.StdScalarDeserializer;
-import com.github.raynigon.unit_api_starter.jackson.annotations.JsonUnit;
+import com.github.raynigon.unit_api_starter.jackson.annotation.JsonUnit;
+import com.github.raynigon.unit_api_starter.jackson.service.UnitResolverService;
 import tech.units.indriya.quantity.Quantities;
 import tech.units.indriya.unit.Units;
 
@@ -30,14 +30,15 @@ public class QuantityDeserializer extends JsonDeserializer<Quantity<?>> implemen
     @SuppressWarnings({"unchecked", "rawtypes"})
     public JsonDeserializer<?> createContextual(DeserializationContext ctxt, BeanProperty property) throws JsonMappingException {
         Class<Quantity> quantityType = (Class<Quantity>) property.getType().getBindings().getBoundType(0).getRawClass();
-        this.unit = Units.getInstance().getUnit(quantityType);
+        this.unit = UnitResolverService.getInstance().getUnit(quantityType);
 
         JsonUnit unitWrapper = property.getAnnotation(JsonUnit.class);
         if (unitWrapper==null) return new QuantityDeserializer(unit, false);
 
         String unitName = unitWrapper.unit();
         if ("".equalsIgnoreCase(unitName)) return new QuantityDeserializer(unit, false);
-        this.unit = Units.getInstance().getUnit(unitName);
+        this.unit = UnitResolverService.getInstance().getUnit(unitName);
+        if (this.unit == null) throw new RuntimeException("Unknown Unit: "+unitName);
 
         return new QuantityDeserializer(unit, true);
     }
@@ -55,9 +56,7 @@ public class QuantityDeserializer extends JsonDeserializer<Quantity<?>> implemen
                         p.getValueAsDouble(),
                         unit
                 );
-            case JsonTokenId.ID_NULL:
             case JsonTokenId.ID_START_ARRAY:
-                return null;
             default:
                 return null;
         }

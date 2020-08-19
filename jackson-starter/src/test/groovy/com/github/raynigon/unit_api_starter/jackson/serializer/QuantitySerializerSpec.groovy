@@ -1,4 +1,4 @@
-package com.github.raynigon.unit_api_starter.jackson.serializers
+package com.github.raynigon.unit_api_starter.jackson.serializer
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.raynigon.unit_api_starter.jackson.UnitApiModule
@@ -28,7 +28,7 @@ class QuantitySerializerSpec extends Specification {
         noExceptionThrown()
 
         and:
-        result == '{"id":"1","speed":100.0,"temperature":"30 ℃"}'
+        result == '{"id":"1","speed":100.0,"temperature":"30 ℃","distance":null}'
     }
 
 
