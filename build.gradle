@@ -30,9 +30,10 @@ subprojects {
     apply plugin: 'maven-publish'
 
     dependencies {
-        implementation 'org.springframework.boot:spring-boot-starter'
+        compileOnly 'org.springframework.boot:spring-boot-starter'
         implementation 'tech.units:indriya:2.0.4'
 
+        testImplementation 'org.springframework.boot:spring-boot-starter'
         testImplementation 'org.codehaus.groovy:groovy-all:2.4.20'
         testImplementation 'org.spockframework:spock-core:1.2-groovy-2.4'
         testImplementation 'org.spockframework:spock-spring:1.2-groovy-2.4'
@@ -54,7 +55,26 @@ subprojects {
         }
         publications {
             gpr(MavenPublication) {
-                from(components.java)
+                artifactId = project.name
+
+                artifact project.tasks.jar
+
+                pom.withXml {
+                    def rootNode = asNode()
+
+                    rootNode.remove((Node) ((Node) rootNode).get("dependencyManagement").get(0))
+                    def dependenciesNode = rootNode.appendNode('dependencies')
+
+                    def addDependency = { dependency, scope ->
+                        dependenciesNode.appendNode('dependency').with {
+                            appendNode('groupId', dependency.group)
+                            appendNode('artifactId', dependency.name)
+                            appendNode('version', dependency.version)
+                            appendNode('scope', scope)
+                        }
+                    }
+                    project.configurations.implementation.dependencies.each { addDependency(it, 'compile') }
+                }
             }
         }
     }
