@@ -97,12 +97,14 @@ subprojects {
     }
 
     task versionClass() {
-        def targetDirectory = projectDir.toPath().resolve("build/generated/sources/version/java")
-        // change package name
-        def packageName = project.group.replace("-", "_") + "." + project.name.replace("-", "_")
-        targetDirectory = targetDirectory.resolve(packageName.replace(".", "/"))
-        targetDirectory.toFile().mkdirs()
-        new File(targetDirectory.toFile(), "BuildVersion.java").text = """package ${packageName};
+        mustRunAfter(clean)
+        doFirst {
+            def targetDirectory = projectDir.toPath().resolve("build/generated/sources/version/java")
+            // change package name
+            def packageName = project.group.replace("-", "_") + "." + project.name.replace("-", "_")
+            targetDirectory = targetDirectory.resolve(packageName.replace(".", "/"))
+            targetDirectory.toFile().mkdirs()
+            new File(targetDirectory.toFile(), "BuildVersion.java").text = """package ${packageName};
 import java.time.OffsetDateTime;
 
 public class BuildVersion {
@@ -117,25 +119,26 @@ public class BuildVersion {
     public static final boolean SNAPSHOT = ${(project.version as String).contains("-")};
     public static final OffsetDateTime BUILD_DATE = OffsetDateTime.parse("${OffsetDateTime.now().toString()}");
 }"""
+        }
     }
 
-    tasks.getByName("build").dependsOn(tasks.getByName("versionClass"))
+    tasks.getByName('compileJava').dependsOn(versionClass)
 }
 
 bootJar {
     enabled = false
 }
 
-def generateReadme(modules) {
+def generateReadme(artifactNames) {
     def maven = "**Maven**\n```\n"
     def gradle = "**Gradle**\n```\n"
 
-    for (module in modules){
-        maven +="<dependency>\n"
-        maven +="    groupId>$project.group</groupId>\n"
-        maven +="    <artifactId>$module</artifactId>\n"
-        maven +="    <version>$project.version</version>\n"
-        maven +="</dependency>\n"
+    for (module in artifactNames) {
+        maven += "<dependency>\n"
+        maven += "    groupId>$project.group</groupId>\n"
+        maven += "    <artifactId>$module</artifactId>\n"
+        maven += "    <version>$project.version</version>\n"
+        maven += "</dependency>\n"
         gradle += "implementation(\"$project.group:$module:$project.version\")\n"
     }
     maven += "```\n"
@@ -148,10 +151,10 @@ task updateReadme() {
     def readme = new File("README.md").text as String
     def pattern = Pattern.compile("<!-- MODULE_LIST: ([A-z-_,]*) -->(\\n[^#]*)*<!-- END_MODULE_LIST -->")
     def matcher = pattern.matcher(readme)
-    for(match in matcher){
+    for (match in matcher) {
         def full_match = match.get(0)
-        def modules = match.get(1).split(",")
-        def generatedBlock = generateReadme(modules)
+        def artifactNames = match.get(1).split(",")
+        def generatedBlock = generateReadme(artifactNames)
         readme = readme.replace(full_match, generatedBlock)
     }
     new File("README.md").write(readme)
