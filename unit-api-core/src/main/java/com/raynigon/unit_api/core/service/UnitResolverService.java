@@ -1,7 +1,9 @@
 package com.raynigon.unit_api.core.service;
 
 import tech.units.indriya.AbstractSystemOfUnits;
+import tech.units.indriya.function.AbstractConverter;
 import tech.units.indriya.unit.AlternateUnit;
+import tech.units.indriya.unit.TransformedUnit;
 import tech.units.indriya.unit.Units;
 
 import javax.measure.MetricPrefix;
@@ -20,10 +22,14 @@ public class UnitResolverService extends AbstractSystemOfUnits {
     public UnitResolverService() {
         units.addAll(Units.getInstance().getUnits());
 
-        // Unit<Energy> wattHour = new AlternateUnit<>(Units.WATT.multiply(Units.HOUR), "Wh");
-        // units.add(wattHour);
+        Unit<Energy> wattHour = new TransformedUnit<Energy>(
+                "Wh",
+                "Watt-hour",
+                (Unit<Energy>) Units.WATT.multiply(Units.HOUR),
+                AbstractConverter.IDENTITY);
+        units.add(wattHour);
         createScaledUnits("m", "k", "c", "m");
-        // createScaledUnits("Wh", "k", "m");
+        createScaledUnits("Wh", "k", "m");
     }
 
     private void createScaledUnits(String base, String... prefixes) {
