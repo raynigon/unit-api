@@ -9,6 +9,7 @@ import tech.units.indriya.unit.Units;
 import javax.measure.MetricPrefix;
 import javax.measure.Quantity;
 import javax.measure.Unit;
+import javax.measure.quantity.Acceleration;
 import javax.measure.quantity.Energy;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -28,6 +29,10 @@ public class UnitResolverService extends AbstractSystemOfUnits {
                 (Unit<Energy>) Units.WATT.multiply(Units.HOUR),
                 AbstractConverter.IDENTITY);
         units.add(wattHour);
+        units.remove(Units.METRE_PER_SQUARE_SECOND);
+        Unit<Acceleration> metrePerSquareSecond = new TransformedUnit<>("m/s²", "", Units.METRE_PER_SQUARE_SECOND,
+                AbstractConverter.IDENTITY);
+        units.add(metrePerSquareSecond);
         createScaledUnits("m", "k", "c", "m");
         createScaledUnits("Wh", "k", "m");
     }

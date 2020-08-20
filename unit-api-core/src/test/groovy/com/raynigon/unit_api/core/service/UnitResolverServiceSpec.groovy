@@ -24,4 +24,9 @@ class UnitResolverServiceSpec extends Specification {
         then:
         result.value.intValue() == 1
     }
+
+    def 'resolve m/s2'() {
+        expect:
+        UnitResolverService.getInstance().getUnit("m/s²") != null
+    }
 }
