@@ -10,7 +10,45 @@ which will allow compile time verification for all your Unit attributes.
 
 ## Installation
 
-`TODO`
+### Spring Boot
+
+**Maven**
+```
+<dependency>
+    groupId>com.raynigon.unit-api</groupId>
+    <artifactId>jackson-starter</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+</dependency>
+<dependency>
+    groupId>com.raynigon.unit-api</groupId>
+    <artifactId>jpa-starter</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+</dependency>
+```
+
+**Gradle**
+```
+implementation("com.raynigon.unit-api:jackson-starter:0.0.1-SNAPSHOT")
+implementation("com.raynigon.unit-api:jpa-starter:0.0.1-SNAPSHOT")
+```
+
+
+### Jackson Standalone
+
+**Maven**
+```
+<dependency>
+    groupId>com.raynigon.unit-api</groupId>
+    <artifactId>jackson-module</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+</dependency>
+```
+
+**Gradle**
+```
+implementation("com.raynigon.unit-api:jackson-module:0.0.1-SNAPSHOT")
+```
+
 
 ## Usage
 
