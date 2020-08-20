@@ -1,9 +1,10 @@
-# unit-api-starter
-![CI](https://github.com/raynigon/unit-api-starter/workflows/CI/badge.svg)
+# unit-api
+![CI](https://github.com/raynigon/unit-api/workflows/CI/badge.svg)
 
-Spring Boot Starter for the java unit-api.
+Integration of the junit-api into various frameworks (Jackson, Spring Boot, JPA etc.)
 
-The starters will allow you to use the unit-api with jackson and jpa.
+The Spring Boot starter modules will allow you to use the unit-api directly in Spring Boot without configuration.
+You can also use the Jackson Module for non Spring boot Use cases.
 The unit-api allows you to specify SI Units instead of primitives,
 which will allow compile time verification for all your Unit attributes.
 

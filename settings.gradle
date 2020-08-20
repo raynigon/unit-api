@@ -1,4 +1,6 @@
-rootProject.name = 'unit-api-starter'
+rootProject.name = 'unit-api'
 
+include 'unit-api-core'
+include 'jackson-module'
 include 'jackson-starter'
 // include 'jpa-starter'

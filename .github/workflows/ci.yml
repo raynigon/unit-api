@@ -17,10 +17,6 @@ jobs:
       uses: eskatos/gradle-command-action@v1.3.2
       with:
         arguments: test
-    - name: Build
-      uses: eskatos/gradle-command-action@v1.3.2
-      with:
-        arguments: clean build
   publish:
     runs-on: ubuntu-latest
 #    if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
