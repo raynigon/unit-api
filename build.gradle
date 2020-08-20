@@ -55,7 +55,7 @@ subprojects {
         repositories {
             maven {
                 name = "GitHubPackages"
-                url = uri("https://maven.pkg.github.com/raynigon/unit-api-starter")
+                url = uri("https://maven.pkg.github.com/raynigon/unit-api")
                 credentials {
                     username = System.getenv("USERNAME") ?: null
                     password = System.getenv("TOKEN") ?: null
@@ -157,4 +157,5 @@ task updateReadme() {
     new File("README.md").write(readme)
 }
 
+// TODO let this job depend on the release task only!
 tasks.getByName("build").dependsOn(tasks.getByName("updateReadme"))
