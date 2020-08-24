@@ -144,12 +144,12 @@ bootJar {
 }
 
 def generateReadme(artifactNames) {
-    def maven = "**Maven**\n```\n"
-    def gradle = "**Gradle**\n```\n"
+    def maven = "**Maven**\n```xml\n"
+    def gradle = "**Gradle**\n```groovy\n"
 
     for (module in artifactNames) {
         maven += "<dependency>\n"
-        maven += "    groupId>$project.group</groupId>\n"
+        maven += "    <groupId>$project.group</groupId>\n"
         maven += "    <artifactId>$module</artifactId>\n"
         maven += "    <version>$project.version</version>\n"
         maven += "</dependency>\n"
@@ -168,7 +168,7 @@ task updateReadme() {
     for (match in matcher) {
         def full_match = match.get(0)
         def artifactNames = match.get(1).split(",")
-        def generatedBlock = generateReadme(artifactNames)
+        def generatedBlock = "<!-- MODULE_LIST: ${String.join(",", artifactNames)} -->\n${generateReadme(artifactNames)}<!-- END_MODULE_LIST -->"
         readme = readme.replace(full_match, generatedBlock)
     }
     new File("README.md").write(readme)
