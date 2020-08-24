@@ -36,6 +36,7 @@ subprojects {
     apply plugin: 'java'
     apply plugin: 'groovy'
     apply plugin: 'maven-publish'
+    apply plugin: 'jacoco'
 
     sourceSets {
         main {
@@ -49,6 +50,19 @@ subprojects {
 
         testImplementation 'org.codehaus.groovy:groovy-all:2.4.20'
         testImplementation 'org.spockframework:spock-core:1.2-groovy-2.4'
+    }
+
+    tasks.test {
+        finalizedBy(tasks.jacocoTestReport) // report is always generated after tests run
+    }
+
+    tasks.jacocoTestReport {
+        dependsOn(tasks.test) // tests are required to run before generating the report
+        reports {
+            xml.enabled = true
+            html.enabled = true
+            csv.enabled = false
+        }
     }
 
     publishing {
