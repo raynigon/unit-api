@@ -23,6 +23,7 @@ public class UnitResolverService extends AbstractSystemOfUnits {
     public UnitResolverService() {
         units.addAll(Units.getInstance().getUnits());
 
+        @SuppressWarnings("unchecked")
         Unit<Energy> wattHour = new TransformedUnit<Energy>(
                 "Wh",
                 "Watt-hour",

@@ -1,7 +1,15 @@
-bootJar {
-    enabled = false
-}
+dependencies {
+    compileOnly 'org.springframework.boot:spring-boot-starter'
+    compileOnly 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation project(":unit-api-core")
 
-jar {
-    enabled = true
+
+    testImplementation 'org.springframework.boot:spring-boot-starter'
+    testImplementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+    testImplementation("org.postgresql:postgresql:42.2.14")
+    testImplementation("org.testcontainers:postgresql:1.14.3")
+    testImplementation 'org.spockframework:spock-spring:1.2-groovy-2.4'
 }

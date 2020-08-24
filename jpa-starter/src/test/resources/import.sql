@@ -1,0 +1,1 @@
+INSERT INTO basic_entity (id, speed, temperature, distance) VALUES ('99', 12, 30, 100);

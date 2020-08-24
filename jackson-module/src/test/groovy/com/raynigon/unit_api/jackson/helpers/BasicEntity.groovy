@@ -1,10 +1,9 @@
 package com.raynigon.unit_api.jackson.helpers
 
 import com.raynigon.unit_api.jackson.annotation.JsonUnit
-import com.raynigon.unit_api.jackson.annotation.QuantityShape
+import com.raynigon.unit_api.core.annotation.QuantityShape
 
 import javax.measure.Quantity
-import javax.measure.quantity.Energy
 import javax.measure.quantity.Length
 import javax.measure.quantity.Speed
 import javax.measure.quantity.Temperature

@@ -2,6 +2,7 @@ dependencies {
     compileOnly 'org.springframework.boot:spring-boot-starter'
     compileOnly 'org.springframework.boot:spring-boot-starter-web'
     implementation project(':jackson-module')
+    implementation project(":unit-api-core")
 
     testImplementation 'org.springframework.boot:spring-boot-starter'
     testImplementation 'org.springframework.boot:spring-boot-starter-web'
