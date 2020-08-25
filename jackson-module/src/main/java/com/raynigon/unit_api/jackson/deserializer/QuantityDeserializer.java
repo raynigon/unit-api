@@ -1,4 +1,4 @@
-package com.raynigon.unit_api.jpa.deserializer;
+package com.raynigon.unit_api.jackson.deserializer;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -6,8 +6,8 @@ import com.fasterxml.jackson.core.JsonTokenId;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.deser.ContextualDeserializer;
 import com.raynigon.unit_api.core.service.UnitResolverService;
-import com.raynigon.unit_api.jpa.annotation.JsonUnit;
-import com.raynigon.unit_api.jpa.exception.UnknownUnitException;
+import com.raynigon.unit_api.jackson.annotation.JsonUnit;
+import com.raynigon.unit_api.jackson.exception.UnknownUnitException;
 import org.apache.commons.lang3.StringUtils;
 import tech.units.indriya.quantity.Quantities;
 

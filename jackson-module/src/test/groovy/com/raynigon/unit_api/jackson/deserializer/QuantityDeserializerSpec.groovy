@@ -1,4 +1,4 @@
-package com.raynigon.unit_api.jpa.deserializer
+package com.raynigon.unit_api.jackson.deserializer
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.raynigon.unit_api.jackson.UnitApiModule

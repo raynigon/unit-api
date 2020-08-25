@@ -1,4 +1,4 @@
-package com.raynigon.unit_api.jpa.serializer;
+package com.raynigon.unit_api.jackson.serializer;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.BeanProperty;
@@ -7,9 +7,9 @@ import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.ContextualSerializer;
 import com.raynigon.unit_api.core.service.UnitResolverService;
-import com.raynigon.unit_api.jpa.annotation.JsonUnit;
+import com.raynigon.unit_api.jackson.annotation.JsonUnit;
 import com.raynigon.unit_api.core.annotation.QuantityShape;
-import com.raynigon.unit_api.jpa.exception.UnknownUnitException;
+import com.raynigon.unit_api.jackson.exception.UnknownUnitException;
 
 import javax.measure.Quantity;
 import javax.measure.Unit;

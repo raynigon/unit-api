@@ -1,4 +1,4 @@
-package com.raynigon.unit_api.jpa.exception;
+package com.raynigon.unit_api.jackson.exception;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 

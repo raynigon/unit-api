@@ -1,4 +1,4 @@
-package com.raynigon.unit_api.jpa.helpers
+package com.raynigon.unit_api.jackson.helpers
 
 import com.raynigon.unit_api.jackson.annotation.JsonUnit
 import com.raynigon.unit_api.core.annotation.QuantityShape

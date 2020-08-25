@@ -1,4 +1,4 @@
-package com.raynigon.unit_api.jpa.helpers
+package com.raynigon.unit_api.jackson.helpers
 
 
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration

@@ -1,10 +1,8 @@
 package com.raynigon.unit_api.jpa.helpers
 
-import com.raynigon.unit_api.jpa.annotation.JpaUnit
 import com.raynigon.unit_api.core.annotation.QuantityShape
+import com.raynigon.unit_api.jpa.annotation.JpaUnit
 import com.raynigon.unit_api.jpa.type.QuantityType
-import org.hibernate.annotations.Parameter
-import org.hibernate.annotations.Type
 import org.hibernate.annotations.TypeDef
 
 import javax.measure.Quantity
@@ -18,6 +16,11 @@ import javax.persistence.Table
 
 @Entity
 @Table(name = "basic_entity")
+@TypeDef(
+        name = "quantity",
+        typeClass = QuantityType.class,
+        defaultForType = Quantity.class
+)
 class BasicEntity {
 
     @Id

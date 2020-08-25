@@ -1,4 +1,4 @@
-package com.raynigon.unit_api.jpa
+package com.raynigon.unit_api.jackson
 
 import com.raynigon.unit_api.jackson.helpers.BasicApplicationConfig
 import com.raynigon.unit_api.jackson.helpers.BasicRestController

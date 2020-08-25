@@ -1,9 +1,9 @@
-package com.raynigon.unit_api.jpa;
+package com.raynigon.unit_api.jackson;
 
 import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.raynigon.unit_api.jpa.deserializer.QuantityDeserializer;
-import com.raynigon.unit_api.jpa.serializer.QuantitySerializer;
+import com.raynigon.unit_api.jackson.deserializer.QuantityDeserializer;
+import com.raynigon.unit_api.jackson.serializer.QuantitySerializer;
 import com.raynigon.unit_api.jackson_module.BuildVersion;
 
 import javax.measure.Quantity;
