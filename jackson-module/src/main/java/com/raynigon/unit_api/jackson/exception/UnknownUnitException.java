@@ -6,7 +6,6 @@ import java.io.Closeable;
 
 public class UnknownUnitException extends JsonMappingException {
 
-
     public UnknownUnitException(Closeable processor, String unitName) {
         super(processor, "Unknown Unit: "+unitName);
     }

@@ -2,9 +2,11 @@ package com.raynigon.unit_api.jpa.type;
 
 import com.raynigon.unit_api.core.service.UnitResolverService;
 import com.raynigon.unit_api.jpa.annotation.JpaUnit;
+import com.raynigon.unit_api.jpa.exception.UnitNotFound;
 import org.hibernate.type.AbstractSingleColumnStandardBasicType;
 import org.hibernate.type.descriptor.sql.DoubleTypeDescriptor;
 import org.hibernate.usertype.DynamicParameterizedType;
+import org.springframework.core.GenericTypeResolver;
 import tech.units.indriya.AbstractUnit;
 
 import javax.measure.Quantity;
@@ -44,23 +46,14 @@ public class QuantityType extends AbstractSingleColumnStandardBasicType<Quantity
     }
 
     private Unit<?> resolveUnit(ParameterType reader) {
-        Unit<?> typedUnit = resolveTypedUnit(reader);
-        Unit<?> annotatedUnit = Stream.of(reader.getAnnotationsMethod())
+        return Stream.of(reader.getAnnotationsMethod())
                 .filter(it -> it instanceof JpaUnit)
                 .map(it -> ((JpaUnit) it))
                 .map(JpaUnit::unit)
                 .filter((unit) -> !unit.isEmpty())
                 .map(it -> UnitResolverService.getInstance().getUnit(it))
                 .filter(Objects::nonNull)
-                .findFirst().orElse(null);
-        return annotatedUnit != null ? annotatedUnit : typedUnit;
-    }
-
-    @SuppressWarnings({"rawtypes", "unchecked"})
-    private Unit<?> resolveTypedUnit(ParameterType reader) {
-        Class<Quantity> returnedClass = (Class<Quantity>) reader.getReturnedClass();
-        if (returnedClass == null || returnedClass.getTypeParameters().length < 1) return null;
-        Class<Quantity> quantityType = returnedClass.getTypeParameters()[0].getGenericDeclaration();
-        return UnitResolverService.getInstance().getUnit(quantityType);
+                .findFirst()
+                .orElseThrow(UnitNotFound::new);
     }
 }
