@@ -1,5 +1,6 @@
 package com.raynigon.unit_api.jpa.type;
 
+import org.hibernate.cfg.NotYetImplementedException;
 import org.hibernate.type.descriptor.WrapperOptions;
 import org.hibernate.type.descriptor.java.AbstractTypeDescriptor;
 import org.hibernate.type.descriptor.java.ImmutableMutabilityPlan;
@@ -14,7 +15,7 @@ import java.util.Objects;
 
 public class QuantityJavaDescriptor extends AbstractTypeDescriptor<Quantity<?>> {
 
-    private Unit<?> unit;
+    private final Unit<?> unit;
 
     @SuppressWarnings("unchecked")
     protected QuantityJavaDescriptor(Unit<?> unit) {
@@ -54,7 +55,7 @@ public class QuantityJavaDescriptor extends AbstractTypeDescriptor<Quantity<?>> 
         } else if (value instanceof Number) {
             return Quantities.getQuantity((Number) value, unit);
         } else {
-            throw new RuntimeException("Not Implemented"); // TODO handle error
+            throw new NotYetImplementedException();
         }
     }
 

@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 class UnitApiJacksonConfiguration {
 
     @Bean
-    UnitApiModule unitApiJacksonModule(){
+    public UnitApiModule unitApiJacksonModule(){
         return new UnitApiModule();
     }
 }

@@ -3,6 +3,7 @@ package com.raynigon.unit_api.jpa.type;
 import com.raynigon.unit_api.core.service.UnitResolverService;
 import com.raynigon.unit_api.jpa.annotation.JpaUnit;
 import com.raynigon.unit_api.jpa.exception.UnitNotFound;
+import org.hibernate.cfg.NotYetImplementedException;
 import org.hibernate.type.AbstractSingleColumnStandardBasicType;
 import org.hibernate.type.descriptor.sql.DoubleTypeDescriptor;
 import org.hibernate.usertype.DynamicParameterizedType;
@@ -40,7 +41,7 @@ public class QuantityType extends AbstractSingleColumnStandardBasicType<Quantity
     @Override
     public void setParameterValues(Properties parameters) {
         ParameterType reader = (ParameterType) parameters.get(PARAMETER_TYPE);
-        if (reader == null) throw new RuntimeException("Not Implemented");
+        if (reader == null) throw new NotYetImplementedException();
         Unit<?> resolvedUnit = resolveUnit(reader);
         setJavaTypeDescriptor(new QuantityJavaDescriptor(resolvedUnit));
     }

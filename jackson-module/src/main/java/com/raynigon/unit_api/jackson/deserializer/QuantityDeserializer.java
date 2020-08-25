@@ -48,7 +48,7 @@ public class QuantityDeserializer extends JsonDeserializer<Quantity<?>> implemen
     }
 
     @Override
-    public Quantity<?> deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+    public Quantity<?> deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
         switch (p.getCurrentTokenId()) {
             case JsonTokenId.ID_STRING:
                 String strValue = p.getValueAsString();
