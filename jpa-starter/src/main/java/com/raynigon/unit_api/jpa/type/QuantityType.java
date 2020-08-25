@@ -1,7 +1,7 @@
 package com.raynigon.unit_api.jpa.type;
 
-import com.raynigon.unit_api.jpa.annotation.JpaUnit;
 import com.raynigon.unit_api.core.service.UnitResolverService;
+import com.raynigon.unit_api.jpa.annotation.JpaUnit;
 import org.hibernate.type.AbstractSingleColumnStandardBasicType;
 import org.hibernate.type.descriptor.sql.DoubleTypeDescriptor;
 import org.hibernate.usertype.DynamicParameterizedType;
@@ -11,7 +11,6 @@ import javax.measure.Quantity;
 import javax.measure.Unit;
 import java.util.Objects;
 import java.util.Properties;
-import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 public class QuantityType extends AbstractSingleColumnStandardBasicType<Quantity<?>> implements DynamicParameterizedType {
@@ -45,9 +44,8 @@ public class QuantityType extends AbstractSingleColumnStandardBasicType<Quantity
     }
 
     private Unit<?> resolveUnit(ParameterType reader) {
-        //noinspection unchecked,rawtypes
-        Unit<?> typedUnit = UnitResolverService.getInstance().getUnit((Class<Quantity>) reader.getReturnedClass());
-        Unit<?> resolvedUnit = Stream.of(reader.getAnnotationsMethod())
+        Unit<?> typedUnit = resolveTypedUnit(reader);
+        Unit<?> annotatedUnit = Stream.of(reader.getAnnotationsMethod())
                 .filter(it -> it instanceof JpaUnit)
                 .map(it -> ((JpaUnit) it))
                 .map(JpaUnit::unit)
@@ -55,6 +53,14 @@ public class QuantityType extends AbstractSingleColumnStandardBasicType<Quantity
                 .map(it -> UnitResolverService.getInstance().getUnit(it))
                 .filter(Objects::nonNull)
                 .findFirst().orElse(null);
-        return resolvedUnit != null ? resolvedUnit : typedUnit;
+        return annotatedUnit != null ? annotatedUnit : typedUnit;
+    }
+
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    private Unit<?> resolveTypedUnit(ParameterType reader) {
+        Class<Quantity> returnedClass = (Class<Quantity>) reader.getReturnedClass();
+        if (returnedClass == null || returnedClass.getTypeParameters().length < 1) return null;
+        Class<Quantity> quantityType = returnedClass.getTypeParameters()[0].getGenericDeclaration();
+        return UnitResolverService.getInstance().getUnit(quantityType);
     }
 }
