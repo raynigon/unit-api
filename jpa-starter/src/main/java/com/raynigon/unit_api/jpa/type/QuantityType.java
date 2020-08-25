@@ -51,7 +51,7 @@ public class QuantityType extends AbstractSingleColumnStandardBasicType<Quantity
                 .filter(it -> it instanceof JpaUnit)
                 .map(it -> ((JpaUnit) it))
                 .map(JpaUnit::unit)
-                .filter(Predicate.not(String::isBlank))
+                .filter((unit) -> !unit.isEmpty())
                 .map(it -> UnitResolverService.getInstance().getUnit(it))
                 .filter(Objects::nonNull)
                 .findFirst().orElse(null);

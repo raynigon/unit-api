@@ -38,6 +38,11 @@ subprojects {
     apply plugin: 'maven-publish'
     apply plugin: 'jacoco'
 
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+    compileJava.options.encoding = 'UTF-8'
+    compileTestJava.options.encoding = 'UTF-8'
+
     sourceSets {
         main {
             java.srcDirs += "build/generated/sources/version/java"
