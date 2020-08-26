@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.ser.ContextualSerializer;
 import com.raynigon.unit_api.core.service.UnitResolverService;
 import com.raynigon.unit_api.jackson.annotation.JsonUnit;
 import com.raynigon.unit_api.core.annotation.QuantityShape;
+import com.raynigon.unit_api.jackson.annotation.JsonUnitHelper;
 import com.raynigon.unit_api.jackson.exception.UnknownUnitException;
 
 import javax.measure.Quantity;
@@ -37,12 +38,15 @@ public class QuantitySerializer extends JsonSerializer<Quantity> implements Cont
 
         JsonUnit unitWrapper = property.getAnnotation(JsonUnit.class);
         if (unitWrapper == null) return new QuantitySerializer(unit, shape);
+        shape = JsonUnitHelper.getShape(unitWrapper);
+        String unitName = JsonUnitHelper.getUnitName(unitWrapper);
 
-        shape = unitWrapper.shape();
-
-        String unitName = unitWrapper.unit();
-        if (!"".equalsIgnoreCase(unitName)) unit = UnitResolverService.getInstance().getUnit(unitName);
-        if (unit == null) throw new UnknownUnitException(prov.getGenerator(), unitName);
+        if (unitName != null) {
+            unit = UnitResolverService.getInstance().getUnit(unitName);
+        }
+        if (unit == null) {
+            throw new UnknownUnitException(prov.getGenerator(), unitName);
+        }
 
         return new QuantitySerializer(unit, shape);
     }

@@ -14,12 +14,21 @@ import static java.lang.annotation.ElementType.METHOD;
 public @interface JsonUnit {
 
     /**
+     * AliasFor(value="unit")
      * Specifies the unit in which the Quantity is serialized/deserialized
+     * @return the unit which should be used for serialization/deserialization
+     */
+    String value() default "";
+
+    /**
+     * Specifies the unit in which the Quantity is serialized/deserialized
+     * @return the unit which should be used for serialization/deserialization
      */
     String unit() default "";
 
     /**
      * Serialize the Quantity as String
+     * @return the shape which should be used for serialization/deserialization
      */
     QuantityShape shape() default QuantityShape.NUMBER;
 }

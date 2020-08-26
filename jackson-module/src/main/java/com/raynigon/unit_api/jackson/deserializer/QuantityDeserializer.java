@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.deser.ContextualDeserializer;
 import com.raynigon.unit_api.core.service.UnitResolverService;
 import com.raynigon.unit_api.jackson.annotation.JsonUnit;
+import com.raynigon.unit_api.jackson.annotation.JsonUnitHelper;
 import com.raynigon.unit_api.jackson.exception.UnknownUnitException;
 import org.apache.commons.lang3.StringUtils;
 import tech.units.indriya.quantity.Quantities;
@@ -39,10 +40,13 @@ public class QuantityDeserializer extends JsonDeserializer<Quantity<?>> implemen
         JsonUnit unitWrapper = property.getAnnotation(JsonUnit.class);
         if (unitWrapper == null) return new QuantityDeserializer(unit, false);
 
-        String unitName = unitWrapper.unit();
-        if ("".equalsIgnoreCase(unitName)) return new QuantityDeserializer(unit, false);
-        this.unit = UnitResolverService.getInstance().getUnit(unitName);
-        if (this.unit == null) throw new UnknownUnitException(ctxt.getParser(), unitName);
+        String unitName = JsonUnitHelper.getUnitName(unitWrapper);
+        if (unitName != null) {
+            this.unit = UnitResolverService.getInstance().getUnit(unitName);
+        }
+        if (this.unit == null) {
+            throw new UnknownUnitException(ctxt.getParser(), unitName);
+        }
 
         return new QuantityDeserializer(unit, true);
     }

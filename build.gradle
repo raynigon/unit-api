@@ -57,6 +57,16 @@ subprojects {
         testImplementation 'org.spockframework:spock-core:1.2-groovy-2.4'
     }
 
+    task sourcesJar(type: Jar) {
+        from sourceSets.main.allJava
+        archiveClassifier = 'sources'
+    }
+
+    task javadocJar(type: Jar) {
+        from javadoc
+        archiveClassifier = 'javadoc'
+    }
+
     tasks.test {
         finalizedBy(tasks.jacocoTestReport) // report is always generated after tests run
     }
@@ -86,6 +96,8 @@ subprojects {
                 artifactId = project.name
 
                 artifact project.tasks.jar
+                artifact sourcesJar
+                artifact javadocJar
 
                 pom.withXml {
                     def rootNode = asNode()
