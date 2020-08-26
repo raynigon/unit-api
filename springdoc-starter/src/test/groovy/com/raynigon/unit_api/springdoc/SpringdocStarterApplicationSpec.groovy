@@ -7,8 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import spock.lang.Specification
 
 @SpringBootTest(classes = [
-        BasicApplicationConfig.class,
-        UnitApiSpringdocConfiguration.class
+        BasicApplicationConfig.class
 ])
 class SpringdocStarterApplicationSpec extends Specification {
 
