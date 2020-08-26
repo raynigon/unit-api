@@ -1,3 +1,4 @@
+import java.nio.file.Files
 import java.util.regex.Pattern
 
 import java.time.OffsetDateTime
@@ -55,6 +56,10 @@ subprojects {
 
         testImplementation 'org.codehaus.groovy:groovy-all:2.4.20'
         testImplementation 'org.spockframework:spock-core:1.2-groovy-2.4'
+    }
+
+    javadoc {
+        options.addBooleanOption('html5', true)
     }
 
     task sourcesJar(type: Jar) {
@@ -119,6 +124,14 @@ subprojects {
         }
     }
 
+    task globalJavadoc(type: Copy) {
+        dependsOn javadoc
+        group = 'documentation'
+        String branchName = (System.getenv("GITHUB_REF") ?: "refs/heads/master").split("/")[2]
+        from(buildDir.toString() + "/docs/javadoc/")
+        into(parent.buildDir.toString() + "/javadoc/$branchName/" + project.name + "/")
+    }
+
     bootJar {
         enabled = false
     }
@@ -127,8 +140,9 @@ subprojects {
         enabled = true
     }
 
-    task versionClass() {
+    task generateVersionClass() {
         mustRunAfter(clean)
+        group = 'build'
         doFirst {
             def targetDirectory = projectDir.toPath().resolve("build/generated/sources/version/java")
             // change package name
@@ -153,12 +167,14 @@ public class BuildVersion {
         }
     }
 
-    tasks.getByName('compileJava').dependsOn(versionClass)
+    tasks.getByName('compileJava').dependsOn(generateVersionClass)
 }
 
 bootJar {
     enabled = false
 }
+
+
 
 def generateReadme(artifactNames) {
     def maven = "**Maven**\n```xml\n"
