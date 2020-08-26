@@ -30,15 +30,16 @@ jobs:
       - uses: actions/setup-java@v1
         with:
           java-version: 11
-      - name: Unit Tests
+      - name: Generate javadoc
         uses: eskatos/gradle-command-action@v1.3.2
         with:
           arguments: globalJavadoc
-      - name: Upload artifact
+      - name: Upload javadoc
         uses: actions/upload-artifact@v1.0.0
         with:
           name: "Javadoc"
           path: "build/javadoc"
+# Upload apidoc to server
 
   publish:
     runs-on: ubuntu-latest
@@ -57,4 +58,4 @@ jobs:
         USERNAME: raynigon
         TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        arguments: publish
+        arguments: publish -x test
