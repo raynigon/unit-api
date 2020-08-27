@@ -59,6 +59,8 @@ implementation("com.raynigon.unit-api:jackson-module:0.0.1-SNAPSHOT")
 
 ### Support
 
+The current javadoc can be found [here](http://unit-api.raynigon.com/javadoc/master/).
+
 `TODO`
 
 ## Contributing
