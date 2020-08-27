@@ -6,6 +6,11 @@ import spock.lang.Unroll
 
 class JsonUnitHelperSpec extends Specification {
 
+    def 'instantiate class'() {
+        expect:
+        new JsonUnitHelper() != null
+    }
+
     @Unroll
     def 'determine shape #source'() {
 

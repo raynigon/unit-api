@@ -8,6 +8,11 @@ import javax.measure.quantity.Speed
 
 class JpaUnitHelperSpec extends Specification {
 
+    def 'instantiate class'() {
+        expect:
+        new JpaUnitHelper() != null
+    }
+
     @Unroll
     def 'determine shape #source'() {
 
