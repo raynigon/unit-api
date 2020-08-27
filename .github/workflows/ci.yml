@@ -35,11 +35,6 @@ jobs:
         with:
           arguments: globalJavadoc
       - name: Upload javadoc
-        uses: actions/upload-artifact@v1.0.0
-        with:
-          name: "Javadoc"
-          path: "build/javadoc"
-      - name: Upload ftp
         uses: sebastianpopp/ftp-action@releases/v2
         with:
           host: ${{ secrets.WEBSPACE_HOST }}
