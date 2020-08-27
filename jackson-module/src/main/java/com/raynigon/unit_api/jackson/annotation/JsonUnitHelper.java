@@ -1,10 +1,6 @@
 package com.raynigon.unit_api.jackson.annotation;
 
 import com.raynigon.unit_api.core.annotation.QuantityShape;
-import com.raynigon.unit_api.core.service.UnitResolverService;
-import com.raynigon.unit_api.jackson.exception.UnknownUnitException;
-
-import javax.measure.Unit;
 
 /**
  * Support a simple usage of the @JsonUnit properties

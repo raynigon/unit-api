@@ -18,8 +18,9 @@ import java.util.stream.Stream;
 
 /**
  * Describes Quantity objects for Hibernate
+ *
  * @see javax.measure.Quantity
- * */
+ */
 public class QuantityType extends AbstractSingleColumnStandardBasicType<Quantity<?>> implements DynamicParameterizedType {
 
     public static final QuantityType INSTANCE = new QuantityType();
@@ -36,7 +37,6 @@ public class QuantityType extends AbstractSingleColumnStandardBasicType<Quantity
     @Override
     public String[] getRegistrationKeys() {
         return new String[]{
-                getName(),
                 QuantityType.class.getSimpleName(),
                 Quantity.class.getName()
         };

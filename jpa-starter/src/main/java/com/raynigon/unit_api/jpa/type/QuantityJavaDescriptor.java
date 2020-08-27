@@ -17,8 +17,9 @@ import java.util.Objects;
 
 /**
  * Describes the Quantity Java Class for Hibernate
+ *
  * @see javax.measure.Quantity
- * */
+ */
 public class QuantityJavaDescriptor extends AbstractTypeDescriptor<Quantity<?>> {
 
     private final Unit<?> unit;
@@ -35,6 +36,26 @@ public class QuantityJavaDescriptor extends AbstractTypeDescriptor<Quantity<?>> 
         this.shape = shape;
     }
 
+    /**
+     * Exposes the value of the unit attribute,
+     * used to wrap/unwrap values
+     *
+     * @return the currently used Unit
+     */
+    public Unit<?> getUnit() {
+        return unit;
+    }
+
+    /**
+     * Exposes the value of the shape attribute,
+     * used in QuantityJavaDescriptor#getJdbcRecommendedSqlType
+     *
+     * @return the currently used QuantityShape
+     */
+    public QuantityShape getQuantityShape() {
+        return shape;
+    }
+
     @Override
     public String toString(Quantity<?> value) {
         return value.toString();
@@ -47,11 +68,12 @@ public class QuantityJavaDescriptor extends AbstractTypeDescriptor<Quantity<?>> 
 
     /**
      * Creates a target object for the given Quantity
-     * @param value     the quantity which should be used to create the new object
-     * @param type      the type of the new object, only String and Number types are supported
-     * @param options   unused
+     *
+     * @param value   the quantity which should be used to create the new object
+     * @param type    the type of the new object, only String and Number types are supported
+     * @param options unused
      * @throws QuantityPackingException thrown if the type is unknown to the implementation (String and Number types are supported)
-     * */
+     */
     @Override
     @SuppressWarnings({"unchecked", "rawtypes"})
     public <X> X unwrap(Quantity<?> value, Class<X> type, WrapperOptions options) {
@@ -83,15 +105,18 @@ public class QuantityJavaDescriptor extends AbstractTypeDescriptor<Quantity<?>> 
 
     /**
      * Creates a new Quantity object for the given value
-     * @param value     the value which should be used to create the new Quantity object, can either be a String or a Number
-     * @param options   unused
+     *
+     * @param value   the value which should be used to create the new Quantity object, can either be a String or a Number
+     * @param options unused
      * @throws QuantityPackingException thrown if the type of the given value is unknown to the implementation (String or Number are accepted types)
-     * */
+     */
     @Override
     @SuppressWarnings({"unchecked", "rawtypes"})
     public <X> Quantity<?> wrap(X value, WrapperOptions options) {
-        if (value instanceof String) {
+        if (value instanceof String && ((String) value).contains(" ")) {
             return Quantities.getQuantity((String) value).to((Unit) unit);
+        } else if (value instanceof String) {
+            return Quantities.getQuantity(Double.parseDouble((String) value), unit);
         } else if (value instanceof Number) {
             return Quantities.getQuantity((Number) value, unit);
         } else {
@@ -101,7 +126,7 @@ public class QuantityJavaDescriptor extends AbstractTypeDescriptor<Quantity<?>> 
 
     /**
      * Calculates the best matching sql type by the given QuantityShape
-     * */
+     */
     @Override
     public SqlTypeDescriptor getJdbcRecommendedSqlType(JdbcRecommendedSqlTypeMappingContext context) {
         switch (shape) {
