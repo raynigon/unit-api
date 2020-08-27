@@ -2,7 +2,6 @@ package com.raynigon.unit_api.core.service;
 
 import tech.units.indriya.AbstractSystemOfUnits;
 import tech.units.indriya.function.AbstractConverter;
-import tech.units.indriya.unit.AlternateUnit;
 import tech.units.indriya.unit.TransformedUnit;
 import tech.units.indriya.unit.Units;
 

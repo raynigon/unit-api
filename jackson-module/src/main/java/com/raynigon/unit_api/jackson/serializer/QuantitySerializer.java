@@ -54,15 +54,16 @@ public class QuantitySerializer extends JsonSerializer<Quantity> implements Cont
     @Override
     @SuppressWarnings({"unchecked", "rawtypes"})
     public void serialize(Quantity quantity, JsonGenerator gen, SerializerProvider serializers) throws IOException {
-        if (this.unit!=null){
-            quantity = quantity.to(unit);
+        Quantity convertedQuantity = quantity;
+        if (this.unit != null) {
+            convertedQuantity = quantity.to(unit);
         }
-        switch (shape){
+        switch (shape) {
             case NUMBER:
-                gen.writeNumber(quantity.getValue().doubleValue());
+                gen.writeNumber(convertedQuantity.getValue().doubleValue());
                 break;
             case STRING:
-                gen.writeString(quantity.toString());
+                gen.writeString(convertedQuantity.toString());
                 break;
             default:
                 // TODO raise exception
