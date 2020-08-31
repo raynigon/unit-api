@@ -4,7 +4,7 @@
 
 ## About
 
-Integration of the junit-api into various frameworks (Jackson, Spring Boot, JPA etc.)
+This Library provides the integration of the unit-api into various frameworks like Jackson, Spring Boot, Hibernate etc.
 
 The Spring Boot starter modules will allow you to use the unit-api directly in Spring Boot without configuration.
 You can also use the Jackson Module for non Spring boot Use cases.
