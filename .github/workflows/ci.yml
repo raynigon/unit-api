@@ -42,6 +42,24 @@ jobs:
           password: ${{ secrets.WEBSPACE_PASSWORD }}
           localDir: "build/javadoc/"
           remoteDir: "javadoc/"
+  documentation:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master' || contains(github.ref, 'refs/tags/')
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.7'
+      - run: pip3 install -r requirements.txt
+      - run: mkdocs build -d build/site/
+      - name: Upload javadoc
+        uses: sebastianpopp/ftp-action@releases/v2
+        with:
+          host: ${{ secrets.WEBSPACE_HOST }}
+          user: ${{ secrets.WEBSPACE_USER }}
+          password: ${{ secrets.WEBSPACE_PASSWORD }}
+          localDir: "build/site/"
+          remoteDir: "."
 
   publish:
     runs-on: ubuntu-latest

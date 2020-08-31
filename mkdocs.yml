@@ -1,0 +1,27 @@
+site_name: Unit API
+plugins:
+  - search
+  - codeinclude
+  - markdownextradata
+theme:
+  name: 'material'
+  palette:
+    primary: 'blue'
+    accent: 'teal'
+  font: false
+  logo: 'logo.svg'
+  favicon: 'logo.ico'
+repo_name: 'unit-api'
+repo_url: 'https://github.com/raynigon/unit-api'
+markdown_extensions:
+  - admonition
+  - codehilite:
+      linenums: False
+  - pymdownx.superfences
+  - pymdownx.snippets
+nav:
+  - Home: index.md
+  - Javadoc: javadoc.md
+  - Contribution: contribution.md
+extra:
+  latest_version: 1.14.3
