@@ -22,7 +22,7 @@ plugins {
 
 allprojects {
     group = 'com.raynigon.unit-api'
-    version = '1.0.0'
+    version = '1.0.1-SNAPSHOT'
     sourceCompatibility = '1.8'
     repositories {
         jcenter()
@@ -97,14 +97,6 @@ subprojects {
 
     publishing {
         repositories {
-            /*maven {
-                name = "GitHubPackages"
-                url = uri("https://maven.pkg.github.com/raynigon/unit-api")
-                credentials {
-                    username = System.getenv("GITHUB_USERNAME") ?: null
-                    password = System.getenv("GITHUB_TOKEN") ?: null
-                }
-            }*/
             maven {
                 name = "OSSRH" // OSS Repository Hosting
                 url = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2/")
