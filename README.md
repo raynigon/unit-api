@@ -15,66 +15,13 @@ You can also use the Jackson Module for non Spring boot Use cases.
 The unit-api allows you to specify SI Units instead of primitives,
 which will allow compile time verification for all your Unit attributes.
 
-## Installation
-
-### Spring Boot
-<!-- MODULE_LIST: jackson-starter,jpa-starter -->
-**Maven**
-```xml
-<dependency>
-    <groupId>com.raynigon.unit-api</groupId>
-    <artifactId>jackson-starter</artifactId>
-    <version>1.0.0</version>
-</dependency>
-<dependency>
-    <groupId>com.raynigon.unit-api</groupId>
-    <artifactId>jpa-starter</artifactId>
-    <version>1.0.0</version>
-</dependency>
-```
-
-**Gradle**
-```groovy
-implementation("com.raynigon.unit-api:jackson-starter:1.0.0")
-implementation("com.raynigon.unit-api:jpa-starter:1.0.0")
-```
-<!-- END_MODULE_LIST -->
-
-### Jackson Standalone
-<!-- MODULE_LIST: jackson-module -->
-**Maven**
-```xml
-<dependency>
-    <groupId>com.raynigon.unit-api</groupId>
-    <artifactId>jackson-module</artifactId>
-    <version>1.0.0</version>
-</dependency>
-```
-
-**Gradle**
-```groovy
-implementation("com.raynigon.unit-api:jackson-module:1.0.0")
-```
-<!-- END_MODULE_LIST -->
-
-## Usage
-
-`TODO`
-
-### Support
-
-The current javadoc can be found [here](https://unit-api.raynigon.com/javadoc/master/).
-
-`TODO`
-
-## Contributing
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-
-Please make sure to update tests as appropriate.
-
-### Roadmap
-
-### Authors
+# [Read the documentation here](http://unit-api.raynigon.com)
 
 ## License
 [Apache License 2.0](LICENSE)
+
+## Copyright
+
+Copyright (c) 2020 Simon Schneider and other authors.
+
+See [contributors](https://github.com/raynigon/unit-api/graphs/contributors) for all contributors.

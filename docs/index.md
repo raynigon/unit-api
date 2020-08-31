@@ -1,8 +1,8 @@
-# unit-api
+# Unit API
 
-![CI](https://github.com/raynigon/unit-api/workflows/CI/badge.svg)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/05af413562694d6ba3b3a923d86da210)](https://app.codacy.com/manual/raynigon/unit-api?utm_source=github.com&utm_medium=referral&utm_content=raynigon/unit-api&utm_campaign=Badge_Grade_Dashboard)
-[![Codacy Badge](https://app.codacy.com/project/badge/Coverage/16680694f7a84aab8246e4a7f57b06f3)](https://www.codacy.com/manual/raynigon/unit-api?utm_source=github.com&utm_medium=referral&utm_content=raynigon/unit-api&utm_campaign=Badge_Coverage)
+![Testcontainers logo](./logo.png)
+
+## About
 
 Integration of the junit-api into various frameworks (Jackson, Spring Boot, JPA etc.)
 
@@ -10,3 +10,15 @@ The Spring Boot starter modules will allow you to use the unit-api directly in S
 You can also use the Jackson Module for non Spring boot Use cases.
 The unit-api allows you to specify SI Units instead of primitives,
 which will allow compile time verification for all your Unit attributes.
+
+## Maven dependencies
+
+Unit API is distributed as separate JARs with a common version number:
+
+* A core JAR file for core functionality
+* A separate JAR file for each of the specialised modules. Each module's documentation describes the Maven/Gradle dependency to add to your project's build.
+
+The most commonly used modules are explained in the quick start sections:
+
+* [Spring Boot](/quickstart/spring-boot)
+* [Jackson Standalone](/quickstart/jackson)
