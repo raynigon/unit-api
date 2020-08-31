@@ -24,19 +24,19 @@ which will allow compile time verification for all your Unit attributes.
 <dependency>
     <groupId>com.raynigon.unit-api</groupId>
     <artifactId>jackson-starter</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
 </dependency>
 <dependency>
     <groupId>com.raynigon.unit-api</groupId>
     <artifactId>jpa-starter</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
 </dependency>
 ```
 
 **Gradle**
 ```groovy
-implementation("com.raynigon.unit-api:jackson-starter:0.0.1-SNAPSHOT")
-implementation("com.raynigon.unit-api:jpa-starter:0.0.1-SNAPSHOT")
+implementation("com.raynigon.unit-api:jackson-starter:1.0.0")
+implementation("com.raynigon.unit-api:jpa-starter:1.0.0")
 ```
 <!-- END_MODULE_LIST -->
 
@@ -47,13 +47,13 @@ implementation("com.raynigon.unit-api:jpa-starter:0.0.1-SNAPSHOT")
 <dependency>
     <groupId>com.raynigon.unit-api</groupId>
     <artifactId>jackson-module</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
 </dependency>
 ```
 
 **Gradle**
 ```groovy
-implementation("com.raynigon.unit-api:jackson-module:0.0.1-SNAPSHOT")
+implementation("com.raynigon.unit-api:jackson-module:1.0.0")
 ```
 <!-- END_MODULE_LIST -->
 
