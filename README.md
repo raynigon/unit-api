@@ -4,7 +4,7 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/05af413562694d6ba3b3a923d86da210)](https://app.codacy.com/manual/raynigon/unit-api?utm_source=github.com&utm_medium=referral&utm_content=raynigon/unit-api&utm_campaign=Badge_Grade_Dashboard)
 [![Codacy Badge](https://app.codacy.com/project/badge/Coverage/16680694f7a84aab8246e4a7f57b06f3)](https://www.codacy.com/manual/raynigon/unit-api?utm_source=github.com&utm_medium=referral&utm_content=raynigon/unit-api&utm_campaign=Badge_Coverage)
 
-[![Logo](docs/logo.png | width=250)](https://unit-api.raynigon.com)
+[<img src="docs/logo.png" width="250" height="250">](https://unit-api.raynigon.com/)
 
 Integration of the junit-api into various frameworks (Jackson, Spring Boot, JPA etc.)
 
