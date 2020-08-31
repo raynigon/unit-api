@@ -106,9 +106,18 @@ subprojects {
                     password = System.getenv("GITHUB_TOKEN") ?: null
                 }
             }
+            maven {
+                name = "OSSRH" // OSS Repository Hosting
+                url = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2/")
+                credentials {
+                    username = System.getenv("OSSRH_USERNAME") ?: null
+                    password = System.getenv("OSSRH_PASSWORD") ?: null
+                }
+
+            }
         }
         publications {
-            github(MavenPublication) {
+            basic(MavenPublication) {
                 artifactId = project.name
 
                 artifact project.tasks.jar
