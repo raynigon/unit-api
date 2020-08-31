@@ -108,6 +108,34 @@ subprojects {
 
                 pom.withXml {
                     def rootNode = asNode()
+                    rootNode.children().last() + {
+                        resolveStrategy = Closure.DELEGATE_FIRST
+
+                        description "The ${project.name} is a part of the unit-api"
+                        url 'https://unit-api.raynigon.com/'
+                        issueManagement {
+                            system 'GitHub'
+                            url 'https://github.com/raynigon/unit-api/issues'
+                        }
+                        licenses {
+                            license {
+                                name 'Apache-2.0'
+                                url 'https://opensource.org/licenses/Apache-2.0'
+                            }
+                        }
+                        scm {
+                            url 'https://github.com/raynigon/unit-api/'
+                            connection 'scm:git:git://github.com/raynigon/unit-api.git'
+                            developerConnection 'scm:git:ssh://git@github.com/raynigon/unit-api.git'
+                        }
+                        developers {
+                            developer {
+                                id 'raynigon'
+                                name 'Simon Schneider'
+                                email 'opensource@raynigon.de'
+                            }
+                        }
+                    }
 
                     rootNode.remove((Node) ((Node) rootNode).get("dependencyManagement").get(0))
                     def dependenciesNode = rootNode.appendNode('dependencies')

@@ -52,7 +52,7 @@ jobs:
           python-version: '3.7'
       - run: pip3 install -r requirements.txt
       - run: mkdocs build -d build/site/
-      - name: Upload javadoc
+      - name: Upload documentation
         uses: sebastianpopp/ftp-action@releases/v2
         with:
           host: ${{ secrets.WEBSPACE_HOST }}
