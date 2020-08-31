@@ -59,7 +59,9 @@ subprojects {
     }
 
     javadoc {
-        options.addBooleanOption('html5', true)
+        if (!org.gradle.internal.jvm.Jvm.current().javaVersion.isJava8()) {
+            options.addBooleanOption('html5', true)
+        }
     }
 
     task sourcesJar(type: Jar) {
@@ -173,7 +175,6 @@ public class BuildVersion {
 bootJar {
     enabled = false
 }
-
 
 
 def generateReadme(artifactNames) {
