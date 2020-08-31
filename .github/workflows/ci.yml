@@ -1,9 +1,7 @@
 name: CI
 on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+  - push
+  - pull_request
 
 jobs:
   build:
@@ -63,15 +61,16 @@ jobs:
 
   publish:
     runs-on: ubuntu-latest
-    # needs:
-    #   - build
-    #   - javadoc
-    # if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
+    needs:
+      - build
+      - javadoc
+      - documentation
+    if: contains(github.ref, 'refs/tags/')
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-java@v1
         with:
-          java-version: 11
+          java-version: 8
       - name: Publish
         uses: eskatos/gradle-command-action@v1.3.2
         env:
@@ -87,15 +86,16 @@ jobs:
         uses: eskatos/gradle-command-action@v1.3.2
         with:
           arguments: updateReadme
-      # - name: Commit Readme
-      #   uses: EndBug/add-and-commit@v4
-      #   with:
-      #     add: 'README.md'
-      #     author_name: Github Actions
-      #     author_email: 10846939+raynigon@users.noreply.github.com
-      #     message: 'Update Readme due to Release'
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Leave this line unchanged
+      - name: Commit Readme
+        uses: EndBug/add-and-commit@v4
+        with:
+          add: 'README.md'
+          author_name: Github Actions
+          author_email: 10846939+raynigon@users.noreply.github.com
+          message: 'Update Readme due to Release'
+          ref: 'released'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Leave this line unchanged
       - name: Copy Assets
         run: |
           mkdir -p build/jars/
@@ -109,5 +109,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          prerelease: true
           files: build/jars/*.jar
