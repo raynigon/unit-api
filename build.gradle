@@ -108,7 +108,8 @@ subprojects {
             }
             maven {
                 name = "OSSRH" // OSS Repository Hosting
-                url = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2/")
+                url = uri("https://oss.sonatype.org/content/repositories/snapshots/")
+                // Staging: uri("https://oss.sonatype.org/service/local/staging/deploy/maven2/")
                 credentials {
                     username = System.getenv("OSSRH_USERNAME") ?: null
                     password = System.getenv("OSSRH_PASSWORD") ?: null
