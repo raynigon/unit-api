@@ -1,7 +1,3 @@
-import java.util.regex.Pattern
-
-import java.time.OffsetDateTime
-
 buildscript {
     repositories {
         jcenter()
@@ -45,6 +41,17 @@ subprojects {
     compileJava.options.encoding = 'UTF-8'
     compileTestJava.options.encoding = 'UTF-8'
 
+    apply from: "$rootDir/gradle/scripts/publishing.gradle"
+    apply from: "$rootDir/gradle/scripts/versionClass.gradle"
+
+    bootJar {
+        enabled = false
+    }
+
+    jar {
+        enabled = true
+    }
+
     sourceSets {
         main {
             java.srcDirs += "build/generated/sources/version/java"
@@ -58,190 +65,10 @@ subprojects {
         testImplementation 'org.codehaus.groovy:groovy-all:2.4.20'
         testImplementation 'org.spockframework:spock-core:1.2-groovy-2.4'
     }
-
-    javadoc {
-        if (!org.gradle.internal.jvm.Jvm.current().javaVersion.isJava8()) {
-            options.addBooleanOption('html5', true)
-        }
-    }
-
-    task sourcesJar(type: Jar) {
-        from sourceSets.main.allJava
-        archiveClassifier = 'sources'
-    }
-
-    task javadocJar(type: Jar) {
-        from javadoc
-        archiveClassifier = 'javadoc'
-    }
-
-    signing {
-        def signingKey = findProperty("signingKey")
-        def signingPassword = findProperty("signingPassword")
-        useInMemoryPgpKeys(signingKey, signingPassword)
-        sign publishing.publications
-    }
-
-    tasks.test {
-        finalizedBy(tasks.jacocoTestReport) // report is always generated after tests run
-    }
-
-    tasks.jacocoTestReport {
-        dependsOn(tasks.test) // tests are required to run before generating the report
-        reports {
-            xml.enabled = true
-            html.enabled = true
-            csv.enabled = false
-        }
-    }
-
-    publishing {
-        repositories {
-            maven {
-                name = "OSSRH" // OSS Repository Hosting
-                url = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2/")
-                credentials {
-                    username = System.getenv("OSSRH_USERNAME") ?: null
-                    password = System.getenv("OSSRH_PASSWORD") ?: null
-                }
-
-            }
-        }
-        publications {
-            basic(MavenPublication) {
-                artifactId = project.name
-
-                artifact project.tasks.jar
-                artifact sourcesJar
-                artifact javadocJar
-
-                pom.withXml {
-                    def rootNode = asNode()
-                    rootNode.children().last() + {
-                        resolveStrategy = Closure.DELEGATE_FIRST
-
-                        name project.name
-                        description "The ${project.name} is a part of the unit-api"
-                        url 'https://unit-api.raynigon.com/'
-                        issueManagement {
-                            system 'GitHub'
-                            url 'https://github.com/raynigon/unit-api/issues'
-                        }
-                        licenses {
-                            license {
-                                name 'Apache-2.0'
-                                url 'https://opensource.org/licenses/Apache-2.0'
-                            }
-                        }
-                        scm {
-                            url 'https://github.com/raynigon/unit-api/'
-                            connection 'scm:git:git://github.com/raynigon/unit-api.git'
-                            developerConnection 'scm:git:ssh://git@github.com/raynigon/unit-api.git'
-                        }
-                        developers {
-                            developer {
-                                id 'raynigon'
-                                name 'Simon Schneider'
-                                email 'opensource@raynigon.de'
-                            }
-                        }
-                    }
-
-                    rootNode.remove((Node) ((Node) rootNode).get("dependencyManagement").get(0))
-                    def dependenciesNode = rootNode.appendNode('dependencies')
-
-                    def addDependency = { dependency, scope ->
-                        dependenciesNode.appendNode('dependency').with {
-                            appendNode('groupId', dependency.group)
-                            appendNode('artifactId', dependency.name)
-                            appendNode('version', dependency.version)
-                            appendNode('scope', scope)
-                        }
-                    }
-                    project.configurations.implementation.dependencies.each { addDependency(it, 'compile') }
-                }
-            }
-        }
-    }
-
-    task globalJavadoc(type: Copy) {
-        dependsOn javadoc
-        group = 'documentation'
-        String branchName = (System.getenv("GITHUB_REF") ?: "refs/heads/master").split("/")[2]
-        from(buildDir.toString() + "/docs/javadoc/")
-        into(parent.buildDir.toString() + "/javadoc/$branchName/" + project.name + "/")
-    }
-
-    bootJar {
-        enabled = false
-    }
-
-    jar {
-        enabled = true
-    }
-
-    task generateVersionClass() {
-        mustRunAfter(clean)
-        group = 'build'
-        doFirst {
-            def targetDirectory = projectDir.toPath().resolve("build/generated/sources/version/java")
-            // change package name
-            def packageName = project.group.replace("-", "_") + "." + project.name.replace("-", "_")
-            targetDirectory = targetDirectory.resolve(packageName.replace(".", "/"))
-            targetDirectory.toFile().mkdirs()
-            new File(targetDirectory.toFile(), "BuildVersion.java").text = """package ${packageName};
-import java.time.OffsetDateTime;
-
-public class BuildVersion {
-    public static final String ARTIFACT_ID = "${project.name}";
-    public static final String GROUP_ID = "${project.group}";
-
-
-    public static final String VERSION = "${project.version}";
-    public static final int MAJOR_VERSION = ${(project.version as String).split("\\.")[0]};
-    public static final int MINOR_VERSION = ${(project.version as String).split("\\.")[1]};
-    public static final int PATCH_VERSION = ${(project.version as String).split("\\.")[2].split('-')[0]};
-    public static final boolean SNAPSHOT = ${(project.version as String).contains("-")};
-    public static final OffsetDateTime BUILD_DATE = OffsetDateTime.parse("${OffsetDateTime.now().toString()}");
-}"""
-        }
-    }
-
-    tasks.getByName('compileJava').dependsOn(generateVersionClass)
 }
 
 bootJar {
     enabled = false
 }
 
-
-def generateReadme(artifactNames) {
-    def maven = "**Maven**\n```xml\n"
-    def gradle = "**Gradle**\n```groovy\n"
-
-    for (module in artifactNames) {
-        maven += "<dependency>\n"
-        maven += "    <groupId>$project.group</groupId>\n"
-        maven += "    <artifactId>$module</artifactId>\n"
-        maven += "    <version>$project.version</version>\n"
-        maven += "</dependency>\n"
-        gradle += "implementation(\"$project.group:$module:$project.version\")\n"
-    }
-    maven += "```\n"
-    gradle += "```\n"
-
-    return "$maven\n$gradle"
-}
-
-task updateReadme() {
-    def readme = new File("README.md").text as String
-    def pattern = Pattern.compile("<!-- MODULE_LIST: ([A-z-_,]*) -->(\\n[^#]*)*<!-- END_MODULE_LIST -->")
-    def matcher = pattern.matcher(readme)
-    for (match in matcher) {
-        def full_match = match.get(0)
-        def artifactNames = match.get(1).split(",")
-        def generatedBlock = "<!-- MODULE_LIST: ${String.join(",", artifactNames)} -->\n${generateReadme(artifactNames)}<!-- END_MODULE_LIST -->"
-        readme = readme.replace(full_match, generatedBlock)
-    }
-    new File("README.md").write(readme)
-}
+apply from: "$rootDir/gradle/scripts/updateReadme.gradle"

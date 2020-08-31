@@ -1,0 +1,114 @@
+import org.gradle.internal.jvm.Jvm
+
+javadoc {
+    if (!Jvm.current().javaVersion.isJava8()) {
+        options.addBooleanOption('html5', true)
+    }
+}
+
+task sourcesJar(type: Jar) {
+    from sourceSets.main.allJava
+    archiveClassifier.set('sources')
+}
+
+task javadocJar(type: Jar) {
+    from javadoc
+    archiveClassifier.set('javadoc')
+}
+
+task globalJavadoc(type: Copy) {
+    dependsOn javadoc
+    group = 'documentation'
+    String branchName = (System.getenv("GITHUB_REF") ?: "refs/heads/master").split("/")[2]
+    from(buildDir.toString() + "/docs/javadoc/")
+    into(parent.buildDir.toString() + "/javadoc/$branchName/" + project.name + "/")
+}
+
+signing {
+    String signingKey = findProperty("signingKey")
+    String signingPassword = findProperty("signingPassword")
+    useInMemoryPgpKeys(signingKey, signingPassword)
+    sign publishing.publications
+}
+
+tasks.test {
+    finalizedBy(tasks.jacocoTestReport) // report is always generated after tests run
+}
+
+tasks.jacocoTestReport {
+    dependsOn(tasks.test) // tests are required to run before generating the report
+    reports {
+        xml.enabled = true
+        html.enabled = true
+        csv.enabled = false
+    }
+}
+
+publishing {
+    repositories {
+        maven {
+            name = "OSSRH" // OSS Repository Hosting
+            url = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2/")
+            credentials {
+                username = System.getenv("OSSRH_USERNAME") ?: null
+                password = System.getenv("OSSRH_PASSWORD") ?: null
+            }
+
+        }
+    }
+    publications {
+        basic(MavenPublication) {
+            artifactId = project.name
+
+            artifact project.tasks.jar
+            artifact sourcesJar
+            artifact javadocJar
+
+            pom.withXml {
+                def rootNode = asNode()
+                rootNode.children().last() + {
+                    resolveStrategy = Closure.DELEGATE_FIRST
+
+                    name project.name
+                    description "The ${project.name} is a part of the unit-api"
+                    url 'https://unit-api.raynigon.com/'
+                    issueManagement {
+                        system 'GitHub'
+                        url 'https://github.com/raynigon/unit-api/issues'
+                    }
+                    licenses {
+                        license {
+                            name 'Apache-2.0'
+                            url 'https://opensource.org/licenses/Apache-2.0'
+                        }
+                    }
+                    scm {
+                        url 'https://github.com/raynigon/unit-api/'
+                        connection 'scm:git:git://github.com/raynigon/unit-api.git'
+                        developerConnection 'scm:git:ssh://git@github.com/raynigon/unit-api.git'
+                    }
+                    developers {
+                        developer {
+                            id 'raynigon'
+                            name 'Simon Schneider'
+                            email 'opensource@raynigon.de'
+                        }
+                    }
+                }
+
+                rootNode.remove((Node) ((Node) rootNode).get("dependencyManagement").get(0))
+                def dependenciesNode = rootNode.appendNode('dependencies')
+
+                def addDependency = { dependency, scope ->
+                    dependenciesNode.appendNode('dependency').with {
+                        appendNode('groupId', dependency.group)
+                        appendNode('artifactId', dependency.name)
+                        appendNode('version', dependency.version)
+                        appendNode('scope', scope)
+                    }
+                }
+                project.configurations.implementation.dependencies.each { addDependency(it, 'compile') }
+            }
+        }
+    }
+}
