@@ -12,6 +12,7 @@ buildscript {
 
 plugins {
     id 'java-library'
+    id 'signing'
     id 'org.springframework.boot' version '2.3.3.RELEASE'
     id 'io.spring.dependency-management' version '1.0.10.RELEASE'
 
@@ -38,6 +39,7 @@ subprojects {
     apply plugin: 'groovy'
     apply plugin: 'maven-publish'
     apply plugin: 'jacoco'
+    apply plugin: 'signing'
 
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
@@ -74,6 +76,13 @@ subprojects {
         archiveClassifier = 'javadoc'
     }
 
+    signing {
+        def signingKey = findProperty("signingKey")
+        def signingPassword = findProperty("signingPassword")
+        useInMemoryPgpKeys(signingKey, signingPassword)
+        sign publishing.publications
+    }
+
     tasks.test {
         finalizedBy(tasks.jacocoTestReport) // report is always generated after tests run
     }
@@ -93,13 +102,13 @@ subprojects {
                 name = "GitHubPackages"
                 url = uri("https://maven.pkg.github.com/raynigon/unit-api")
                 credentials {
-                    username = System.getenv("USERNAME") ?: null
-                    password = System.getenv("TOKEN") ?: null
+                    username = System.getenv("GITHUB_USERNAME") ?: null
+                    password = System.getenv("GITHUB_TOKEN") ?: null
                 }
             }
         }
         publications {
-            gpr(MavenPublication) {
+            github(MavenPublication) {
                 artifactId = project.name
 
                 artifact project.tasks.jar
