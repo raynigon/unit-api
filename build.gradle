@@ -98,14 +98,14 @@ subprojects {
 
     publishing {
         repositories {
-            maven {
+            /*maven {
                 name = "GitHubPackages"
                 url = uri("https://maven.pkg.github.com/raynigon/unit-api")
                 credentials {
                     username = System.getenv("GITHUB_USERNAME") ?: null
                     password = System.getenv("GITHUB_TOKEN") ?: null
                 }
-            }
+            }*/
             maven {
                 name = "OSSRH" // OSS Repository Hosting
                 url = uri("https://oss.sonatype.org/content/repositories/snapshots/")
