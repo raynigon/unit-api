@@ -8,12 +8,12 @@ import tech.units.indriya.unit.Units;
 import javax.measure.MetricPrefix;
 import javax.measure.Quantity;
 import javax.measure.Unit;
-import javax.measure.quantity.Acceleration;
 import javax.measure.quantity.Energy;
+import java.util.ArrayList;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
 
 public class UnitResolverService extends AbstractSystemOfUnits {
 
@@ -22,19 +22,58 @@ public class UnitResolverService extends AbstractSystemOfUnits {
     public UnitResolverService() {
         units.addAll(Units.getInstance().getUnits());
 
+        createCustomUnits();
+        replaceDefaultUnits();
+
+        createScaledUnits("m", "k", "c", "m");
+        createScaledUnits("Wh", "k", "m");
+    }
+
+    public <U extends Unit<?>> void addUnit(U unit) {
+        units.add(unit);
+    }
+
+    public <U extends Unit<?>> void addUnit(U unit, Class<? extends Quantity<?>> type) {
+        units.add(unit);
+        quantityToUnit.put(type, unit);
+    }
+
+    public <U extends Quantity<U>> void replaceUnit(Unit<U> oldUnit, Unit<U> newUnit) {
+        units.remove(oldUnit);
+        @SuppressWarnings("rawtypes")
+        Set<Class<? extends Quantity>> keys = quantityToUnit.entrySet()
+                .stream()
+                .filter((it) -> it.getValue().equals(oldUnit))
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toSet());
+        keys.forEach(quantityToUnit::remove);
+        if (keys.isEmpty()) {
+            addUnit(newUnit);
+            return;
+        }
+        //noinspection unchecked
+        Class<? extends Quantity<?>> quantityType = (Class<? extends Quantity<?>>) new ArrayList<>(keys).get(0)
+        addUnit(newUnit, quantityType);
+    }
+
+    private void createCustomUnits() {
         @SuppressWarnings("unchecked")
         Unit<Energy> wattHour = new TransformedUnit<Energy>(
                 "Wh",
                 "Watt-hour",
                 (Unit<Energy>) Units.WATT.multiply(Units.HOUR),
                 AbstractConverter.IDENTITY);
-        units.add(wattHour);
-        units.remove(Units.METRE_PER_SQUARE_SECOND);
-        Unit<Acceleration> metrePerSquareSecond = new TransformedUnit<>("m/s²", "", Units.METRE_PER_SQUARE_SECOND,
-                AbstractConverter.IDENTITY);
-        units.add(metrePerSquareSecond);
-        createScaledUnits("m", "k", "c", "m");
-        createScaledUnits("Wh", "k", "m");
+        addUnit(wattHour);
+    }
+
+    private void replaceDefaultUnits() {
+        // Replace Unit, due to missing Symbol
+        replaceUnit(Units.METRE_PER_SQUARE_SECOND, new TransformedUnit<>(
+                "m/s²",
+                "Metre per second squared",
+                Units.METRE_PER_SQUARE_SECOND,
+                AbstractConverter.IDENTITY
+        ));
     }
 
     private void createScaledUnits(String base, String... prefixes) {
