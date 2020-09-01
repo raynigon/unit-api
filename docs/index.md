@@ -4,7 +4,8 @@
 
 ## About
 
-This Library provides the integration of the unit-api into various frameworks like Jackson, Spring Boot, Hibernate etc.
+This Library provides the integration of the [unit-api](https://github.com/unitsofmeasurement) into various frameworks.
+<!-- TODO add better description -->
 
 The Spring Boot starter modules will allow you to use the unit-api directly in Spring Boot without configuration.
 You can also use the Jackson Module for non Spring boot Use cases.
