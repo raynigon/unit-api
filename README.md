@@ -10,7 +10,7 @@
     <img src="./docs/logo.png" width="250" height="250">
 </a>
 
-# [Read the documentation here](http://unit-api.raynigon.com)
+## [Read the documentation here](http://unit-api.raynigon.com)
 
 ## License
 [Apache License 2.0](LICENSE)
