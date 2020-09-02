@@ -28,7 +28,7 @@ nav:
   - Modules:
       - Jackson Module: modules/jackson-module.md
       - Jackson Starter: modules/jackson-starter.md
-      - Jackson Module: modules/jpa-starter.md
+      - Jpa Starter: modules/jpa-starter.md
       - Springdoc Starter: modules/springdoc-starter.md
   - Contribution: contribution.md
 extra:

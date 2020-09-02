@@ -1,4 +1,5 @@
-## Adding this module to your project dependencies
+# Jackson Starter
+## Project Dependencies
    
 Add the following dependency to your pom.xml/build.gradle file:
 
