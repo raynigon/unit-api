@@ -52,7 +52,7 @@ public class UnitResolverService extends AbstractSystemOfUnits {
             return;
         }
         //noinspection unchecked
-        Class<? extends Quantity<?>> quantityType = (Class<? extends Quantity<?>>) new ArrayList<>(keys).get(0)
+        Class<? extends Quantity<?>> quantityType = (Class<? extends Quantity<?>>) new ArrayList<>(keys).get(0);
         addUnit(newUnit, quantityType);
     }
 
