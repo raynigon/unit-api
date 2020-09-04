@@ -71,4 +71,4 @@ bootJar {
     enabled = false
 }
 
-apply from: "$rootDir/gradle/scripts/updateReadme.gradle"
+apply from: "$rootDir/gradle/scripts/updateMkdocsConfig.gradle"

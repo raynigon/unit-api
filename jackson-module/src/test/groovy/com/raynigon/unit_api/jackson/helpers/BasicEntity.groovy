@@ -10,17 +10,15 @@ import javax.measure.quantity.Temperature
 
 class BasicEntity {
 
-    public String id
+    public String id;
 
     @JsonUnit(unit = "km/h")
-    public Quantity<Speed> speed
+    public Quantity<Speed> speed;
 
     @JsonUnit(unit = "℃", shape = QuantityShape.STRING)
-    public Quantity<Temperature> temperature
+    public Quantity<Temperature> temperature;
 
     @JsonUnit(unit = "km")
-    public Quantity<Length> distance
+    public Quantity<Length> distance;
 
-    /*@JsonUnit(unit="mWh")
-    public Quantity<Energy> energy*/
 }

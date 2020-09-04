@@ -19,9 +19,17 @@ markdown_extensions:
       linenums: False
   - pymdownx.superfences
   - pymdownx.snippets
+  - pymdownx.tabbed
 nav:
   - Home: index.md
-  - Javadoc: javadoc.md
+  - Quickstart:
+      - Jackson: quickstart/jackson.md
+      - Spring Boot: quickstart/spring-boot.md
+  - Modules:
+      - Jackson Module: modules/jackson-module.md
+      - Jackson Starter: modules/jackson-starter.md
+      - Jpa Starter: modules/jpa-starter.md
+      - Springdoc Starter: modules/springdoc-starter.md
   - Contribution: contribution.md
 extra:
-  latest_version: 1.14.3
+  latest_version: 1.0.0
