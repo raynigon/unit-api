@@ -1,0 +1,7 @@
+
+task updateMkdocsConfig() {
+    doFirst {
+        def cfg = project.file(project.file('mkdocs.yml'))
+        cfg.text = cfg.text.replaceAll(/(?m)latest_version:.*/, "latest_version: ${project.version}")
+    }
+}
