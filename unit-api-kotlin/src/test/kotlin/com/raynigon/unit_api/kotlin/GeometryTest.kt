@@ -6,7 +6,7 @@ import tech.units.indriya.quantity.Quantities.getQuantity
 import tech.units.indriya.unit.Units
 import tech.units.indriya.unit.Units.*
 
-class GeometryTest{
+internal class GeometryTest{
 
     @Test
     fun `pythagorean theorem`(){
