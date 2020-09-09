@@ -25,6 +25,9 @@ task globalJavadoc(type: Copy) {
 }
 
 signing {
+    required {
+        findProperty("signingKey") != null
+    }
     String signingKey = findProperty("signingKey")
     String signingPassword = findProperty("signingPassword")
     useInMemoryPgpKeys(signingKey, signingPassword)
