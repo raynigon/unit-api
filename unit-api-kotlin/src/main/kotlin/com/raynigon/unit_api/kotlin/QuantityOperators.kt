@@ -8,11 +8,11 @@ import javax.measure.Quantity
  * negative integer, zero, or a positive integer as this quantity is less
  * than, equal to, or greater than the specified quantity.
  *
- * @param   value   the quantity to be compared.
- * @return  a negative integer, zero, or a positive integer as this quantity
+ * @param value   the quantity to be compared.
+ * @return a negative integer, zero, or a positive integer as this quantity
  *          is less than, equal to, or greater than the specified quantity.
  *
- * @throws  ClassCastException  the unit of this quantity cannot be compared
+ * @throws ClassCastException  the unit of this quantity cannot be compared
  * with the unit of the specified quantity
  */
 @Contract(pure = true)

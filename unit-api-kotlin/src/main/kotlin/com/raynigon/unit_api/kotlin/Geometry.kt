@@ -10,8 +10,8 @@ import kotlin.math.sqrt
 /**
  * Implementation of the Pythagorean theorem (https://en.wikipedia.org/wiki/Pythagorean_theorem)
  * for Length Quantities. Calculates the length of a hypotenuse in a right-angled triangle.
- *  @param  a   length of the first cathete in the triangle
- *  @param  b   length of second cathete in the triangle
+ *  @param a   length of the first cathete in the triangle
+ *  @param b   length of second cathete in the triangle
  *  @return length of hypotenuse in the triangle (c)
  */
 fun pythagoreanTheorem(a: Quantity<Length>, b: Quantity<Length>): Quantity<Length> {
