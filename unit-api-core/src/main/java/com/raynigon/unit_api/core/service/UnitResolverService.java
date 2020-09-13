@@ -2,12 +2,15 @@ package com.raynigon.unit_api.core.service;
 
 import tech.units.indriya.AbstractSystemOfUnits;
 import tech.units.indriya.function.AbstractConverter;
+import tech.units.indriya.function.MultiplyConverter;
+import tech.units.indriya.function.RationalConverter;
 import tech.units.indriya.unit.TransformedUnit;
 import tech.units.indriya.unit.Units;
 
 import javax.measure.MetricPrefix;
 import javax.measure.Quantity;
 import javax.measure.Unit;
+import javax.measure.quantity.ElectricCharge;
 import javax.measure.quantity.Energy;
 import java.util.ArrayList;
 import java.util.Map;
@@ -27,6 +30,7 @@ public class UnitResolverService extends AbstractSystemOfUnits {
 
         createScaledUnits("m", "k", "c", "m");
         createScaledUnits("Wh", "k", "m");
+        createScaledUnits("s", "m", "\u00b5", "n");
     }
 
     public <U extends Unit<?>> void addUnit(U unit) {
@@ -64,6 +68,20 @@ public class UnitResolverService extends AbstractSystemOfUnits {
                 (Unit<Energy>) Units.WATT.multiply(Units.HOUR),
                 AbstractConverter.IDENTITY);
         addUnit(wattHour);
+
+        Unit<ElectricCharge> ampereSecond = new TransformedUnit<ElectricCharge>(
+                "As",
+                "Ampere-second",
+                Units.COULOMB,
+                AbstractConverter.IDENTITY);
+        addUnit(ampereSecond);
+
+        Unit<ElectricCharge> ampereHour = new TransformedUnit<ElectricCharge>(
+                "Ah",
+                "Ampere-hour",
+                (Unit<ElectricCharge>) Units.COULOMB.multiply(Units.HOUR),
+                AbstractConverter.IDENTITY);
+        addUnit(ampereHour);
     }
 
     private void replaceDefaultUnits() {
