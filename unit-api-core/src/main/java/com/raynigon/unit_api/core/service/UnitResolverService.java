@@ -79,7 +79,7 @@ public class UnitResolverService extends AbstractSystemOfUnits {
         Unit<ElectricCharge> ampereHour = new TransformedUnit<ElectricCharge>(
                 "Ah",
                 "Ampere-hour",
-                (Unit<ElectricCharge>) Units.COULOMB.multiply(Units.HOUR),
+                (Unit<ElectricCharge>) Units.COULOMB.multiply(3600),
                 AbstractConverter.IDENTITY);
         addUnit(ampereHour);
     }
