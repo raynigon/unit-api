@@ -32,4 +32,4 @@ nav:
       - Springdoc Starter: modules/springdoc-starter.md
   - Contribution: contribution.md
 extra:
-  latest_version: 1.0.0
+  latest_version: 1.0.1
