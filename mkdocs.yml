@@ -25,6 +25,7 @@ nav:
   - Quickstart:
       - Jackson: quickstart/jackson.md
       - Spring Boot: quickstart/spring-boot.md
+      - Kotlin: quickstart/kotlin.md
   - Modules:
       - Jackson Module: modules/jackson-module.md
       - Jackson Starter: modules/jackson-starter.md
