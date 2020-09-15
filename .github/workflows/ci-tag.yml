@@ -34,7 +34,7 @@ jobs:
           add: 'mkdocs.yml'
           author_name: Github Actions
           author_email: 10846939+raynigon@users.noreply.github.com
-          message: 'Update Readme due to Release'
+          message: 'Update mkdocs.yml due to Release'
           ref: 'released'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Leave this line unchanged
