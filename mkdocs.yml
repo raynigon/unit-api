@@ -30,6 +30,7 @@ nav:
       - Jackson Starter: modules/jackson-starter.md
       - Jpa Starter: modules/jpa-starter.md
       - Springdoc Starter: modules/springdoc-starter.md
+      - Kotlin Module: modules/kotlin-module.md
   - Contribution: contribution.md
 extra:
   latest_version: 1.0.1
