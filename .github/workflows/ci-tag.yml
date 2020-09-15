@@ -46,6 +46,7 @@ jobs:
           cp jpa-starter/build/libs/*.jar build/jars/
           cp springdoc-starter/build/libs/*.jar build/jars/
           cp unit-api-core/build/libs/*.jar build/jars/
+          cp unit-api-kotlin/build/libs/*.jar build/jars/
       - name: Github Release
         uses: softprops/action-gh-release@v0.1.5
         env:
