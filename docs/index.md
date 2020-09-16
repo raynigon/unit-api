@@ -33,3 +33,9 @@ The most commonly used modules are explained in the quick start sections:
 
 * [Spring Boot](/quickstart/spring-boot)
 * [Jackson Standalone](/quickstart/jackson)
+
+## Kotlin Support
+
+There is a module which adds support for Kotlin operators:
+
+* [Kotlin](/modules/kotlin-module)

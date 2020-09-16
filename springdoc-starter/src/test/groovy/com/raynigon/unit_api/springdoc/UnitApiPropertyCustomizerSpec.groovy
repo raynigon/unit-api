@@ -20,6 +20,7 @@ class UnitApiPropertyCustomizerSpec extends Specification {
         given:
         def customizer = new UnitApiPropertyCustomizer()
         def property = new Schema()
+        property.name = "speed"
         def annotatedType = new AnnotatedType()
         annotatedType.type = new SimpleType(
                 Quantity.class,
@@ -36,7 +37,8 @@ class UnitApiPropertyCustomizerSpec extends Specification {
         def result = customizer.customize(property, annotatedType)
 
         then:
-        result.type == "string"
+        result.type == "number | string"
+        result.description == "speed is given in metre per second (m/s)"
     }
 
     def 'convert quantity with annotation'(){
@@ -44,6 +46,7 @@ class UnitApiPropertyCustomizerSpec extends Specification {
         given:
         def customizer = new UnitApiPropertyCustomizer()
         def property = new Schema()
+        property.name = "speed"
         def annotatedType = new AnnotatedType()
         annotatedType.type = new SimpleType(
                 Quantity.class,
@@ -66,6 +69,7 @@ class UnitApiPropertyCustomizerSpec extends Specification {
         1 * jsonUnit.unit() >> "km/h"
 
         and:
-        result.type == "string"
+        result.type == "number | string"
+        result.description == "speed is given in kilometre per hour (km/h)"
     }
 }
