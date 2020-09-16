@@ -1,4 +1,4 @@
-name: CI Dependabot Merge
+name: CI - Dependabot Merge
 
 on:
   pull_request:
