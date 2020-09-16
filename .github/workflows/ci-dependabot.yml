@@ -2,6 +2,8 @@ name: CI - Dependabot Merge
 
 on:
   pull_request:
+    branches:
+      - dependabot/**
 
 jobs:
   test:
