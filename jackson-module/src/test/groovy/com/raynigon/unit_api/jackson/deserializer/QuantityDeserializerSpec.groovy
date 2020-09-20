@@ -1,6 +1,8 @@
 package com.raynigon.unit_api.jackson.deserializer
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.raynigon.unit_api.core.units.si.speed.KilometrePerHour
+import com.raynigon.unit_api.core.units.si.speed.MetrePerSecond
 import com.raynigon.unit_api.jackson.UnitApiModule
 import com.raynigon.unit_api.jackson.annotation.JsonUnit
 import spock.lang.Specification
@@ -28,7 +30,7 @@ class QuantityDeserializerSpec extends Specification {
 
         then:
         noExceptionThrown()
-        result.speed.unit == Units.KILOMETRE_PER_HOUR
+        result.speed.unit == new KilometrePerHour()
         result.speed.value.toInteger() == 100
     }
 
@@ -42,7 +44,7 @@ class QuantityDeserializerSpec extends Specification {
 
         then:
         noExceptionThrown()
-        result.speed.unit == Units.KILOMETRE_PER_HOUR
+        result.speed.unit == new KilometrePerHour()
         result.speed.value.toInteger() == 100
     }
 
@@ -56,7 +58,7 @@ class QuantityDeserializerSpec extends Specification {
 
         then:
         noExceptionThrown()
-        result.speed.unit == Units.KILOMETRE_PER_HOUR
+        result.speed.unit == new KilometrePerHour()
         result.speed.value.toInteger() == 100
     }
 
@@ -70,7 +72,7 @@ class QuantityDeserializerSpec extends Specification {
 
         then:
         noExceptionThrown()
-        result.speed.unit == Units.METRE_PER_SECOND
+        result.speed.unit == new MetrePerSecond()
         result.speed.value.toInteger() == 100
     }
 
@@ -84,7 +86,7 @@ class QuantityDeserializerSpec extends Specification {
 
         then:
         noExceptionThrown()
-        result.speed.unit.symbol == Units.KILOMETRE_PER_HOUR.symbol
+        result.speed.unit.symbol == new KilometrePerHour().symbol
         result.speed.value.toInteger() == 100
     }
 

@@ -6,11 +6,12 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.ContextualSerializer;
-import com.raynigon.unit_api.core.service.UnitResolverService;
+import com.raynigon.unit_api.core.service.UnitsApiService;
 import com.raynigon.unit_api.jackson.annotation.JsonUnit;
 import com.raynigon.unit_api.core.annotation.QuantityShape;
 import com.raynigon.unit_api.jackson.annotation.JsonUnitHelper;
 import com.raynigon.unit_api.jackson.exception.UnknownUnitException;
+import tech.units.indriya.format.SimpleQuantityFormat;
 
 import javax.measure.Quantity;
 import javax.measure.Unit;
@@ -34,7 +35,7 @@ public class QuantitySerializer extends JsonSerializer<Quantity> implements Cont
     @SuppressWarnings({"unchecked", "rawtypes"})
     public JsonSerializer<?> createContextual(SerializerProvider prov, BeanProperty property) throws JsonMappingException {
         Class<Quantity> quantityType = (Class<Quantity>) property.getType().getBindings().getBoundType(0).getRawClass();
-        unit = UnitResolverService.getInstance().getUnit(quantityType);
+        unit = UnitsApiService.getInstance().getUnit(quantityType);
 
         JsonUnit unitWrapper = property.getAnnotation(JsonUnit.class);
         if (unitWrapper == null) return new QuantitySerializer(unit, shape);
@@ -42,7 +43,7 @@ public class QuantitySerializer extends JsonSerializer<Quantity> implements Cont
         String unitName = JsonUnitHelper.getUnitName(unitWrapper);
 
         if (unitName != null) {
-            unit = UnitResolverService.getInstance().getUnit(unitName);
+            unit = UnitsApiService.getInstance().getUnit(unitName);
         }
         if (unit == null) {
             throw new UnknownUnitException(prov.getGenerator(), unitName);
@@ -63,7 +64,7 @@ public class QuantitySerializer extends JsonSerializer<Quantity> implements Cont
                 gen.writeNumber(convertedQuantity.getValue().doubleValue());
                 break;
             case STRING:
-                gen.writeString(convertedQuantity.toString());
+                gen.writeString(UnitsApiService.getInstance().format(convertedQuantity));
                 break;
             default:
                 // TODO raise exception

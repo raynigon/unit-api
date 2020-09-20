@@ -1,6 +1,6 @@
 package com.raynigon.unit_api.kotlin
 
-import com.raynigon.unit_api.core.service.UnitResolverService
+import com.raynigon.unit_api.core.service.UnitsApiService
 import tech.units.indriya.quantity.Quantities.getQuantity
 import javax.measure.Quantity
 import javax.measure.quantity.Length
@@ -18,5 +18,5 @@ fun pythagoreanTheorem(a: Quantity<Length>, b: Quantity<Length>): Quantity<Lengt
     val aInMetre = a.toSystemUnit().value.toDouble()
     val bInMetre = b.toSystemUnit().value.toDouble()
     val cInMetre = sqrt(aInMetre.pow(2.0) + bInMetre.pow(2.0))
-    return getQuantity(cInMetre, UnitResolverService.getInstance().getUnit(Length::class.java))
+    return getQuantity(cInMetre, UnitsApiService.getInstance().getUnit(Length::class.java))
 }

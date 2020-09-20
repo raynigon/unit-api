@@ -7,11 +7,11 @@ import tech.units.indriya.unit.Units
 import javax.measure.Unit
 import javax.measure.quantity.Energy
 
-class UnitResolverServiceSpec extends Specification {
+class UnitsApiServiceSpec extends Specification {
 
     def 'initialise works'() {
         expect:
-        new UnitResolverService()
+        new UnitsApiService()
     }
 
     def 'joule to watt-hour works'() {
@@ -19,7 +19,7 @@ class UnitResolverServiceSpec extends Specification {
         def joule1 = Quantities.getQuantity(3600, Units.JOULE)
 
         when:
-        def result = joule1.to(UnitResolverService.getInstance().getUnit("Wh") as Unit<Energy>)
+        def result = joule1.to(UnitsApiService.getInstance().getUnit("Wh") as Unit<Energy>)
 
         then:
         result.value.intValue() == 1
@@ -27,6 +27,6 @@ class UnitResolverServiceSpec extends Specification {
 
     def 'resolve m/s2'() {
         expect:
-        UnitResolverService.getInstance().getUnit("m/s²") != null
+        UnitsApiService.getInstance().getUnit("m/s²") != null
     }
 }

@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.deser.ContextualDeserializer;
-import com.raynigon.unit_api.core.service.UnitResolverService;
+import com.raynigon.unit_api.core.service.UnitsApiService;
 import com.raynigon.unit_api.jackson.annotation.JsonUnit;
 import com.raynigon.unit_api.jackson.annotation.JsonUnitHelper;
 import com.raynigon.unit_api.jackson.exception.UnknownUnitException;
@@ -37,14 +37,14 @@ public class QuantityDeserializer extends JsonDeserializer<Quantity<?>> implemen
     @SuppressWarnings({"unchecked", "rawtypes"})
     public JsonDeserializer<?> createContextual(DeserializationContext ctxt, BeanProperty property) throws JsonMappingException {
         Class<Quantity> quantityType = (Class<Quantity>) property.getType().getBindings().getBoundType(0).getRawClass();
-        this.unit = UnitResolverService.getInstance().getUnit(quantityType);
+        this.unit = UnitsApiService.getInstance().getUnit(quantityType);
 
         JsonUnit unitWrapper = property.getAnnotation(JsonUnit.class);
         if (unitWrapper == null) return new QuantityDeserializer(unit, false);
 
         String unitName = JsonUnitHelper.getUnitName(unitWrapper);
         if (unitName != null) {
-            this.unit = UnitResolverService.getInstance().getUnit(unitName);
+            this.unit = UnitsApiService.getInstance().getUnit(unitName);
         }
         if (this.unit == null) {
             throw new UnknownUnitException(ctxt.getParser(), unitName);
@@ -73,7 +73,7 @@ public class QuantityDeserializer extends JsonDeserializer<Quantity<?>> implemen
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     private Quantity<?> resolveQuantity(String value) {
-        Quantity<?> result = Quantities.getQuantity(value);
+        Quantity<?> result = UnitsApiService.getInstance().parseQuantity(value);
         return forceUnit ? result.to((Unit) this.unit) : result;
     }
 

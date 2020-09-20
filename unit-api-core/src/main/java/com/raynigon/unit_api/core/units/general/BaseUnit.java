@@ -31,50 +31,15 @@ import java.util.Objects;
  * @version 2.0, February 7, 2020
  * @since 1.0
  */
-public class BaseUnit<Q extends Quantity<Q>> extends AbstractUnit<Q> {
+public class BaseUnit<Q extends Quantity<Q>> extends AbstractUnit<Q> implements IUnit<Q> {
 
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1721629233768215930L;
 
     /**
      * Holds the base unit dimension.
      */
     private final Dimension dimension;
-
-    /**
-     * Creates a base unit having the specified symbol and dimension.
-     *
-     * @param symbol the symbol of this base unit.
-     */
-    public BaseUnit(String symbol, Dimension dimension) {
-        super(symbol);
-        this.dimension = dimension;
-    }
-
-    /**
-     * Creates a base unit having the specified symbol.
-     *
-     * @param symbol the symbol of this base unit.
-     */
-    public BaseUnit(String symbol) {
-        super(symbol);
-        this.dimension = UnitDimension.NONE;
-    }
-
-    /**
-     * Creates a base unit having the specified symbol and name.
-     *
-     * @param symbol the symbol of this base unit.
-     * @param name   the name of this base unit.
-     * @throws IllegalArgumentException if the specified symbol is associated to a
-     *                                  different unit.
-     */
-    public BaseUnit(String symbol, String name) {
-        this(symbol);
-        this.name = name;
-    }
+    private final String systemId;
+    private final Class<Q> quantityType;
 
     /**
      * Creates a base unit having the specified symbol, name and dimension.
@@ -85,10 +50,26 @@ public class BaseUnit<Q extends Quantity<Q>> extends AbstractUnit<Q> {
      *                                  different unit.
      * @since 2.0
      */
-    public BaseUnit(String symbol, String name, Dimension dimension) {
-        super(symbol);
+    public BaseUnit(String systemId, String symbol, String name, Class<Q> quantityType, Dimension dimension) {
+        super(Objects.requireNonNull(symbol));
+        Objects.requireNonNull(systemId);
+        Objects.requireNonNull(quantityType);
+        Objects.requireNonNull(name);
+        Objects.requireNonNull(dimension);
+        this.systemId = systemId;
+        this.quantityType = quantityType;
         this.name = name;
         this.dimension = dimension;
+    }
+
+    @Override
+    public String getSystemId() {
+        return systemId;
+    }
+
+    @Override
+    public Class<Q> getQuantityType() {
+        return quantityType;
     }
 
     @Override

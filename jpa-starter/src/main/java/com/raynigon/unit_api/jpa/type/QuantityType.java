@@ -1,7 +1,7 @@
 package com.raynigon.unit_api.jpa.type;
 
 import com.raynigon.unit_api.core.annotation.QuantityShape;
-import com.raynigon.unit_api.core.service.UnitResolverService;
+import com.raynigon.unit_api.core.service.UnitsApiService;
 import com.raynigon.unit_api.jpa.annotation.JpaUnit;
 import com.raynigon.unit_api.jpa.annotation.JpaUnitHelper;
 import com.raynigon.unit_api.jpa.exception.UnitNotFound;
@@ -58,12 +58,12 @@ public class QuantityType extends AbstractSingleColumnStandardBasicType<Quantity
         if (quantityType == null && unitName == null) {
             throw new UnitNotFound("Either QuantityType or unit has to be specified");
         } else if (unitName != null) {
-            Unit<?> unit = UnitResolverService.getInstance().getUnit(unitName);
+            Unit<?> unit = UnitsApiService.getInstance().getUnit(unitName);
             if (unit == null) throw new UnitNotFound("Invalid unit: " + unitName);
             return unit;
         } else {
             @SuppressWarnings({"rawtypes", "unchecked"})
-            Unit<?> unit = UnitResolverService.getInstance().getUnit((Class) quantityType);
+            Unit<?> unit = UnitsApiService.getInstance().getUnit((Class) quantityType);
             if (unit == null) throw new UnitNotFound("Invalid QuantityType: " + quantityType.getName());
             return unit;
         }

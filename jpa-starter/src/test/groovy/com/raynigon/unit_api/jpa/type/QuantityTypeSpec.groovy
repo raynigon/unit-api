@@ -1,6 +1,7 @@
 package com.raynigon.unit_api.jpa.type
 
 import com.raynigon.unit_api.core.annotation.QuantityShape
+import com.raynigon.unit_api.core.units.si.length.Metre
 import com.raynigon.unit_api.jpa.annotation.JpaUnit
 import com.raynigon.unit_api.jpa.annotation.NoneQuantity
 import com.raynigon.unit_api.jpa.exception.UnitNotFound
@@ -51,10 +52,10 @@ class QuantityTypeSpec extends Specification {
 
         where:
         value | unit | quantityType       | shape                | expectedUnit | expectedShape
-        "m"   | ""   | NoneQuantity.class | QuantityShape.NUMBER | Units.METRE  | QuantityShape.NUMBER
-        ""    | "m"  | NoneQuantity.class | QuantityShape.NUMBER | Units.METRE  | QuantityShape.NUMBER
-        ""    | ""   | Length.class       | QuantityShape.NUMBER | Units.METRE  | QuantityShape.NUMBER
-        ""    | ""   | Length.class       | QuantityShape.STRING | Units.METRE  | QuantityShape.STRING
+        "m"   | ""   | NoneQuantity.class | QuantityShape.NUMBER | new Metre() | QuantityShape.NUMBER
+        ""    | "m"  | NoneQuantity.class | QuantityShape.NUMBER | new Metre()  | QuantityShape.NUMBER
+        ""    | ""   | Length.class       | QuantityShape.NUMBER | new Metre()  | QuantityShape.NUMBER
+        ""    | ""   | Length.class       | QuantityShape.STRING | new Metre()  | QuantityShape.STRING
     }
 
     def 'resolve unit failure with missing annotation'() {

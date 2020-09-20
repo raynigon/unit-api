@@ -1,7 +1,7 @@
 package com.raynigon.unit_api.springdoc;
 
 import com.fasterxml.jackson.databind.type.SimpleType;
-import com.raynigon.unit_api.core.service.UnitResolverService;
+import com.raynigon.unit_api.core.service.UnitsApiService;
 import com.raynigon.unit_api.jackson.annotation.JsonUnit;
 import io.swagger.v3.core.converter.AnnotatedType;
 import io.swagger.v3.oas.models.media.Schema;
@@ -31,14 +31,14 @@ public class UnitApiPropertyCustomizer implements PropertyCustomizer {
     private Unit<?> resolveUnit(AnnotatedType type) {
         SimpleType quantityType = (SimpleType) type.getType();
         Class<?> quantityBoundType = (quantityType.getBindings().getBoundType(0).getRawClass());
-        Unit<?> unit = UnitResolverService.getInstance().getUnit((Class) quantityBoundType);
+        Unit<?> unit = UnitsApiService.getInstance().getUnit((Class) quantityBoundType);
         JsonUnit jsonUnit = Stream.of(type.getCtxAnnotations())
                 .filter((it) -> it instanceof JsonUnit)
                 .map((it) -> (JsonUnit) it)
                 .findFirst()
                 .orElse(null);
         if (jsonUnit == null) return unit;
-        Unit<?> resolvedUnit = UnitResolverService.getInstance().getUnit(jsonUnit.unit());
+        Unit<?> resolvedUnit = UnitsApiService.getInstance().getUnit(jsonUnit.unit());
         return resolvedUnit != null ? resolvedUnit : unit;
     }
 

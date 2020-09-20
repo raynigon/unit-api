@@ -38,7 +38,7 @@ class UnitApiPropertyCustomizerSpec extends Specification {
 
         then:
         result.type == "number | string"
-        result.description == "speed is given in metre per second (m/s)"
+        result.description == "speed is given in Metre per Second (m/s)"
     }
 
     def 'convert quantity with annotation'(){
@@ -70,6 +70,6 @@ class UnitApiPropertyCustomizerSpec extends Specification {
 
         and:
         result.type == "number | string"
-        result.description == "speed is given in kilometre per hour (km/h)"
+        result.description == "speed is given in Kilometre per Hour (km/h)"
     }
 }
