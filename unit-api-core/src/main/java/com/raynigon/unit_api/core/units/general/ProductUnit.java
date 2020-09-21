@@ -73,7 +73,7 @@ public final class ProductUnit<Q extends Quantity<Q>> extends AbstractUnit<Q> {
     /**
      * Holds the units composing this product unit.
      *
-     * @implNote considered immutable after constructor was called
+     * Note: considered immutable after constructor was called
      */
     private final ProductUnit.Element[] elements;
 
@@ -180,7 +180,7 @@ public final class ProductUnit<Q extends Quantity<Q>> extends AbstractUnit<Q> {
      * Returns the product unit corresponding to this unit raised to the specified exponent.
      *
      * @param unit the unit.
-     * @param nn   the exponent (nn &gt; 0).
+     * @param n   the exponent (nn &gt; 0).
      * @return <code>unit^n</code>
      */
     public static Unit<?> ofPow(Unit<?> unit, int n) {

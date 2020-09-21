@@ -157,10 +157,10 @@ public abstract class AbstractUnit<Q extends Quantity<Q>>
     }
 
     /**
-     * Returns the unscaled {@link SI} unit from which this unit is derived.
+     * Returns the unscaled {@link com.raynigon.unit_api.core.units.si.SISystem} unit from which this unit is derived.
      * <p>
      * The SI unit can be be used to identify a quantity given the unit. For
-     * example:<code> static boolean isAngularVelocity(AbstractUnit<?> unit) {
+     * example:<code> static boolean isAngularVelocity(AbstractUnit unit) {
      * return unit.toSystemUnit().equals(RADIAN.divide(SECOND)); } assert(REVOLUTION.divide(MINUTE).isAngularVelocity()); // Returns true. </code>
      *
      * @return the unscaled metric unit from which this unit is derived.
@@ -169,11 +169,7 @@ public abstract class AbstractUnit<Q extends Quantity<Q>>
 
     /**
      * Annotates the specified unit. Annotation does not change the unit semantic.
-     * Annotations are often written between curly braces behind units. For
-     * example:<br>
-     * <code> Unit<Volume> PERCENT_VOL = ((AbstractUnit)Units.PERCENT).annotate("vol"); // "%{vol}" Unit<Mass> KG_TOTAL =
-     * ((AbstractUnit)Units.KILOGRAM).annotate("total"); // "kg{total}" Unit<Dimensionless> RED_BLOOD_CELLS = ((AbstractUnit)Units.ONE).annotate("RBC"); // "{RBC}" </code>
-     * <p>
+     * Annotations are often written between curly braces behind units.
      * Note: Annotation of system units are not considered themselves as system
      * units.
      *
@@ -193,8 +189,7 @@ public abstract class AbstractUnit<Q extends Quantity<Q>>
      *
      * <p>
      * Note: The standard format supports dimensionless
-     * units.<code> AbstractUnit<Dimensionless> PERCENT =
-     * AbstractUnit.parse("100").inverse().asType(Dimensionless.class); </code>
+     * units.
      * </p>
      *
      * @param charSequence the character sequence to parse.
@@ -230,8 +225,6 @@ public abstract class AbstractUnit<Q extends Quantity<Q>>
     /**
      * Returns the system unit (unscaled SI unit) from which this unit is derived.
      * They can be be used to identify a quantity given the unit. For example:<br>
-     * <code> static boolean isAngularVelocity(AbstractUnit<?> unit) {<br>&nbsp;&nbsp;return unit.getSystemUnit().equals(RADIAN.divide(SECOND));<br>}
-     * <br>assert(REVOLUTION.divide(MINUTE).isAngularVelocity()); // Returns true. </code>
      *
      * @return the unscaled metric unit from which this unit is derived.
      */
@@ -597,7 +590,8 @@ public abstract class AbstractUnit<Q extends Quantity<Q>>
         /**
          * Indicates if this unit is considered equals to the specified object. order).
          *
-         * @param obj the object to compare for equality.
+         * @param u1 the object to compare for equality.
+         * @param u2 the object to compare for equality.
          * @return <code>true</code> if <code>this</code> and <code>obj</code> are
          * considered equal; <code>false</code>otherwise.
          */

@@ -51,7 +51,6 @@ public class AnnotatedUnit<Q extends Quantity<Q>> extends AbstractUnit<Q> {
      *          the unit to be annotated.
      * @param annotation
      *          the annotation.
-     * @return the annotated unit.
      */
     public AnnotatedUnit(Unit<Q> actualUnit, String annotation) {
         this.actualUnit = actualUnit instanceof AnnotatedUnit ? ((AnnotatedUnit<Q>) actualUnit).actualUnit : actualUnit;

@@ -49,7 +49,6 @@ import static com.raynigon.unit_api.core.format.CommonFormatter.parseCompoundAsL
 /**
  * A simple implementation of QuantityFormat
  *
- * <p>
  * The following pattern letters are defined:
  * <blockquote>
  * <table class="striped">
@@ -98,7 +97,6 @@ import static com.raynigon.unit_api.core.format.CommonFormatter.parseCompoundAsL
  *<li><strong><a id="radix">Mixed Radix:</a></strong>
  *     The Mixed radix marker <code>"~"</code> is followed by a character sequence acting as mixed radix delimiter. This character sequence must not contain <code>"~"</code> itself or any numeric values.<br></li>
  * </ul>
- * </p>
  * @version 1.4, $Date: 2019-04-14 $
  * @since 2.0
  */
