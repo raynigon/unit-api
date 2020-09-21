@@ -2,6 +2,7 @@ package com.raynigon.unit_api.jpa.type;
 
 import com.raynigon.unit_api.core.annotation.QuantityShape;
 import com.raynigon.unit_api.core.service.UnitsApiService;
+import com.raynigon.unit_api.core.units.general.AbstractUnit;
 import com.raynigon.unit_api.jpa.annotation.JpaUnit;
 import com.raynigon.unit_api.jpa.annotation.JpaUnitHelper;
 import com.raynigon.unit_api.jpa.exception.UnitNotFound;
@@ -9,7 +10,6 @@ import org.hibernate.cfg.NotYetImplementedException;
 import org.hibernate.type.AbstractSingleColumnStandardBasicType;
 import org.hibernate.type.descriptor.sql.DoubleTypeDescriptor;
 import org.hibernate.usertype.DynamicParameterizedType;
-import tech.units.indriya.AbstractUnit;
 
 import javax.measure.Quantity;
 import javax.measure.Unit;

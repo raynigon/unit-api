@@ -5,15 +5,22 @@ import com.raynigon.unit_api.core.units.general.IUnit;
 import org.reflections.Reflections;
 import org.reflections.util.ConfigurationBuilder;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Constructor;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @SuppressWarnings("rawtypes")
 public class UnitScanUtils {
+
+    private static final Logger logger = Logger.getLogger(UnitScanUtils.class.getName());
 
     public static Set<? extends IUnit<?>> scanForUnits(Package pack) {
         Reflections reflections = new Reflections(pack.getName());
@@ -33,10 +40,23 @@ public class UnitScanUtils {
             try {
                 return it.newInstance();
             } catch (Exception e) {
-                // TODO Replace with logger
-                System.out.println(e);
+                logException(e);
                 return null;
             }
         }).orElse(null);
+    }
+
+    private static void logException(Exception e) {
+        try {
+            final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            final String utf8 = StandardCharsets.UTF_8.name();
+            try (PrintStream ps = new PrintStream(baos, true, utf8)) {
+                e.printStackTrace(ps);
+            }
+            String stackTrace = baos.toString(utf8);
+            logger.warning(stackTrace);
+        } catch (UnsupportedEncodingException uee) {
+            logger.severe("UnsupportedEncodingException in " + UnitScanUtils.class.getName());
+        }
     }
 }

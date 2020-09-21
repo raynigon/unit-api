@@ -1,7 +1,5 @@
 package com.raynigon.unit_api.core.units.general;
 
-import tech.units.indriya.AbstractUnit;
-
 import javax.measure.*;
 
 import java.util.Map;

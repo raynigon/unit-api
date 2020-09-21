@@ -37,7 +37,7 @@ import javax.measure.Quantity;
 import javax.measure.Unit;
 import javax.measure.format.MeasurementParseException;
 
-import tech.units.indriya.AbstractUnit;
+import com.raynigon.unit_api.core.units.general.AbstractUnit;
 import tech.units.indriya.format.AbstractQuantityFormat;
 import tech.units.indriya.internal.format.RationalNumberScanner;
 import tech.units.indriya.quantity.CompoundQuantity;

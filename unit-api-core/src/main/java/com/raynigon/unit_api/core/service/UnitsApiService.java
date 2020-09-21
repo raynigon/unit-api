@@ -6,27 +6,62 @@ import tech.units.indriya.quantity.Quantities;
 
 import javax.measure.Quantity;
 import javax.measure.Unit;
+import javax.measure.spi.SystemOfUnits;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class UnitsApiService {
 
-    private static final UnitsApiService INSTANCE = new UnitsApiService();
+    private static UnitsApiService INSTANCE = new UnitsApiService();
 
     public static UnitsApiService getInstance() {
         return INSTANCE;
     }
 
-    private final SISystem system;
+    protected static UnitsApiService replaceInstance(UnitsApiService other) {
+        return INSTANCE = other;
+    }
+
+    private final SISystem baseSystem;
+
+    private final Set<SystemOfUnits> systems;
 
     public UnitsApiService() {
-        system = new SISystem();
+        baseSystem = new SISystem();
+        systems = new HashSet<>();
+        systems.add(baseSystem);
+
+    }
+
+    protected UnitsApiService(Set<SystemOfUnits> systems) {
+        this();
+        this.systems.addAll(systems);
+    }
+
+    public void addSystemOfUnits(SystemOfUnits system) {
+        systems.add(system);
     }
 
     public <T extends Quantity<T>> Unit<T> getUnit(Class<T> quantityType) {
-        return system.getUnit(quantityType);
+        Unit<T> unit = baseSystem.getUnit(quantityType);
+        if (unit != null) return unit;
+        for (SystemOfUnits system : systems) {
+            unit = system.getUnit(quantityType);
+            if (unit != null) return unit;
+        }
+        return null;
     }
 
     public Unit<?> getUnit(String symbol) {
-        return system.getUnit(symbol);
+        Unit<?> unit = baseSystem.getUnit(symbol);
+        if (unit != null) return unit;
+        for (SystemOfUnits system : systems) {
+            unit = system.getUnit(symbol);
+            if (unit != null) return unit;
+        }
+        return null;
     }
 
     public String format(Quantity<?> quantity) {
@@ -37,7 +72,8 @@ public class UnitsApiService {
         String[] parts = quantity.split(" ");
         Double value = Double.parseDouble(parts[0]);
         String symbol = parts[1];
-        Unit<?> unit = system.getUnit(symbol);
+        Unit<?> unit = getUnit(symbol);
+        if (unit == null) return null;
         return Quantities.getQuantity(value, unit);
     }
 }

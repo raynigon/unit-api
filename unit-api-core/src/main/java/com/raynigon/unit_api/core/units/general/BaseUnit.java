@@ -5,9 +5,7 @@ import javax.measure.Quantity;
 import javax.measure.Unit;
 import javax.measure.UnitConverter;
 
-import tech.units.indriya.AbstractUnit;
 import tech.units.indriya.function.AbstractConverter;
-import tech.units.indriya.unit.UnitDimension;
 
 import java.util.Map;
 import java.util.Objects;

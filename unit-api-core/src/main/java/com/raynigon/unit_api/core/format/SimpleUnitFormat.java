@@ -29,16 +29,12 @@
  */
 package com.raynigon.unit_api.core.format;
 
-import com.raynigon.unit_api.core.units.general.AlternateUnit;
-import com.raynigon.unit_api.core.units.general.BaseUnit;
-import com.raynigon.unit_api.core.units.general.TransformedUnit;
-import tech.units.indriya.AbstractUnit;
+import com.raynigon.unit_api.core.units.general.*;
 import tech.units.indriya.format.AbstractUnitFormat;
 import tech.units.indriya.function.AddConverter;
 import tech.units.indriya.function.MultiplyConverter;
 import tech.units.indriya.function.RationalNumber;
 import tech.units.indriya.unit.AnnotatedUnit;
-import tech.units.indriya.unit.ProductUnit;
 import tech.units.indriya.unit.Units;
 
 import javax.measure.*;
@@ -53,7 +49,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.raynigon.unit_api.core.format.FormatConstants.MIDDLE_DOT;
-import static javax.measure.MetricPrefix.MICRO;
 
 /**
  * <p>
