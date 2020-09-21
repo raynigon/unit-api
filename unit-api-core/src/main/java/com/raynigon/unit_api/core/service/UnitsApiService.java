@@ -7,14 +7,16 @@ import tech.units.indriya.quantity.Quantities;
 import javax.measure.Quantity;
 import javax.measure.Unit;
 import javax.measure.spi.SystemOfUnits;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class UnitsApiService {
 
     private static UnitsApiService INSTANCE = new UnitsApiService();
+
+    private final SISystem baseSystem;
+
+    private final Set<SystemOfUnits> systems;
 
     public static UnitsApiService getInstance() {
         return INSTANCE;
@@ -23,11 +25,7 @@ public class UnitsApiService {
     protected static UnitsApiService replaceInstance(UnitsApiService other) {
         return INSTANCE = other;
     }
-
-    private final SISystem baseSystem;
-
-    private final Set<SystemOfUnits> systems;
-
+    
     public UnitsApiService() {
         baseSystem = new SISystem();
         systems = new HashSet<>();

@@ -586,7 +586,7 @@ public abstract class AbstractUnit<Q extends Quantity<Q>>
     /**
      * Utility class for number comparison and equality
      */
-    protected static final class Equalizer {
+    protected static final class EqualizerUtils {
         /**
          * Indicates if this unit is considered equals to the specified object. order).
          *
@@ -606,9 +606,7 @@ public abstract class AbstractUnit<Q extends Quantity<Q>>
              * } else { return u1.toString().equals(u2.toString()) &&
              * u1.internalIsCompatible(u2, false); } } else {
              */
-            if (u1 != null && u1.equals(u2))
-                return true;
-            return false;
+            return (u1 != null && u1.equals(u2));
         }
     }
 }

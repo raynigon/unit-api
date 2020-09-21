@@ -11,7 +11,6 @@ import com.raynigon.unit_api.jackson.annotation.JsonUnit;
 import com.raynigon.unit_api.core.annotation.QuantityShape;
 import com.raynigon.unit_api.jackson.annotation.JsonUnitHelper;
 import com.raynigon.unit_api.jackson.exception.UnknownUnitException;
-import tech.units.indriya.format.SimpleQuantityFormat;
 
 import javax.measure.Quantity;
 import javax.measure.Unit;

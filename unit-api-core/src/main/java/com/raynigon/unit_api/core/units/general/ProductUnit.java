@@ -72,10 +72,13 @@ public final class ProductUnit<Q extends Quantity<Q>> extends AbstractUnit<Q> {
 
     /**
      * Holds the units composing this product unit.
-     *
+     * <p>
      * Note: considered immutable after constructor was called
      */
     private final ProductUnit.Element[] elements;
+
+    // thread safe cache for the expensive hashCode calculation
+    private transient Lazy<Integer> hashCode = new Lazy<>(this::calculateHashCode);
 
     /**
      * DefaultQuantityFactory constructor (used solely to create <code>ONE</code> instance).
@@ -180,7 +183,7 @@ public final class ProductUnit<Q extends Quantity<Q>> extends AbstractUnit<Q> {
      * Returns the product unit corresponding to this unit raised to the specified exponent.
      *
      * @param unit the unit.
-     * @param n   the exponent (nn &gt; 0).
+     * @param n    the exponent (nn &gt; 0).
      * @return <code>unit^n</code>
      */
     public static Unit<?> ofPow(Unit<?> unit, int n) {
@@ -264,9 +267,6 @@ public final class ProductUnit<Q extends Quantity<Q>> extends AbstractUnit<Q> {
         }
         return false;
     }
-
-    // thread safe cache for the expensive hashCode calculation
-    private transient Lazy<Integer> hashCode = new Lazy<>(this::calculateHashCode);
 
     private int calculateHashCode() {
         return Objects.hash((Object[]) ProductUnit.ElementUtil.copyAndSort(elements));
@@ -482,11 +482,7 @@ public final class ProductUnit<Q extends Quantity<Q>> extends AbstractUnit<Q> {
             if (!Objects.equals(this.root, other.root)) {
                 return false;
             }
-            if (!Objects.equals(this.unit, other.unit)) {
-                return false;
-            }
-            return true;
-
+            return Objects.equals(this.unit, other.unit);
         }
 
         @Override

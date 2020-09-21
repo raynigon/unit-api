@@ -4,7 +4,6 @@ import com.raynigon.unit_api.core.units.general.BaseUnit;
 import com.raynigon.unit_api.core.units.si.SISystem;
 import tech.units.indriya.unit.UnitDimension;
 
-import javax.measure.Dimension;
 import javax.measure.quantity.Mass;
 
 public class Kilogram extends BaseUnit<Mass> {

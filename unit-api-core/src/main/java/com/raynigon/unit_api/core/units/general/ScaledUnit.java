@@ -2,7 +2,6 @@ package com.raynigon.unit_api.core.units.general;
 
 import tech.units.indriya.function.MultiplyConverter;
 
-import javax.measure.Dimension;
 import javax.measure.Prefix;
 import javax.measure.Quantity;
 import javax.measure.UnitConverter;

@@ -29,7 +29,11 @@
  */
 package com.raynigon.unit_api.core.format;
 
-import com.raynigon.unit_api.core.units.general.*;
+import com.raynigon.unit_api.core.units.general.AbstractUnit;
+import com.raynigon.unit_api.core.units.general.AlternateUnit;
+import com.raynigon.unit_api.core.units.general.BaseUnit;
+import com.raynigon.unit_api.core.units.general.ProductUnit;
+import com.raynigon.unit_api.core.units.general.TransformedUnit;
 import tech.units.indriya.format.AbstractUnitFormat;
 import tech.units.indriya.function.AddConverter;
 import tech.units.indriya.function.MultiplyConverter;
@@ -37,7 +41,12 @@ import tech.units.indriya.function.RationalNumber;
 import tech.units.indriya.unit.AnnotatedUnit;
 import tech.units.indriya.unit.Units;
 
-import javax.measure.*;
+import javax.measure.BinaryPrefix;
+import javax.measure.MetricPrefix;
+import javax.measure.Prefix;
+import javax.measure.Quantity;
+import javax.measure.Unit;
+import javax.measure.UnitConverter;
 import javax.measure.format.MeasurementParseException;
 import javax.measure.format.UnitFormat;
 import java.io.IOException;
@@ -83,16 +92,17 @@ public abstract class SimpleUnitFormat extends AbstractUnitFormat {
    * @author Werner
    *
    */
-  public static enum Flavor {
+  public enum Flavor {
     Default, ASCII
   }
-  
+
+  /**
+   * Holds the unique symbols collection (base units or alternate units).
+   */
+  private static final Map<String, Unit<?>> SYMBOL_TO_UNIT = new HashMap<>();
+
   // Initializes the standard unit database for SI units.
 
-  private static final Unit<?>[] METRIC_UNITS = { Units.AMPERE, Units.BECQUEREL, Units.CANDELA, Units.COULOMB, Units.FARAD, Units.GRAY, Units.HENRY,
-      Units.HERTZ, Units.JOULE, Units.KATAL, Units.KELVIN, Units.LUMEN, Units.LUX, Units.METRE, Units.MOLE, Units.NEWTON, Units.OHM, Units.PASCAL,
-      Units.RADIAN, Units.SECOND, Units.SIEMENS, Units.SIEVERT, Units.STERADIAN, Units.TESLA, Units.VOLT, Units.WATT, Units.WEBER };
- 
   private static final String[] METRIC_PREFIX_SYMBOLS =  
 		  Stream.of(MetricPrefix.values())
 		  .map(Prefix::getSymbol)
@@ -100,7 +110,7 @@ public abstract class SimpleUnitFormat extends AbstractUnitFormat {
 		  .toArray(new String[] {});
 
   // TODO try to consolidate those
-  private static final UnitConverter[] METRIC_PREFIX_CONVERTERS =  
+  private static final UnitConverter[] METRIC_PREFIX_CONVERTERS =
 		  Stream.of(MetricPrefix.values())
 		  .map(MultiplyConverter::ofPrefix)
 		  .collect(Collectors.toList())
@@ -118,8 +128,6 @@ public abstract class SimpleUnitFormat extends AbstractUnitFormat {
           .collect(Collectors.toList())
           .toArray(new UnitConverter[] {});
 
-  private static final String MU = "\u03bc";
-  
   /**
    * Holds the standard unit format.
    */
@@ -273,7 +281,7 @@ public abstract class SimpleUnitFormat extends AbstractUnitFormat {
       }
       return toAppendTo;
     } catch (IOException e) {
-      throw new Error(e); // Should never happen.
+      throw new RuntimeException(e); // Should never happen.
     }
   }
 
@@ -369,67 +377,75 @@ public abstract class SimpleUnitFormat extends AbstractUnitFormat {
         return ((AlternateUnit<?>) unit).getSymbol();
       if (unit instanceof TransformedUnit) {
         TransformedUnit<?> tfmUnit = (TransformedUnit<?>) unit;
-        if (tfmUnit.getSymbol() != null) {
-        	return tfmUnit.getSymbol();
-        }
-        Unit<?> baseUnit = tfmUnit.getParentUnit();
-        UnitConverter cvtr = tfmUnit.getConverter(); // tfmUnit.getSystemConverter();
-        StringBuilder result = new StringBuilder();
-        String baseUnitName = baseUnit.toString();
-        String prefix = prefixFor(cvtr);
-        if ((baseUnitName.indexOf(MIDDLE_DOT) >= 0) || (baseUnitName.indexOf('*') >= 0) || (baseUnitName.indexOf('/') >= 0)) {
-          // We could use parentheses whenever baseUnits is an
-          // instanceof ProductUnit, but most ProductUnits have
-          // aliases,
-          // so we'd end up with a lot of unnecessary parentheses.
-          result.append('(');
-          result.append(baseUnitName);
-          result.append(')');
-        } else {
-          result.append(baseUnitName);
-        }
-        if (prefix != null) {
-          result.insert(0, prefix);
-        } else {
-          if (cvtr instanceof AddConverter) {
-            result.append('+');
-            result.append(((AddConverter) cvtr).getOffset());
-          } else if (cvtr instanceof MultiplyConverter) {
-            Number scaleFactor = ((MultiplyConverter) cvtr).getFactor();
-            if(scaleFactor instanceof RationalNumber) {
-                
-                RationalNumber rational = (RationalNumber)scaleFactor;
-                RationalNumber reciprocal = rational.reciprocal();
-                if(reciprocal.isInteger()) {
-                    result.append('/');
-                    result.append(reciprocal.toString()); // renders as integer
-                } else {
-                    result.append('*');
-                    result.append(scaleFactor);  
-                }
-                
-            } else {
-                result.append('*');
-                result.append(scaleFactor);
-            }
-            
-          } else { // Other converters.
-            return "[" + baseUnit + "?]";
-          }
-        }
-        return result.toString();
+        return nameFor(tfmUnit);
       }
       if (unit instanceof AnnotatedUnit<?>) {
         AnnotatedUnit<?> annotatedUnit = (AnnotatedUnit<?>) unit;
-        final StringBuilder annotable = new StringBuilder(nameFor(annotatedUnit.getActualUnit()));
-        if (annotatedUnit.getAnnotation() != null) {
-          annotable.append('{'); // TODO maybe also configure this one similar to mix delimiter
-          annotable.append(annotatedUnit.getAnnotation());
-          annotable.append('}');
-        }
-        return annotable.toString();
+        return nameFor(annotatedUnit);
       }
       return null; // Product unit.
+    }
+
+    private String nameFor(AnnotatedUnit<?> annotatedUnit) {
+      final StringBuilder annotable = new StringBuilder(nameFor(annotatedUnit.getActualUnit()));
+      if (annotatedUnit.getAnnotation() != null) {
+        annotable.append('{'); // TODO maybe also configure this one similar to mix delimiter
+        annotable.append(annotatedUnit.getAnnotation());
+        annotable.append('}');
+      }
+      return annotable.toString();
+    }
+
+    private String nameFor(TransformedUnit<?> tfmUnit) {
+      if (tfmUnit.getSymbol() != null) {
+          return tfmUnit.getSymbol();
+      }
+      Unit<?> baseUnit = tfmUnit.getParentUnit();
+      UnitConverter cvtr = tfmUnit.getConverter(); // tfmUnit.getSystemConverter();
+      StringBuilder result = new StringBuilder();
+      String baseUnitName = baseUnit.toString();
+      String prefix = prefixFor(cvtr);
+      if ((baseUnitName.indexOf(MIDDLE_DOT) >= 0) || (baseUnitName.indexOf('*') >= 0) || (baseUnitName.indexOf('/') >= 0)) {
+        // We could use parentheses whenever baseUnits is an
+        // instanceof ProductUnit, but most ProductUnits have
+        // aliases,
+        // so we'd end up with a lot of unnecessary parentheses.
+        result.append('(');
+        result.append(baseUnitName);
+        result.append(')');
+      } else {
+        result.append(baseUnitName);
+      }
+      if (prefix != null) {
+        result.insert(0, prefix);
+      } else {
+        if (cvtr instanceof AddConverter) {
+          result.append('+');
+          result.append(((AddConverter) cvtr).getOffset());
+        } else if (cvtr instanceof MultiplyConverter) {
+          Number scaleFactor = ((MultiplyConverter) cvtr).getFactor();
+          if(scaleFactor instanceof RationalNumber) {
+
+              RationalNumber rational = (RationalNumber)scaleFactor;
+              RationalNumber reciprocal = rational.reciprocal();
+              if(reciprocal.isInteger()) {
+                  result.append('/');
+                  result.append(reciprocal.toString()); // renders as integer
+              } else {
+                  result.append('*');
+                  result.append(scaleFactor);
+              }
+
+          } else {
+              result.append('*');
+              result.append(scaleFactor);
+          }
+
+        } else { // Other converters.
+          return "[" + baseUnit + "?]";
+        }
+      }
+      return result.toString();
     }
 
     // Returns the prefix for the specified unit converter.
@@ -881,19 +897,6 @@ public abstract class SimpleUnitFormat extends AbstractUnitFormat {
        */
     }
   }
-
-  /**
-   * Holds the unique symbols collection (base units or alternate units).
-   */
-  private static final Map<String, Unit<?>> SYMBOL_TO_UNIT = new HashMap<>();
-
-  private static String asciiPrefix(String prefix) {
-    return "µ".equals(prefix) ? "micro" : prefix;
-  }
-  
-  private static String asciiSymbol(String s) {
-      return "Ω".equals(s) ? "Ohm" : s;
-   }
 
   /** to check if a string only contains US-ASCII characters */
   protected static boolean isAllASCII(String input) {
