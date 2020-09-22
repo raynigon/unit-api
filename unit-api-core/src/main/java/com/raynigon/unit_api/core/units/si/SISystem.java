@@ -1,6 +1,5 @@
 package com.raynigon.unit_api.core.units.si;
 
-import com.raynigon.unit_api.core.units.general.BaseUnit;
 import com.raynigon.unit_api.core.units.general.IUnit;
 import com.raynigon.unit_api.core.units.general.UnitScanUtils;
 
@@ -8,7 +7,11 @@ import javax.measure.Dimension;
 import javax.measure.Quantity;
 import javax.measure.Unit;
 import javax.measure.spi.SystemOfUnits;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class SISystem implements SystemOfUnits {
