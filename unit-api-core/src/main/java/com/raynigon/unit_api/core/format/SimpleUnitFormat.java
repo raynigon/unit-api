@@ -54,6 +54,7 @@ import java.text.FieldPosition;
 import java.text.ParsePosition;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -774,14 +775,16 @@ public abstract class SimpleUnitFormat extends AbstractUnitFormat {
             }
 
             AtomicInteger invNbr = new AtomicInteger(0);
+            AtomicBoolean startingPosition = new AtomicBoolean(true);
 
-            boolean start = writePositiveExponentFirst(appendable, productUnit, invNbr);
-            writeNegativeExponent(appendable, productUnit, invNbr, start);
+            writePositiveExponentFirst(appendable, productUnit, invNbr, startingPosition);
+            writeNegativeExponent(appendable, productUnit, invNbr, startingPosition);
             return appendable;
         }
 
-        private void writeNegativeExponent(Appendable appendable, ProductUnit<?> productUnit, AtomicInteger invNbr, boolean start) throws IOException {
+        private void writeNegativeExponent(Appendable appendable, ProductUnit<?> productUnit, AtomicInteger invNbr, AtomicBoolean startingPosition) throws IOException {
             String name;
+            boolean start = startingPosition.get();
             // Write negative exponents.
             if (invNbr.get() != 0) {
                 if (start) {
@@ -810,10 +813,10 @@ public abstract class SimpleUnitFormat extends AbstractUnitFormat {
             }
         }
 
-        private boolean writePositiveExponentFirst(Appendable appendable, ProductUnit<?> productUnit, AtomicInteger invNbr) throws IOException {
+        private void writePositiveExponentFirst(Appendable appendable, ProductUnit<?> productUnit, AtomicInteger invNbr, AtomicBoolean startingPosition) throws IOException {
             String name;
             // Write positive exponents first.
-            boolean start = true;
+            boolean start = startingPosition.get();
             for (int i = 0; i < productUnit.getUnitCount(); i++) {
                 int pow = productUnit.getUnitPow(i);
                 if (pow >= 0) {
@@ -828,7 +831,7 @@ public abstract class SimpleUnitFormat extends AbstractUnitFormat {
                     invNbr.incrementAndGet();
                 }
             }
-            return start;
+            startingPosition.set(start);
         }
 
         private static void append(Appendable appendable, CharSequence symbol, int pow, int root) throws IOException {
