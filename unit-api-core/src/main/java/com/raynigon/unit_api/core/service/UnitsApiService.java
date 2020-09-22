@@ -1,77 +1,28 @@
 package com.raynigon.unit_api.core.service;
 
-import com.raynigon.unit_api.core.format.SimpleQuantityFormat;
-import com.raynigon.unit_api.core.units.si.SISystem;
-import tech.units.indriya.quantity.Quantities;
-
 import javax.measure.Quantity;
 import javax.measure.Unit;
 import javax.measure.spi.SystemOfUnits;
-import java.util.HashSet;
-import java.util.Set;
 
-public class UnitsApiService {
+public interface UnitsApiService {
 
-    private static UnitsApiService INSTANCE = new UnitsApiService();
-
-    private final SISystem baseSystem;
-
-    private final Set<SystemOfUnits> systems;
-
-    public static UnitsApiService getInstance() {
-        return INSTANCE;
+    static UnitsApiService getInstance() {
+        return DefaultUnitsApiService.getInstance();
     }
 
-    protected static UnitsApiService replaceInstance(UnitsApiService other) {
-        return INSTANCE = other;
-    }
-    
-    public UnitsApiService() {
-        baseSystem = new SISystem();
-        systems = new HashSet<>();
-        systems.add(baseSystem);
+    /**
+     * Adds an additional {@link SystemOfUnits} to the UnitsApiService.
+     * The Name provided by the {@link SystemOfUnits} is used as an id
+     * and therefore has to be unique.
+     * @param system    the additional {@link SystemOfUnits}
+     */
+    void addSystemOfUnits(SystemOfUnits system);
 
-    }
+    <T extends Quantity<T>> Unit<T> getUnit(Class<T> quantityType);
 
-    protected UnitsApiService(Set<SystemOfUnits> systems) {
-        this();
-        this.systems.addAll(systems);
-    }
+    Unit<?> getUnit(String symbol);
 
-    public void addSystemOfUnits(SystemOfUnits system) {
-        systems.add(system);
-    }
+    String format(Quantity<?> quantity);
 
-    public <T extends Quantity<T>> Unit<T> getUnit(Class<T> quantityType) {
-        Unit<T> unit = baseSystem.getUnit(quantityType);
-        if (unit != null) return unit;
-        for (SystemOfUnits system : systems) {
-            unit = system.getUnit(quantityType);
-            if (unit != null) return unit;
-        }
-        return null;
-    }
-
-    public Unit<?> getUnit(String symbol) {
-        Unit<?> unit = baseSystem.getUnit(symbol);
-        if (unit != null) return unit;
-        for (SystemOfUnits system : systems) {
-            unit = system.getUnit(symbol);
-            if (unit != null) return unit;
-        }
-        return null;
-    }
-
-    public String format(Quantity<?> quantity) {
-        return SimpleQuantityFormat.getInstance().format(quantity);
-    }
-
-    public Quantity<?> parseQuantity(String quantity) {
-        String[] parts = quantity.split(" ");
-        Double value = Double.parseDouble(parts[0]);
-        String symbol = parts[1];
-        Unit<?> unit = getUnit(symbol);
-        if (unit == null) return null;
-        return Quantities.getQuantity(value, unit);
-    }
+    Quantity<?> parseQuantity(String quantity);
 }
