@@ -11,7 +11,7 @@ class UnitsApiServiceSpec extends Specification {
 
     def 'initialise works'() {
         expect:
-        new UnitsApiService()
+        new DefaultUnitsApiService()
     }
 
     def 'joule to watt-hour works'() {
