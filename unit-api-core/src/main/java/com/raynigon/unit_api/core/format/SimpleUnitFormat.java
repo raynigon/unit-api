@@ -34,6 +34,7 @@ import com.raynigon.unit_api.core.units.general.AlternateUnit;
 import com.raynigon.unit_api.core.units.general.BaseUnit;
 import com.raynigon.unit_api.core.units.general.ProductUnit;
 import com.raynigon.unit_api.core.units.general.TransformedUnit;
+import com.raynigon.unit_api.core.units.si.dimensionless.One;
 import tech.units.indriya.format.AbstractUnitFormat;
 import tech.units.indriya.function.AddConverter;
 import tech.units.indriya.function.MultiplyConverter;
@@ -474,7 +475,7 @@ public abstract class SimpleUnitFormat extends AbstractUnitFormat {
         @SuppressWarnings({"rawtypes", "unchecked"})
         @Override
         public Unit<? extends Quantity> parseProductUnit(CharSequence csq, ParsePosition pos) throws MeasurementParseException {
-            Unit result = AbstractUnit.ONE;
+            Unit result = new One();
             Token token = nextToken(csq, pos);
             switch (token) {
                 case IDENTIFIER:

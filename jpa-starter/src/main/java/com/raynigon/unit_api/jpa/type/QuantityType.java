@@ -2,7 +2,7 @@ package com.raynigon.unit_api.jpa.type;
 
 import com.raynigon.unit_api.core.annotation.QuantityShape;
 import com.raynigon.unit_api.core.service.UnitsApiService;
-import com.raynigon.unit_api.core.units.general.AbstractUnit;
+import com.raynigon.unit_api.core.units.si.dimensionless.One;
 import com.raynigon.unit_api.jpa.annotation.JpaUnit;
 import com.raynigon.unit_api.jpa.annotation.JpaUnitHelper;
 import com.raynigon.unit_api.jpa.exception.UnitNotFound;
@@ -26,7 +26,7 @@ public class QuantityType extends AbstractSingleColumnStandardBasicType<Quantity
     public static final QuantityType INSTANCE = new QuantityType();
 
     public QuantityType() {
-        super(DoubleTypeDescriptor.INSTANCE, new QuantityJavaDescriptor(AbstractUnit.ONE, QuantityShape.NUMBER));
+        super(DoubleTypeDescriptor.INSTANCE, new QuantityJavaDescriptor(new One(), QuantityShape.NUMBER));
     }
 
     @Override

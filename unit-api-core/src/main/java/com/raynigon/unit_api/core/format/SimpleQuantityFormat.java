@@ -38,6 +38,7 @@ import javax.measure.Unit;
 import javax.measure.format.MeasurementParseException;
 
 import com.raynigon.unit_api.core.units.general.AbstractUnit;
+import com.raynigon.unit_api.core.units.si.dimensionless.One;
 import tech.units.indriya.format.AbstractQuantityFormat;
 import tech.units.indriya.internal.format.RationalNumberScanner;
 import tech.units.indriya.quantity.CompoundQuantity;
@@ -164,7 +165,7 @@ public class SimpleQuantityFormat extends AbstractQuantityFormat {
     public Appendable format(Quantity<?> quantity, Appendable dest) throws IOException {
         final Unit unit = quantity.getUnit();
         dest.append(quantity.getValue().toString());
-        if (quantity.getUnit().equals(AbstractUnit.ONE))
+        if (quantity.getUnit().equals(new One()))
             return dest;
         dest.append(delimiter);
         return SimpleUnitFormat.getInstance().format(unit, dest);
