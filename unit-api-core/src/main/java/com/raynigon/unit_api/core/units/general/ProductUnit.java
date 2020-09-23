@@ -42,6 +42,7 @@ import javax.measure.Quantity;
 import javax.measure.Unit;
 import javax.measure.UnitConverter;
 
+import com.raynigon.unit_api.core.units.si.dimensionless.One;
 import tech.units.indriya.function.AbstractConverter;
 import tech.units.indriya.internal.function.Lazy;
 import tech.units.indriya.unit.UnitDimension;
@@ -63,7 +64,7 @@ import tech.units.indriya.unit.UnitDimension;
  * @version 1.10, April 22, 2020
  * @since 1.0
  */
-public final class ProductUnit<Q extends Quantity<Q>> extends AbstractUnit<Q> {
+public class ProductUnit<Q extends Quantity<Q>> extends AbstractUnit<Q> {
 
     /**
      *
@@ -280,7 +281,7 @@ public final class ProductUnit<Q extends Quantity<Q>> extends AbstractUnit<Q> {
     @SuppressWarnings("unchecked")
     @Override
     public Unit<Q> toSystemUnit() {
-        Unit<?> systemUnit = AbstractUnit.ONE;
+        Unit<?> systemUnit = new One();
         for (ProductUnit.Element element : elements) {
             Unit<?> unit = element.unit.getSystemUnit();
             unit = unit.pow(element.pow);
@@ -381,7 +382,7 @@ public final class ProductUnit<Q extends Quantity<Q>> extends AbstractUnit<Q> {
 
         // Returns or creates instance.
         if (resultIndex == 0)
-            return AbstractUnit.ONE;
+            return new One();
         else if (resultIndex == 1 && result[0].pow == result[0].root)
             return result[0].unit;
         else {
@@ -395,7 +396,7 @@ public final class ProductUnit<Q extends Quantity<Q>> extends AbstractUnit<Q> {
      * Returns the greatest common divisor (Euclid's algorithm).
      *
      * @param m  the first number.
-     * @param nn the second number.
+     * @param n the second number.
      * @return the greatest common divisor.
      */
     private static int gcd(int m, int n) {

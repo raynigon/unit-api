@@ -29,21 +29,7 @@ package com.raynigon.unit_api.core.units.general;
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.measure.Dimension;
-import javax.measure.IncommensurableException;
-import javax.measure.Prefix;
-import javax.measure.Quantity;
-import javax.measure.UnconvertibleException;
-import javax.measure.Unit;
-import javax.measure.UnitConverter;
-import javax.measure.format.MeasurementParseException;
-import javax.measure.quantity.Dimensionless;
-
+import com.raynigon.unit_api.core.units.si.dimensionless.One;
 import tech.units.indriya.ComparableUnit;
 import tech.units.indriya.format.LocalUnitFormat;
 import tech.units.indriya.format.SimpleUnitFormat;
@@ -59,6 +45,19 @@ import tech.units.indriya.unit.Units;
 import tech.uom.lib.common.function.Nameable;
 import tech.uom.lib.common.function.PrefixOperator;
 import tech.uom.lib.common.function.SymbolSupplier;
+
+import javax.measure.Dimension;
+import javax.measure.IncommensurableException;
+import javax.measure.Prefix;
+import javax.measure.Quantity;
+import javax.measure.UnconvertibleException;
+import javax.measure.Unit;
+import javax.measure.UnitConverter;
+import javax.measure.format.MeasurementParseException;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * <p>
@@ -90,17 +89,6 @@ public abstract class AbstractUnit<Q extends Quantity<Q>>
      *
      */
     private static final long serialVersionUID = -4344589505537030204L;
-
-    /**
-     * Holds the dimensionless unit <code>ONE</code>.
-     *
-     * @see <a href=
-     * "https://en.wikipedia.org/wiki/Natural_units#Choosing_constants_to_normalize">
-     * Wikipedia: Natural Units - Choosing constants to normalize</a>
-     * @see <a href= "http://www.av8n.com/physics/dimensionless-units.htm">Units of
-     * Dimension One</a>
-     */
-    public static final Unit<Dimensionless> ONE = new ProductUnit<>();
 
     /**
      * Holds the name.
@@ -440,9 +428,9 @@ public abstract class AbstractUnit<Q extends Quantity<Q>>
      * @return <code>this * that</code>
      */
     protected final Unit<?> multiply(ComparableUnit<?> that) {
-        if (this.equals(ONE))
+        if (this.equals(new One()))
             return that;
-        if (that.equals(ONE))
+        if (that.equals(new One()))
             return this;
         return ProductUnit.ofProduct(this, that);
     }
@@ -454,9 +442,9 @@ public abstract class AbstractUnit<Q extends Quantity<Q>>
      */
     @Override
     public final Unit<?> inverse() {
-        if (this.equals(ONE))
+        if (this.equals(new One()))
             return this;
-        return ProductUnit.ofQuotient(ONE, this);
+        return ProductUnit.ofQuotient(new One(), this);
     }
 
     /**
@@ -517,7 +505,7 @@ public abstract class AbstractUnit<Q extends Quantity<Q>>
             throw new ArithmeticException("Root's order of zero");
         else
             // n < 0
-            return ONE.divide(this.root(-n));
+            return new One().divide(this.root(-n));
     }
 
     /**
@@ -531,10 +519,10 @@ public abstract class AbstractUnit<Q extends Quantity<Q>>
         if (n > 0)
             return this.multiply(this.pow(n - 1));
         else if (n == 0)
-            return ONE;
+            return new One();
         else
             // n < 0
-            return ONE.divide(this.pow(-n));
+            return new One().divide(this.pow(-n));
     }
 
     @Override
