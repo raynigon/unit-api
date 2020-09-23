@@ -40,6 +40,11 @@ public class DefaultUnitsApiService implements UnitsApiService {
 
     @Override
     public void addSystemOfUnits(SystemOfUnits system) {
+        // Check if System is already present
+        boolean present = systems.stream().anyMatch(it -> it.getClass().isAssignableFrom(system.getClass()));
+        if (present) {
+            return;
+        }
         systems.add(system);
     }
 
