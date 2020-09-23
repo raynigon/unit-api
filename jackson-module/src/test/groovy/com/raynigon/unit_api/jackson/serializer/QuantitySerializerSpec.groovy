@@ -1,11 +1,12 @@
 package com.raynigon.unit_api.jackson.serializer
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.raynigon.unit_api.core.service.UnitsApiService
+import com.raynigon.unit_api.core.units.si.speed.KilometrePerHour
+import com.raynigon.unit_api.core.units.si.temperature.Celsius
 import com.raynigon.unit_api.jackson.UnitApiModule
 import com.raynigon.unit_api.jackson.helpers.BasicEntity
 import spock.lang.Specification
-import tech.units.indriya.quantity.Quantities
-import tech.units.indriya.unit.Units
 
 class QuantitySerializerSpec extends Specification {
 
@@ -18,8 +19,8 @@ class QuantitySerializerSpec extends Specification {
         and:
         def source = new BasicEntity()
         source.id = "1"
-        source.speed = Quantities.getQuantity(100, Units.KILOMETRE_PER_HOUR)
-        source.temperature = Quantities.getQuantity(30, Units.CELSIUS)
+        source.speed = UnitsApiService.quantity(100, new KilometrePerHour())
+        source.temperature = UnitsApiService.quantity(30, new Celsius())
 
         when:
         def result = mapper.writeValueAsString(source)

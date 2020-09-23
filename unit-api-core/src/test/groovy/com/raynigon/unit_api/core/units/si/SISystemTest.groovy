@@ -20,9 +20,9 @@ import com.raynigon.unit_api.core.units.si.time.Minute
 import com.raynigon.unit_api.core.units.si.time.Second
 import spock.lang.Specification
 import spock.lang.Unroll
-import tech.units.indriya.function.AddConverter
-import tech.units.indriya.quantity.Quantities
-import tech.units.indriya.unit.TransformedUnit
+
+import static com.raynigon.unit_api.core.service.UnitsApiService.quantity
+
 
 class SISystemTest extends Specification {
 
@@ -70,7 +70,7 @@ class SISystemTest extends Specification {
     def 'metre conversion'() {
 
         when:
-        def quantity = Quantities.getQuantity(initialValue, unit)
+        def quantity = quantity(initialValue, unit)
 
         then:
         expectedValue == quantity.to(new Metre()).value.intValue()
@@ -85,7 +85,7 @@ class SISystemTest extends Specification {
     def 'energy conversion'() {
 
         when:
-        def quantity = Quantities.getQuantity(initialValue, unit)
+        def quantity = quantity(initialValue, unit)
 
         then:
         expectedValue == quantity.to(new Joule()).value.intValue()
@@ -100,7 +100,7 @@ class SISystemTest extends Specification {
     def 'speed conversion'() {
 
         when:
-        def quantity = Quantities.getQuantity(initialValue, unit)
+        def quantity = quantity(initialValue, unit)
 
         then:
         expectedValue == quantity.to(new MetrePerSecond()).value.intValue()

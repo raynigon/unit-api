@@ -12,7 +12,6 @@ import com.raynigon.unit_api.jackson.annotation.JsonUnit;
 import com.raynigon.unit_api.jackson.annotation.JsonUnitHelper;
 import com.raynigon.unit_api.jackson.exception.UnknownUnitException;
 import org.apache.commons.lang3.StringUtils;
-import tech.units.indriya.quantity.Quantities;
 
 import javax.measure.Quantity;
 import javax.measure.Unit;
@@ -78,14 +77,14 @@ public class QuantityDeserializer extends JsonDeserializer<Quantity<?>> implemen
     }
 
     private Quantity<?> createQuantity(String value) {
-        return Quantities.getQuantity(
+        return UnitsApiService.getInstance().createQuantity(
                 Double.parseDouble(value),
                 unit
         );
     }
 
     private Quantity<?> createQuantity(double value) {
-        return Quantities.getQuantity(
+        return UnitsApiService.getInstance().createQuantity(
                 value,
                 unit
         );

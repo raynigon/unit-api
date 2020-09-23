@@ -1,8 +1,8 @@
 package com.raynigon.unit_api.core.units.si.temperature;
 
 import com.raynigon.unit_api.core.units.general.BaseUnit;
+import com.raynigon.unit_api.core.units.general.UnitDimension;
 import com.raynigon.unit_api.core.units.si.SISystem;
-import tech.units.indriya.unit.UnitDimension;
 
 import javax.measure.quantity.Temperature;
 

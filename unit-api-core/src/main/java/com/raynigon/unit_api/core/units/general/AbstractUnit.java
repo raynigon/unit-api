@@ -29,22 +29,17 @@ package com.raynigon.unit_api.core.units.general;
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import com.raynigon.unit_api.core.function.AbstractConverter;
+import com.raynigon.unit_api.core.function.AddConverter;
+import com.raynigon.unit_api.core.function.Calculator;
+import com.raynigon.unit_api.core.function.Calculus;
+import com.raynigon.unit_api.core.function.DimensionalModel;
+import com.raynigon.unit_api.core.function.MultiplyConverter;
+import com.raynigon.unit_api.core.function.Nameable;
+import com.raynigon.unit_api.core.function.PrefixOperator;
+import com.raynigon.unit_api.core.function.RationalNumber;
+import com.raynigon.unit_api.core.function.SymbolSupplier;
 import com.raynigon.unit_api.core.units.si.dimensionless.One;
-import tech.units.indriya.ComparableUnit;
-import tech.units.indriya.format.LocalUnitFormat;
-import tech.units.indriya.format.SimpleUnitFormat;
-import tech.units.indriya.function.AbstractConverter;
-import tech.units.indriya.function.AddConverter;
-import tech.units.indriya.function.Calculus;
-import tech.units.indriya.function.MultiplyConverter;
-import tech.units.indriya.function.RationalNumber;
-import tech.units.indriya.internal.function.Calculator;
-import tech.units.indriya.spi.DimensionalModel;
-import tech.units.indriya.unit.UnitDimension;
-import tech.units.indriya.unit.Units;
-import tech.uom.lib.common.function.Nameable;
-import tech.uom.lib.common.function.PrefixOperator;
-import tech.uom.lib.common.function.SymbolSupplier;
 
 import javax.measure.Dimension;
 import javax.measure.IncommensurableException;
@@ -168,42 +163,9 @@ public abstract class AbstractUnit<Q extends Quantity<Q>>
         return new AnnotatedUnit<>(this, annotation);
     }
 
-    /**
-     * Returns the abstract unit represented by the specified characters as per
-     * default format.
-     * <p>
-     * Locale-sensitive unit parsing could be handled using {@link LocalUnitFormat}
-     * in subclasses of AbstractUnit.
-     *
-     * <p>
-     * Note: The standard format supports dimensionless
-     * units.
-     * </p>
-     *
-     * @param charSequence the character sequence to parse.
-     * @return <code>SimpleUnitFormat.getInstance().parse(csq, new ParsePosition(0))</code>
-     * @throws MeasurementParseException if the specified character sequence cannot
-     *                                   be correctly parsed (e.g. not UCUM
-     *                                   compliant).
-     */
-    public static Unit<?> parse(CharSequence charSequence) {
-        return SimpleUnitFormat.getInstance().parse(charSequence);
-    }
-
-    /**
-     * Returns the standard representation of this physics unit. The string produced
-     * for a given unit is always the same; it is not affected by the locale. It can
-     * be used as a canonical string representation for exchanging units, or as a
-     * key for a Hashtable, etc.
-     * <p>
-     * Locale-sensitive unit parsing could be handled using {@link LocalUnitFormat}
-     * in subclasses of AbstractUnit.
-     *
-     * @return <code>symbol</code>
-     */
     @Override
     public String toString() {
-        return symbol != null ? symbol : SimpleUnitFormat.getInstance().format(this);
+        return symbol != null ? symbol : super.toString();
     }
 
     // ///////////////////////////////////////////////////////
@@ -245,7 +207,6 @@ public abstract class AbstractUnit<Q extends Quantity<Q>>
      * @param type the quantity class identifying the nature of the unit.
      * @throws ClassCastException if the dimension of this unit is different from
      *                            the SI dimension of the specified type.
-     * @see Units#getUnit(Class)
      */
     @SuppressWarnings("unchecked")
     @Override

@@ -1,12 +1,13 @@
 package com.raynigon.unit_api.jpa.type
 
 import com.raynigon.unit_api.core.annotation.QuantityShape
+import com.raynigon.unit_api.core.units.si.length.Metre
 import com.raynigon.unit_api.jpa.exception.QuantityPackingException
 import spock.lang.Specification
 import spock.lang.Unroll
-import tech.units.indriya.unit.Units
 
-import static tech.units.indriya.quantity.Quantities.getQuantity
+import static com.raynigon.unit_api.core.service.UnitsApiService.quantity
+
 
 class QuantityJavaDescriptorSpec extends Specification {
 
@@ -14,7 +15,7 @@ class QuantityJavaDescriptorSpec extends Specification {
     def 'valid wrap #source'() {
 
         given:
-        QuantityJavaDescriptor descriptor = new QuantityJavaDescriptor(Units.METRE, QuantityShape.NUMBER)
+        QuantityJavaDescriptor descriptor = new QuantityJavaDescriptor(new Metre(), QuantityShape.NUMBER)
 
         when:
         def result = descriptor.wrap(source as Object, null)
@@ -25,21 +26,21 @@ class QuantityJavaDescriptorSpec extends Specification {
 
         where:
         source              | expectedResult
-        Float.valueOf(1.1)  | getQuantity(1.1, Units.METRE)
-        Double.valueOf(1.2) | getQuantity(1.2, Units.METRE)
-        Byte.valueOf("2")   | getQuantity(2, Units.METRE)
-        Short.valueOf("3")  | getQuantity(3, Units.METRE)
-        Integer.valueOf(4)  | getQuantity(4, Units.METRE)
-        Long.valueOf(5)     | getQuantity(5, Units.METRE)
-        "6"                 | getQuantity(6, Units.METRE)
-        "7 m"               | getQuantity(7, Units.METRE)
+        Float.valueOf(1.1)  | quantity(1.1, new Metre())
+        Double.valueOf(1.2) | quantity(1.2, new Metre())
+        Byte.valueOf("2")   | quantity(2, new Metre())
+        Short.valueOf("3")  | quantity(3, new Metre())
+        Integer.valueOf(4)  | quantity(4, new Metre())
+        Long.valueOf(5)     | quantity(5, new Metre())
+        "6"                 | quantity(6, new Metre())
+        "7 m"               | quantity(7, new Metre())
     }
 
     @Unroll
     def 'valid unwrap #source'() {
 
         given:
-        QuantityJavaDescriptor descriptor = new QuantityJavaDescriptor(Units.METRE, QuantityShape.NUMBER)
+        QuantityJavaDescriptor descriptor = new QuantityJavaDescriptor(new Metre(), QuantityShape.NUMBER)
 
         when:
         def result = descriptor.unwrap(source, type, null)
@@ -48,19 +49,19 @@ class QuantityJavaDescriptorSpec extends Specification {
         expectedResult == result
 
         where:
-        source                        | type          | expectedResult
-        getQuantity(1.1, Units.METRE) | Float.class   | 1.1f
-        getQuantity(1.2, Units.METRE) | Double.class  | 1.2
-        getQuantity(2, Units.METRE)   | Byte.class    | 2
-        getQuantity(3, Units.METRE)   | Short.class   | 3
-        getQuantity(4, Units.METRE)   | Integer.class | 4
-        getQuantity(5, Units.METRE)   | Long.class    | 5
-        getQuantity(6, Units.METRE)   | String.class  | "6 m"
+        source                     | type          | expectedResult
+        quantity(1.1, new Metre()) | Float.class   | 1.1f
+        quantity(1.2, new Metre()) | Double.class  | 1.2
+        quantity(2, new Metre())   | Byte.class    | 2
+        quantity(3, new Metre())   | Short.class   | 3
+        quantity(4, new Metre())   | Integer.class | 4
+        quantity(5, new Metre())   | Long.class    | 5
+        quantity(6, new Metre())   | String.class  | "6 m"
     }
 
     def 'invalid wrap'() {
         given:
-        QuantityJavaDescriptor descriptor = new QuantityJavaDescriptor(Units.METRE, QuantityShape.NUMBER)
+        QuantityJavaDescriptor descriptor = new QuantityJavaDescriptor(new Metre(), QuantityShape.NUMBER)
 
         when:
         descriptor.wrap([1, 2, 3] as int[], null)
@@ -71,10 +72,10 @@ class QuantityJavaDescriptorSpec extends Specification {
 
     def 'invalid unwrap'() {
         given:
-        QuantityJavaDescriptor descriptor = new QuantityJavaDescriptor(Units.METRE, QuantityShape.NUMBER)
+        QuantityJavaDescriptor descriptor = new QuantityJavaDescriptor(new Metre(), QuantityShape.NUMBER)
 
         when:
-        descriptor.unwrap(getQuantity(1, Units.METRE), ArrayList.class, null)
+        descriptor.unwrap(quantity(1, new Metre()), ArrayList.class, null)
 
         then:
         thrown(QuantityPackingException)

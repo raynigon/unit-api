@@ -1,6 +1,6 @@
 /*
- * Units of Measurement Reference Implementation
- * Copyright (c) 2005-2020, Jean-Marie Dautelle, Werner Keil, Otavio Santana.
+ * Units of Measurement Common Library for Java
+ * Copyright (c) 2005-2019, Jean-Marie Dautelle, Werner Keil and others.
  *
  * All rights reserved.
  *
@@ -27,35 +27,36 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.raynigon.unit_api.core.format;
+package com.raynigon.unit_api.core.function;
+
+import javax.measure.Prefix;
+import javax.measure.Quantity;
+import javax.measure.Unit;
 
 /**
- * Format related constants
- * 
- * @author keilw
+ * Represents a function that parses an input value and produces an output.
+ *
+ * <p>
+ * This is a <a href=
+ * "https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/FunctionalInterface.html"
+ * >functional interface</a> whose functional method is {@link #prefix()}.
+ *
+ * @author <a href="mailto:units@catmedia.us">Werner Keil</a>
+ * @version 0.9, 2019-01-31
+ * @param <Q>
+ *            the quantity type
+ * @see Prefix
+ * @see Unit
  * @since 2.0
  */
-interface FormatConstants {
-    /** Operator precedence for the addition and subtraction operations */
-    static final int ADDITION_PRECEDENCE = 0;
-
-    /** Operator precedence for the multiplication and division operations */
-    static final int PRODUCT_PRECEDENCE = ADDITION_PRECEDENCE + 2;
-
-    /** Operator precedence for the exponentiation and logarithm operations */
-    static final int EXPONENT_PRECEDENCE = PRODUCT_PRECEDENCE + 2;
-
-    static final char MIDDLE_DOT = '\u00b7'; // $NON-NLS-1$
-
-    /** Exponent 1 character */
-    static final char EXPONENT_1 = '\u00b9'; // $NON-NLS-1$
-
-    /** Exponent 2 character */
-    static final char EXPONENT_2 = '\u00b2'; // $NON-NLS-1$
-
+@FunctionalInterface
+public interface PrefixOperator<Q extends Quantity<Q>> {
     /**
-     * Operator precedence for a unit identifier containing no mathematical operations (i.e., consisting exclusively of an identifier and possibly a
-     * prefix). Defined to be <code>Integer.MAX_VALUE</code> so that no operator can have a higher precedence.
+     * Returns a new unit equal to this unit prefixed by the specified {@code prefix}.
+     *
+     * @param prefix
+     *          the prefix to apply on this unit.
+     * @return the unit with the given prefix applied.
      */
-    static final int NOOP_PRECEDENCE = Integer.MAX_VALUE;
+    Unit<Q> prefix(Prefix prefix);
 }

@@ -1,11 +1,12 @@
 package com.raynigon.unit_api.core.service
 
+import com.raynigon.unit_api.core.units.si.energy.Joule
 import spock.lang.Specification
-import tech.units.indriya.quantity.Quantities
-import tech.units.indriya.unit.Units
 
 import javax.measure.Unit
 import javax.measure.quantity.Energy
+
+import static com.raynigon.unit_api.core.service.UnitsApiService.quantity
 
 class UnitsApiServiceSpec extends Specification {
 
@@ -16,7 +17,7 @@ class UnitsApiServiceSpec extends Specification {
 
     def 'joule to watt-hour works'() {
         given:
-        def joule1 = Quantities.getQuantity(3600, Units.JOULE)
+        def joule1 = quantity(3600, new Joule())
 
         when:
         def result = joule1.to(UnitsApiService.getInstance().getUnit("Wh") as Unit<Energy>)

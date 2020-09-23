@@ -30,6 +30,9 @@ package com.raynigon.unit_api.core.units.general;
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+
+import com.raynigon.unit_api.core.function.UnitConverterSupplier;
+
 import java.util.Map;
 import java.util.Objects;
 
@@ -37,8 +40,6 @@ import javax.measure.Dimension;
 import javax.measure.Quantity;
 import javax.measure.Unit;
 import javax.measure.UnitConverter;
-
-import tech.uom.lib.common.function.UnitConverterSupplier;
 
 /**
  * <p>

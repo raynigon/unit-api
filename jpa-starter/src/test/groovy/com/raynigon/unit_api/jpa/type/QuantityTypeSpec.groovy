@@ -7,7 +7,6 @@ import com.raynigon.unit_api.jpa.annotation.NoneQuantity
 import com.raynigon.unit_api.jpa.exception.UnitNotFound
 import org.hibernate.usertype.DynamicParameterizedType
 import spock.lang.Specification
-import tech.units.indriya.unit.Units
 
 import javax.measure.Quantity
 import javax.measure.quantity.Length
