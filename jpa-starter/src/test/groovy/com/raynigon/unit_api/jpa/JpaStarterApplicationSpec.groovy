@@ -1,5 +1,9 @@
 package com.raynigon.unit_api.jpa
 
+import com.raynigon.unit_api.core.units.si.length.Kilometre
+import com.raynigon.unit_api.core.units.si.length.Metre
+import com.raynigon.unit_api.core.units.si.speed.KilometrePerHour
+import com.raynigon.unit_api.core.units.si.temperature.Celsius
 import com.raynigon.unit_api.jpa.helpers.BasicApplicationConfig
 import com.raynigon.unit_api.jpa.helpers.BasicEntity
 import com.raynigon.unit_api.jpa.helpers.BasicRepository
@@ -7,10 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.transaction.annotation.Transactional
 import spock.lang.Specification
-import tech.units.indriya.quantity.Quantities
-import tech.units.indriya.unit.Units
 
-import javax.measure.MetricPrefix
+import static com.raynigon.unit_api.core.service.UnitsApiService.quantity
 
 @Transactional
 @SpringBootTest(
@@ -40,9 +42,9 @@ class JpaStarterApplicationSpec extends Specification {
         given:
         def entity = new BasicEntity()
         entity.id = "1"
-        entity.speed = Quantities.getQuantity(10, Units.KILOMETRE_PER_HOUR)
-        entity.distance = Quantities.getQuantity(10, Units.METRE)
-        entity.temperature = Quantities.getQuantity(10, Units.CELSIUS)
+        entity.speed = quantity(10, new KilometrePerHour())
+        entity.distance = quantity(10, new Metre())
+        entity.temperature = quantity(10, new Celsius())
 
         when:
         repository.save(entity)
@@ -66,8 +68,8 @@ class JpaStarterApplicationSpec extends Specification {
 
         then:
         result.id == "99"
-        result.speed == Quantities.getQuantity(12, Units.KILOMETRE_PER_HOUR)
-        result.distance == Quantities.getQuantity(100, Units.METRE.prefix(MetricPrefix.KILO))
-        result.temperature == Quantities.getQuantity(30, Units.CELSIUS)
+        result.speed == quantity(12, new KilometrePerHour())
+        result.distance == quantity(100, new Kilometre())
+        result.temperature == quantity(30, new Celsius())
     }
 }

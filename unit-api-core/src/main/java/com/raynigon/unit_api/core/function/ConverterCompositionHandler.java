@@ -27,35 +27,53 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.raynigon.unit_api.core.format;
+package com.raynigon.unit_api.core.function;
+
+
+import java.util.function.BiPredicate;
+import java.util.function.BinaryOperator;
 
 /**
- * Format related constants
+ * Functional interface for handling the composition (concatenation) of two unit converters.
  * 
- * @author keilw
+ * @author Andi Huber
+ * @author Werner Keil
+ * @version 1.2
  * @since 2.0
  */
-interface FormatConstants {
-    /** Operator precedence for the addition and subtraction operations */
-    static final int ADDITION_PRECEDENCE = 0;
-
-    /** Operator precedence for the multiplication and division operations */
-    static final int PRODUCT_PRECEDENCE = ADDITION_PRECEDENCE + 2;
-
-    /** Operator precedence for the exponentiation and logarithm operations */
-    static final int EXPONENT_PRECEDENCE = PRODUCT_PRECEDENCE + 2;
-
-    static final char MIDDLE_DOT = '\u00b7'; // $NON-NLS-1$
-
-    /** Exponent 1 character */
-    static final char EXPONENT_1 = '\u00b9'; // $NON-NLS-1$
-
-    /** Exponent 2 character */
-    static final char EXPONENT_2 = '\u00b2'; // $NON-NLS-1$
+public interface ConverterCompositionHandler {
 
     /**
-     * Operator precedence for a unit identifier containing no mathematical operations (i.e., consisting exclusively of an identifier and possibly a
-     * prefix). Defined to be <code>Integer.MAX_VALUE</code> so that no operator can have a higher precedence.
+     * Takes two converters {@code left}, {@code right} and returns a (not necessarily new) 
+     * converter that is equivalent to the mathematical composition of these:
+     * <p>
+     * compose(left, right) === left o right 
+     * 
+     * <p>
+     * Implementation Note: Instead of using AbstractConverter as parameter 
+     * and result types, this could be generalized to UnitConverter, but that 
+     * would require some careful changes within AbstractConverter itself.
+     *  
+     * @param left
+     * @param right
+     * @param canReduce
+     * @param doReduce
+     * @return
      */
-    static final int NOOP_PRECEDENCE = Integer.MAX_VALUE;
+    public AbstractConverter compose(
+            AbstractConverter left, 
+            AbstractConverter right,
+            BiPredicate<AbstractConverter, AbstractConverter> canReduce,
+            BinaryOperator<AbstractConverter> doReduce);
+    
+    // -- FACTORIES (BUILT-IN) 
+    
+    /**
+     * @return the default built-in UnitCompositionHandler which is yielding a normal-form, 
+     * required to decide whether two UnitConverters are equivalent
+     */
+    public static ConverterCompositionHandler yieldingNormalForm() {
+        return new UnitCompositionHandlerYieldingNormalForm();
+    }
+
 }

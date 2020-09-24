@@ -1,11 +1,11 @@
 package com.raynigon.unit_api.core.units.si.energy;
 
+import com.raynigon.unit_api.core.function.MultiplyConverter;
 import com.raynigon.unit_api.core.units.general.IUnit;
 import com.raynigon.unit_api.core.units.general.TransformedUnit;
 import com.raynigon.unit_api.core.units.si.SISystem;
 import com.raynigon.unit_api.core.units.si.power.Watt;
 import com.raynigon.unit_api.core.units.si.time.Hour;
-import tech.units.indriya.function.MultiplyConverter;
 
 import javax.measure.Unit;
 import javax.measure.quantity.Energy;

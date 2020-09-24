@@ -42,10 +42,9 @@ import javax.measure.Quantity;
 import javax.measure.Unit;
 import javax.measure.UnitConverter;
 
+import com.raynigon.unit_api.core.function.AbstractConverter;
+import com.raynigon.unit_api.core.function.Lazy;
 import com.raynigon.unit_api.core.units.si.dimensionless.One;
-import tech.units.indriya.function.AbstractConverter;
-import tech.units.indriya.internal.function.Lazy;
-import tech.units.indriya.unit.UnitDimension;
 
 /**
  * <p>

@@ -1,11 +1,11 @@
 package com.raynigon.unit_api.core.units.general;
 
+import com.raynigon.unit_api.core.function.AbstractConverter;
+
 import javax.measure.Dimension;
 import javax.measure.Quantity;
 import javax.measure.Unit;
 import javax.measure.UnitConverter;
-
-import tech.units.indriya.function.AbstractConverter;
 
 import java.util.Map;
 import java.util.Objects;
@@ -16,10 +16,6 @@ import java.util.Objects;
  * units are created. Base units are always unscaled SI units.
  * </p>
  *
- * <p>
- * When using the {@link tech.units.indriya.spi.StandardModel standard model},
- * all seven <b>SI</b> base units are dimensionally independent.
- * </p>
  *
  * @see <a href="http://en.wikipedia.org/wiki/SI_base_unit"> Wikipedia: SI base
  *      unit</a>

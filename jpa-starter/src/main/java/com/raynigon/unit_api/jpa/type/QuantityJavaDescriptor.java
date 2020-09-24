@@ -9,11 +9,12 @@ import org.hibernate.type.descriptor.spi.JdbcRecommendedSqlTypeMappingContext;
 import org.hibernate.type.descriptor.sql.DoubleTypeDescriptor;
 import org.hibernate.type.descriptor.sql.SqlTypeDescriptor;
 import org.hibernate.type.descriptor.sql.VarcharTypeDescriptor;
-import tech.units.indriya.quantity.Quantities;
 
 import javax.measure.Quantity;
 import javax.measure.Unit;
 import java.util.Objects;
+
+import static com.raynigon.unit_api.core.service.UnitsApiService.quantity;
 
 /**
  * Describes the Quantity Java Class for Hibernate
@@ -63,7 +64,7 @@ public class QuantityJavaDescriptor extends AbstractTypeDescriptor<Quantity<?>> 
 
     @Override
     public Quantity<?> fromString(String string) {
-        return Quantities.getQuantity(string);
+        return quantity(string);
     }
 
     /**
@@ -114,11 +115,11 @@ public class QuantityJavaDescriptor extends AbstractTypeDescriptor<Quantity<?>> 
     @SuppressWarnings({"unchecked", "rawtypes"})
     public <X> Quantity<?> wrap(X value, WrapperOptions options) {
         if (value instanceof String && ((String) value).contains(" ")) {
-            return Quantities.getQuantity((String) value).to((Unit) unit);
+            return quantity((String) value).to((Unit) unit);
         } else if (value instanceof String) {
-            return Quantities.getQuantity(Double.parseDouble((String) value), unit);
+            return quantity(Double.parseDouble((String) value), unit);
         } else if (value instanceof Number) {
-            return Quantities.getQuantity((Number) value, unit);
+            return quantity((Number) value, unit);
         } else {
             throw new QuantityPackingException("Unknown value type: " + value.getClass().getName());
         }

@@ -1,8 +1,7 @@
 package com.raynigon.unit_api.core.service;
 
-import com.raynigon.unit_api.core.format.SimpleQuantityFormat;
+import com.raynigon.unit_api.core.quantities.NumberQuantity;
 import com.raynigon.unit_api.core.units.si.SISystem;
-import tech.units.indriya.quantity.Quantities;
 
 import javax.measure.Quantity;
 import javax.measure.Unit;
@@ -72,7 +71,7 @@ public class DefaultUnitsApiService implements UnitsApiService {
 
     @Override
     public String format(Quantity<?> quantity) {
-        return SimpleQuantityFormat.getInstance().format(quantity);
+        return quantity.toString(); // TODO handle proper formatting
     }
 
     @Override
@@ -82,6 +81,11 @@ public class DefaultUnitsApiService implements UnitsApiService {
         String symbol = parts[1];
         Unit<?> unit = getUnit(symbol);
         if (unit == null) return null;
-        return Quantities.getQuantity(value, unit);
+        return new NumberQuantity<>(value, unit);
+    }
+
+    @Override
+    public <Q extends Quantity<Q>> Quantity<Q> createQuantity(Number value, Unit<Q> unit) {
+        return new NumberQuantity<Q>(value, unit, Quantity.Scale.ABSOLUTE);
     }
 }

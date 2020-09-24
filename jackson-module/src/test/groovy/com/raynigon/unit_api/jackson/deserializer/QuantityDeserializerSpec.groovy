@@ -6,7 +6,6 @@ import com.raynigon.unit_api.core.units.si.speed.MetrePerSecond
 import com.raynigon.unit_api.jackson.UnitApiModule
 import com.raynigon.unit_api.jackson.annotation.JsonUnit
 import spock.lang.Specification
-import tech.units.indriya.unit.Units
 
 import javax.measure.Quantity
 import javax.measure.quantity.Speed

@@ -1,14 +1,14 @@
 package com.raynigon.unit_api.kotlin
 
+import com.raynigon.unit_api.core.service.UnitsApiService.quantity
+import com.raynigon.unit_api.core.units.si.dimensionless.One
+import com.raynigon.unit_api.core.units.si.length.Metre
+import com.raynigon.unit_api.core.units.si.power.Watt
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
-import tech.units.indriya.AbstractUnit.ONE
-import tech.units.indriya.quantity.Quantities.getQuantity
-import tech.units.indriya.unit.Units.METRE
-import tech.units.indriya.unit.Units.WATT
 import javax.measure.Quantity
 import javax.measure.quantity.Speed
 import kotlin.math.sign
@@ -17,10 +17,10 @@ internal class QuantityOperatorsTest {
 
     @Test
     fun `comparison operator`() {
-        val a = getQuantity(3, METRE)
-        val b = getQuantity(4, METRE)
-        val c = getQuantity(5, METRE)
-        val d = getQuantity(4, METRE)
+        val a = quantity(3, Metre())
+        val b = quantity(4, Metre())
+        val c = quantity(5, Metre())
+        val d = quantity(4, Metre())
         assertTrue(a < b)
         assertFalse(a > b)
         assertTrue(c > b)
@@ -54,8 +54,8 @@ internal class QuantityOperatorsTest {
 
     @Test
     fun `invalid comparison fails`() {
-        val a = getQuantity(3, METRE) as Quantity<*>
-        val b = getQuantity(4, WATT) as Quantity<*>
+        val a = quantity(3, Metre()) as Quantity<*>
+        val b = quantity(4, Watt()) as Quantity<*>
         val c = a as Quantity<Speed>
         val d = b as Quantity<Speed>
 
@@ -64,15 +64,15 @@ internal class QuantityOperatorsTest {
 
     @Test
     fun `math operators`() {
-        val a = getQuantity(2, METRE)
-        val b = getQuantity(4, METRE)
-        val c = getQuantity(3, METRE)
+        val a = quantity(2, Metre())
+        val b = quantity(4, Metre())
+        val c = quantity(3, Metre())
 
-        assertEquals(getQuantity(6, METRE), a + b)
-        assertEquals(getQuantity(2, METRE), b - a)
+        assertEquals(quantity(6, Metre()), a + b)
+        assertEquals(quantity(2, Metre()), b - a)
         val result = b * c
         assertEquals(12, result.getValue().toInt())
-        assertEquals(METRE.pow(2), result.getUnit())
-        assertEquals(getQuantity(2, ONE), b / a)
+        assertEquals(Metre().pow(2), result.getUnit())
+        assertEquals(quantity(2, One()), b / a)
     }
 }
