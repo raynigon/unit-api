@@ -39,7 +39,7 @@ import javax.measure.Unit;
  * <p>
  * This is a <a href=
  * "https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/FunctionalInterface.html"
- * >functional interface</a> whose functional method is {@link #prefix()}.
+ * >functional interface</a> whose functional method is {@link #prefix}.
  *
  * @author <a href="mailto:units@catmedia.us">Werner Keil</a>
  * @version 0.9, 2019-01-31

@@ -33,7 +33,7 @@ package com.raynigon.unit_api.core.function;
  * Represents an operation to convert values.
  * <p>
  * This is a <a href= "http://docs.oracle.com/javase/8/docs/api/java/util/function/package-summary.html#package.description" >functional interface</a>
- * whose functional method is {@link #convert(F)}.
+ * whose functional method is {@link #convert}.
  *
  * @param <T> the type to convert to
  * @param <F> the type to convert from

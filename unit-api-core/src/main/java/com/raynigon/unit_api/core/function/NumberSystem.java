@@ -37,13 +37,7 @@ package com.raynigon.unit_api.core.function;
  * {@link Number} types.<br>
  * Then <em>S</em> is <a href="https://en.wikipedia.org/wiki/Closure_(mathematics)">closed</a> 
  * under the collection of {@link NumberSystem}'s methods.   
- * 
- * @implNote
- * Given <em>S</em> the set of possible {@link Number} values within implementation specific 
- * set of (supported) {@link Number} types:<br>
- * - implemented methods must support any {@link Number} arguments from <em>S</em><br>
- * - implemented methods must also have their {@link Number} results to be in <em>S</em><br>
- *  
+ *
  * @author Andi Huber
  * @since 2.0
  * @see <a href="https://en.wikipedia.org/wiki/Closure_(mathematics)">Closure (wikipedia)</a>

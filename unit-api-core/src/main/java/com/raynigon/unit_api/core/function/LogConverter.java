@@ -37,7 +37,7 @@ import javax.measure.UnitConverter;
 /**
  * <p>
  * This class represents a logarithmic converter of limited precision. Such converter is typically used to create logarithmic unit. For example:<code>
- * Unit<Dimensionless> BEL = Unit.ONE.transform(new LogConverter(10).inverse()); </code>
+ * Unit &lt;Dimensionless&gt; BEL = Unit.ONE.transform(new LogConverter(10).inverse()); </code>
  *
  * @author <a href="mailto:jean-marie@dautelle.com">Jean-Marie Dautelle</a>
  * @author <a href="mailto:werner@units.tech">Werner Keil</a>

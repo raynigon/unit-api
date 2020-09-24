@@ -37,7 +37,7 @@ import javax.measure.Unit;
  * <p>
  * This is a <a href=
  * "http://docs.oracle.com/javase/8/docs/api/java/util/function/package-summary.html#package.description"
- * >functional interface</a> whose functional method is {@link #to()}.
+ * >functional interface</a> whose functional method is {@link #to}.
  *
 *  @author <a href="mailto:units@catmedia.us">Werner Keil</a>
  * @version 1.5, 2019-04-07

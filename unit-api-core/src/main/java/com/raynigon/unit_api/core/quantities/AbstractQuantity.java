@@ -85,7 +85,7 @@ import com.raynigon.unit_api.core.units.si.dimensionless.One;
  * public Double getValue() { return kilograms; }<br>
  * ...<br>
  * }<br>
- * <p>
+ *
  * // Complex numbers measurements.<br>
  * public class ComplexQuantity
  * &lt;Q extends Quantity&gt;extends AbstractQuantity
