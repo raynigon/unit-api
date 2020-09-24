@@ -35,23 +35,24 @@ import javax.measure.Unit;
 /**
  * Comparator to sort units by natural order, looking both the name and the symbol.
  *
+ * <b>Given:</b>
+ * <p>
+ * Quantity&lt;Time&gt; day = timeFactory.create(1, Units.DAY);
+ * </p>
+ * <p>
+ * Quantity&lt;Time&gt; hours = timeFactory.create(18, Units.HOUR);
+ * </p>
+ * <p>
+ * Quantity&lt;Time&gt; minutes = timeFactory.create(15, Units.HOUR);
+ * </p>
+ * <p>
+ * Quantity&lt;Time&gt; seconds = timeFactory.create(100, Units.HOUR);
+ * </p>
+ * will return: seconds, minutes, hours, day
+ *
+ * @param <U> the type to compare
  * @author <a href="mailto:werner@uom.technology">Werner Keil</a>
  * @version 1.1
- * @param <U> the type to compare
- * @return <b>Given:</b>
- *         <p>
- *         Quantity&lt;Time&gt; day = timeFactory.create(1, Units.DAY);
- *         </p>
- *         <p>
- *         Quantity&lt;Time&gt; hours = timeFactory.create(18, Units.HOUR);
- *         </p>
- *         <p>
- *         Quantity&lt;Time&gt; minutes = timeFactory.create(15, Units.HOUR);
- *         </p>
- *         <p>
- *         Quantity&lt;Time&gt; seconds = timeFactory.create(100, Units.HOUR);
- *         </p>
- *         will return: seconds, minutes, hours, day
  * @since 2.0
  */
 public class UnitComparator<U extends Unit<?>> implements Comparator<U> {

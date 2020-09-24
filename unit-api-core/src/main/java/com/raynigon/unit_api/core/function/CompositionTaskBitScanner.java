@@ -75,15 +75,15 @@ public class CompositionTaskBitScanner {
    * This BitScanner holds internally a BitSet. The specified {@code visitor} is called 
    * for each sequence of consecutive ones, where each such call passes over 2 int parameters
    * i, j.<p>
-   * i .. zero based start index of the processed one-sequence<br/>
-   * j .. length of the processed one-sequence<br/>
-   * <p>
+   * i .. zero based start index of the processed one-sequence<br>
+   * j .. length of the processed one-sequence<br>
+   * </p>
    * Eg. given an internal BitSet represented by eg. 0-0-1-0-1-1-1-0, the resulting visitor
-   * calls would be:<br/>
-   * visitor.accept(2, 1) - start at 2, length = 1<br/>
-   * visitor.accept(4, 3) - start at 4, length = 3<br/>
+   * calls would be:<br>
+   * visitor.accept(2, 1) - start at 2, length = 1<br>
+   * visitor.accept(4, 3) - start at 4, length = 3<br>
    * 
-   * @param visitor
+   * @param visitor the visited BiIntConsumer
    */
   public void visitBitSequences(BiIntConsumer visitor) {
     int scanPointer = 0;

@@ -244,8 +244,8 @@ public abstract class AbstractQuantity<Q extends Quantity<Q>> implements Compara
      *
      * @param obj the object to compare with.
      * @return <code>this.getUnit.equals(obj.getUnit())
-     * && this.getLevel().equals(obj.getLevel()
-     * && this.getValue().equals(obj.getValue())</code>
+     * &amp;&amp; this.getLevel().equals(obj.getLevel()
+     * &amp;&amp; this.getValue().equals(obj.getValue())</code>
      */
     @Override
     public boolean equals(Object obj) {
@@ -306,7 +306,7 @@ public abstract class AbstractQuantity<Q extends Quantity<Q>> implements Compara
      * Casts this quantity to a parameterized quantity of specified nature or throw a <code>ClassCastException</code> if the dimension of the
      * specified quantity and its unit's dimension do not match. For example:<br>
      * <code>
-     * Quantity<Length> length = AbstractQuantity.parse("2 km").asType(Length.class);
+     * Quantity&lt;Length&gt; length = AbstractQuantity.parse("2 km").asType(Length.class);
      * </code>
      *
      * @param type the quantity class identifying the nature of the quantity.

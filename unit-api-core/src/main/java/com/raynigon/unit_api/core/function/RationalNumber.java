@@ -36,11 +36,7 @@ import java.util.Objects;
 /**
  * Represents a rational number {@code dividend/divisor} with {@code dividend}
  * and {@code divisor} being integer numbers.
- * <p>
- * @implSpec
- * This implementation uses {@link BigInteger} to represent 'dividend' and
- * 'divisor'.
- * 
+ *
  * @author Andi Huber
  * @author Werner Keil
  * @version 1.2, June 21, 2019
@@ -153,9 +149,7 @@ public final class RationalNumber extends Number {
 	 * @throws IllegalArgumentException if <code>divisor = 0</code>
 	 * @throws NullPointerException     - if dividend is {@code null} or divisor is
 	 *                                  {@code null}
-	 * 
-	 * @implNote this implementation stores dividend and divisor after canceling
-	 *           down from given parameters
+	 *
 	 */
 	public static RationalNumber of(BigInteger dividend, BigInteger divisor) {
 		Objects.requireNonNull(dividend);
@@ -234,7 +228,6 @@ public final class RationalNumber extends Number {
 	/**
 	 * @return this {@code RationalNumber} converted to {@link BigDecimal}
 	 *         representation
-	 * @implNote the conversion calculation is done lazily and thread-safe
 	 */
 	public BigDecimal bigDecimalValue() {
 		synchronized ($lock1) {

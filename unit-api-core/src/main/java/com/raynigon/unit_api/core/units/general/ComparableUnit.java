@@ -84,11 +84,11 @@ public interface ComparableUnit<Q extends Quantity<Q>> extends Unit<Q>, Comparab
 	Unit<Q> getSystemUnit();
 	
 	/**
-	 * Returns the converter from this unit to its unscaled {@link #toSystemUnit
+	 * Returns the converter from this unit to its unscaled {@link #getSystemUnit
 	 * System Unit} unit.
 	 *
 	 * @return <code>getConverterTo(this.toSystemUnit())</code>
-	 * @see #toSystemUnit
+	 * @see #getSystemUnit
 	 */
 	UnitConverter getSystemConverter();
 }

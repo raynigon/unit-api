@@ -45,7 +45,7 @@ import javax.measure.Dimension;
  * quantities uncommensurate (not comparable). Modern physics has cast doubt on the very existence of incompatible fundamental dimensions of physical
  * quantities. For example, most physicists do not recognize temperature, {@link UnitDimension#TEMPERATURE Θ}, as a fundamental dimension since it
  * essentially expresses the energy per particle per degree of freedom, which can be expressed in terms of energy (or mass, length, and time). To
- * support, such model the method {@link #getConverter} may returns a non-null value for distinct dimensions.
+ * support, such model the method {@link #getDimensionalTransform} may returns a non-null value for distinct dimensions.
  * </p>
  * 
  * <p>

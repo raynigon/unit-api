@@ -368,7 +368,7 @@ public abstract class AbstractConverter
          * @param right
          *            the right converter.
          * @throws IllegalArgumentException
-         *             if either the left or right converter are </code> null</code>
+         *             if either the left or right converter are <code>null</code>
          */
         public Pair(UnitConverter left, UnitConverter right) {
             if (left != null && right != null) {
