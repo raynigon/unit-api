@@ -59,7 +59,6 @@ subprojects {
     }
 
     dependencies {
-        // implementation 'tech.units:indriya:2.0.4'
         implementation 'javax.measure:unit-api:2.0'
         implementation 'si.uom:si-quantity:2.0.1'
 

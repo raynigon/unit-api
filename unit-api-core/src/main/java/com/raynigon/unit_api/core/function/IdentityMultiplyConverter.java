@@ -45,7 +45,7 @@ final class IdentityMultiplyConverter implements MultiplyConverter, Serializable
 
     private static final long serialVersionUID = 1L;
     
-    final static IdentityMultiplyConverter INSTANCE = new IdentityMultiplyConverter();
+    public final static IdentityMultiplyConverter INSTANCE = new IdentityMultiplyConverter();
 
     private IdentityMultiplyConverter() {
         // hidden

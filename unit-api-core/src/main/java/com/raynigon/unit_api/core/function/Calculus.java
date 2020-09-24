@@ -35,7 +35,6 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.ServiceLoader;
@@ -51,10 +50,17 @@ import java.util.logging.Logger;
  * @version 1.4, August 21, 2019
  * @since 2.0
  */
-public final class Calculus {
+public class Calculus {
 	
 	private static final Logger log = Logger.getLogger(Calculus.class.getName());
-		
+
+	/**
+	 * Memoization of Pi by number-of-digits.
+	 */
+	private static final Map<Integer, BigDecimal> piCache = new HashMap<>();
+
+	private final static Map<Class<? extends AbstractConverter>, Integer> normalFormOrder = new HashMap<>(9);
+
 	/**
 	 * The default MathContext used for BigDecimal calculus.
 	 */
@@ -66,8 +72,6 @@ public final class Calculus {
 	public static MathContext MATH_CONTEXT = DEFAULT_MATH_CONTEXT;
 	
 	private static NumberSystem currentSystem;
-	
-    private static final String DEFAULT_NUMBER_SYSTEM = "com.raynigon.unit_api.core.function.DefaultNumberSystem";
 
     /**
      * All available {@link NumberSystem NumberSystems} used for Number arithmetic.
@@ -102,12 +106,6 @@ public final class Calculus {
     	currentSystem = system;
     }
 
-	
-	/**
-	 * Memoization of Pi by number-of-digits.
-	 */
-	private static final Map<Integer, BigDecimal> piCache = new HashMap<>();
-	
 	/**
 	 * Pi calculation with Machin's formula.
 	 * 
@@ -176,8 +174,6 @@ public final class Calculus {
 	}
 	
 	// -- NORMAL FORM TABLE OF COMPOSITION
-	
-	private final static Map<Class<? extends AbstractConverter>, Integer> normalFormOrder = new HashMap<>(9);
 
     public static Map<Class<? extends AbstractConverter>, Integer> getNormalFormOrder() {
         synchronized (normalFormOrder) {

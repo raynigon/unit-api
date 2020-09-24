@@ -39,6 +39,10 @@ import java.util.Objects;
  */
 public class Calculator {
 
+
+    private final NumberSystem ns;
+    private Number acc = 0;
+
     /**
      * Returns a new instance of a {@code Calculator} initialized with the default {@link NumberSystem}, 
      * as set at {@link Calculus#currentNumberSystem()}
@@ -59,9 +63,6 @@ public class Calculator {
         return getInstance().load(number);
     }
 
-    private final NumberSystem ns;
-    private Number acc = 0;
-    
     private Calculator(NumberSystem ns) {
         this.ns = ns;
     }

@@ -39,14 +39,14 @@ import java.util.function.Predicate;
  * @version 1.1
  * @since 2.0
  */
-final class CompositionTaskBitScanner {
-
-  @FunctionalInterface
-  public static interface BiIntConsumer {
-    public void accept(int i, int j); 
-  }
+public class CompositionTaskBitScanner {
 
   private final BitSet bitSet;
+
+  @FunctionalInterface
+  public interface BiIntConsumer {
+    void accept(int i, int j);
+  }
 
   private CompositionTaskBitScanner(BitSet bitSet) {
     this.bitSet = bitSet;

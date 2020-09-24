@@ -110,7 +110,7 @@ implements MultiplyConverter {
      * @throws NullPointerException
      *           if factor is {@code null}
      */
-    static RationalConverter of(RationalNumber factor) {
+    public static RationalConverter of(RationalNumber factor) {
         return new RationalConverter(factor);
     }
 	
@@ -126,7 +126,7 @@ implements MultiplyConverter {
      * @throws NullPointerException
      *           if dividend is {@code null} or divisor is {@code null}
 	 */
-	static RationalConverter of(BigInteger dividend, BigInteger divisor) {
+	public static RationalConverter of(BigInteger dividend, BigInteger divisor) {
 		return new RationalConverter(dividend, divisor);
 	}
 
@@ -140,7 +140,7 @@ implements MultiplyConverter {
 	 * @throws IllegalArgumentException
 	 *           if <code>divisor = 0</code>
 	 */
-	static RationalConverter of(long dividend, long divisor) {
+	public static RationalConverter of(long dividend, long divisor) {
 		return new RationalConverter(dividend, divisor);
 	}
 

@@ -39,9 +39,8 @@ import javax.measure.UnitConverter;
  * Unit specialized for the Java SE platform. It extends {@link Unit} with
  * {@linkplain Comparable} and {@linkplain Serializable }
  * 
- * @see {@link Unit}
  * @author werner
- * @param <Q>
+ * @param <Q>	QuantityType
  * @version 1.4, July 2, 2019
  * @since 1.0.9
  */

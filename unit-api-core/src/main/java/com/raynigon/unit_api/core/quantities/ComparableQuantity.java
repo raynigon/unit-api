@@ -38,11 +38,10 @@ import javax.measure.Unit;
 
 /**
  * Quantity specialized for the Java SE platform. It extends {@link Quantity} with {@linkplain Comparable} and {@linkplain Serializable }
- * 
- * @see {@link Quantity}
+ *
  * @author otaviojava
  * @author werner
- * @param <Q>
+ * @param <Q>   QuantityType
  * @version 1.1, July 2, 2019
  * @since 1.0
  */

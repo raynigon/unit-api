@@ -64,7 +64,7 @@ final class PowerOfPiConverter extends AbstractConverter
 	 * @param exponent
 	 *            the exponent for the factor π^exponent.
 	 */
-	static PowerOfPiConverter of(int exponent) {
+	public static PowerOfPiConverter of(int exponent) {
 		return new PowerOfPiConverter(exponent);
 	}
 

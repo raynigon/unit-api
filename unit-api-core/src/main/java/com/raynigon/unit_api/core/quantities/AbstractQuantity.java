@@ -67,7 +67,6 @@ import com.raynigon.unit_api.core.units.si.dimensionless.One;
  * <code>
  * Quantity&lt;Velocity&gt; milesPerHour = C.to(MILES_PER_HOUR); // Use double implementation (fast).
  * System.out.println(milesPerHour);
- * <p>
  * &gt; 670616629.3843951 m/h
  * </code>
  * </p>

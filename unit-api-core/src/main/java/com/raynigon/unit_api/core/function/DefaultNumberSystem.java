@@ -144,8 +144,8 @@ public class DefaultNumberSystem implements NumberSystem {
         final boolean reorder_args = type_y.ordinal()>type_x.ordinal();
         
         return reorder_args
-                ? addWideAndNarrow(type_y, y, type_x, x)
-                        : addWideAndNarrow(type_x, x, type_y, y);
+                ? addWideAndNarrow(type_y, y, x)
+                        : addWideAndNarrow(type_x, x, y);
     }
 
     @Override
@@ -162,8 +162,8 @@ public class DefaultNumberSystem implements NumberSystem {
         final boolean reorder_args = type_y.ordinal()>type_x.ordinal();
         
         return reorder_args
-                ? multiplyWideAndNarrow(type_y, y, type_x, x)
-                        : multiplyWideAndNarrow(type_x, x, type_y, y);
+                ? multiplyWideAndNarrow(type_y, y, x)
+                        : multiplyWideAndNarrow(type_x, x, y);
     }
 
     @Override
@@ -489,8 +489,8 @@ public class DefaultNumberSystem implements NumberSystem {
         final boolean reorder_args = type_y.ordinal()>type_x.ordinal();
         
         return reorder_args
-                ? -compareWideVsNarrow(type_y, y, type_x, x)
-                        : compareWideVsNarrow(type_x, x, type_y, y);
+                ? -compareWideVsNarrow(type_y, y, x)
+                        : compareWideVsNarrow(type_x, x, y);
     }
     
     @Override
@@ -625,8 +625,9 @@ public class DefaultNumberSystem implements NumberSystem {
     }
 
     private Number addWideAndNarrow(
-            NumberType wideType, Number wide, 
-            NumberType narrowType, Number narrow) {
+            NumberType wideType,
+            Number wide,
+            Number narrow) {
         
         if(wideType.isIntegerOnly()) {
             // at this point we know, that narrow must also be an integer-only type
@@ -706,8 +707,9 @@ public class DefaultNumberSystem implements NumberSystem {
     }
     
     private Number multiplyWideAndNarrow(
-            NumberType wideType, Number wide, 
-            NumberType narrowType, Number narrow) {
+            NumberType wideType,
+            Number wide,
+            Number narrow) {
         
         if(wideType.isIntegerOnly()) {
             // at this point we know, that narrow must also be an integer-only type
@@ -786,8 +788,9 @@ public class DefaultNumberSystem implements NumberSystem {
     
     
     private int compareWideVsNarrow(
-            NumberType wideType, Number wide, 
-            NumberType narrowType, Number narrow) {
+            NumberType wideType,
+            Number wide,
+            Number narrow) {
         
         
         if(wideType.isIntegerOnly()) {

@@ -53,7 +53,7 @@ public interface NumberSystem {
     /**
      * Immutable value type, holder of 2 numbers.
      */
-    public final static class DivisionResult {
+    final class DivisionResult {
         /**
          * originating from x / y
          */
@@ -239,6 +239,7 @@ public interface NumberSystem {
      * @return
      */
     default boolean equals(Number x, Number y) {
+        //noinspection NumberEquality
         if(x == y) {
             return true;
         }

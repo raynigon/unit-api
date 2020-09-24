@@ -1,6 +1,5 @@
 package com.raynigon.unit_api.kotlin
 
-import com.raynigon.unit_api.core.service.UnitsApiService
 import com.raynigon.unit_api.core.service.UnitsApiService.quantity
 import com.raynigon.unit_api.core.units.si.dimensionless.One
 import com.raynigon.unit_api.core.units.si.length.Metre

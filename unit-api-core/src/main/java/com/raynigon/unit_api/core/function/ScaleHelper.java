@@ -41,6 +41,7 @@ import javax.measure.Quantity.Scale;
 import javax.measure.Unit;
 import javax.measure.UnitConverter;
 
+import static javax.measure.Quantity.Scale.*;
 import static javax.measure.Quantity.Scale.ABSOLUTE;
 import static javax.measure.Quantity.Scale.RELATIVE;
 
@@ -71,11 +72,11 @@ public final class ScaleHelper {
                 throw unsupportedRelativeScaleConversion(quantity, anotherUnit);
             }
             final Number valueInOtherUnit = Calculator.of(linearFactor).multiply(quantity.getValue()).peek();
-            return new NumberQuantity<Q>(valueInOtherUnit, anotherUnit, Scale.RELATIVE);
+            return new NumberQuantity<Q>(valueInOtherUnit, anotherUnit, RELATIVE);
         }
         
         final Number convertedValue = converter.convert(quantity.getValue());
-        return new NumberQuantity<Q>(convertedValue, anotherUnit, Scale.ABSOLUTE);
+        return new NumberQuantity<Q>(convertedValue, anotherUnit, ABSOLUTE);
     }
 
     public static <Q extends Quantity<Q>> ComparableQuantity<Q> addition(
@@ -157,14 +158,14 @@ public final class ScaleHelper {
         }
         // convert to system units
         if(isAbsolute(quantity)) {
-            return new NumberQuantity<>(toSystemUnit.convert(quantity.getValue()), systemUnit, Scale.ABSOLUTE);
+            return new NumberQuantity<>(toSystemUnit.convert(quantity.getValue()), systemUnit, ABSOLUTE);
         } else {
             final Number linearFactor = linearFactorOf(toSystemUnit).orElse(null);
             if(linearFactor==null) {
                 throw unsupportedRelativeScaleConversion(quantity, systemUnit);
             }
             final Number valueInSystemUnits = Calculator.of(linearFactor).multiply(quantity.getValue()).peek();
-            return new NumberQuantity<>(valueInSystemUnits, systemUnit, Scale.ABSOLUTE);
+            return new NumberQuantity<>(valueInSystemUnits, systemUnit, ABSOLUTE);
         }
     }
 

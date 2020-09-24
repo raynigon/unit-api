@@ -74,7 +74,7 @@ implements MultiplyConverter {
 	 * @param factor
 	 *            the scaling factor.
 	 */
-	static DoubleMultiplyConverter of(double factor) {
+	public static DoubleMultiplyConverter of(double factor) {
 		return new DoubleMultiplyConverter(factor);
 	}
 

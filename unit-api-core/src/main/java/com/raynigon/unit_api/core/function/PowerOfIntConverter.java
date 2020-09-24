@@ -43,8 +43,7 @@ import javax.measure.UnitConverter;
  * @version 1.5, Jun 25, 2019
  * @since 2.0
  */
-//TODO[220] make this like all the other MultiplyConverter package private
-public final class PowerOfIntConverter extends AbstractConverter 
+public final class PowerOfIntConverter extends AbstractConverter
  implements MultiplyConverter, IntBaseSupplier, IntExponentSupplier {
 	private static final long serialVersionUID = 3546932001671571300L;
 
@@ -59,7 +58,7 @@ public final class PowerOfIntConverter extends AbstractConverter
 	 * @param prefix
 	 *            the prefix for the factor.
 	 */
-	static PowerOfIntConverter of(Prefix prefix) {
+	public static PowerOfIntConverter of(Prefix prefix) {
 		return of(prefix.getValue(), prefix.getExponent());
 	}
 
@@ -70,7 +69,7 @@ public final class PowerOfIntConverter extends AbstractConverter
 	 * @param exponent
 	 * @return
 	 */
-	static PowerOfIntConverter of(int base, int exponent) {
+	public static PowerOfIntConverter of(int base, int exponent) {
 		return new PowerOfIntConverter(base, exponent);
 	}
 	
@@ -81,7 +80,7 @@ public final class PowerOfIntConverter extends AbstractConverter
 	 * @param exponent
 	 * @return
 	 */
-	static PowerOfIntConverter of(Number base, int exponent) {
+	public static PowerOfIntConverter of(Number base, int exponent) {
 		return new PowerOfIntConverter(base.intValue(), exponent);
 	}
 

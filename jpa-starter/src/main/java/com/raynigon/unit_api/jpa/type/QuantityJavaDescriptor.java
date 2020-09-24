@@ -15,6 +15,8 @@ import javax.measure.Quantity;
 import javax.measure.Unit;
 import java.util.Objects;
 
+import static com.raynigon.unit_api.core.service.UnitsApiService.quantity;
+
 /**
  * Describes the Quantity Java Class for Hibernate
  *
@@ -63,7 +65,7 @@ public class QuantityJavaDescriptor extends AbstractTypeDescriptor<Quantity<?>> 
 
     @Override
     public Quantity<?> fromString(String string) {
-        return UnitsApiService.quantity(string);
+        return quantity(string);
     }
 
     /**
@@ -114,11 +116,11 @@ public class QuantityJavaDescriptor extends AbstractTypeDescriptor<Quantity<?>> 
     @SuppressWarnings({"unchecked", "rawtypes"})
     public <X> Quantity<?> wrap(X value, WrapperOptions options) {
         if (value instanceof String && ((String) value).contains(" ")) {
-            return UnitsApiService.quantity((String) value).to((Unit) unit);
+            return quantity((String) value).to((Unit) unit);
         } else if (value instanceof String) {
-            return UnitsApiService.quantity(Double.parseDouble((String) value), unit);
+            return quantity(Double.parseDouble((String) value), unit);
         } else if (value instanceof Number) {
-            return UnitsApiService.quantity((Number) value, unit);
+            return quantity((Number) value, unit);
         } else {
             throw new QuantityPackingException("Unknown value type: " + value.getClass().getName());
         }
