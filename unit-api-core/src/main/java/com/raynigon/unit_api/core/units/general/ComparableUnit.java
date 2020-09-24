@@ -76,7 +76,7 @@ public interface ComparableUnit<Q extends Quantity<Q>> extends Unit<Q>, Comparab
 	/**
 	 * Returns the system unit (unscaled SI unit) from which this unit is derived.
 	 * They can be be used to identify a quantity given the unit. For example:<br>
-	 * <code> static boolean isAngularVelocity(AbstractUnit<?> unit) {<br>&nbsp;&nbsp;return unit.getSystemUnit().equals(RADIAN.divide(SECOND));<br>}
+	 * <code> static boolean isAngularVelocity(AbstractUnit&lt;?&gt; unit) {<br>&nbsp;&nbsp;return unit.getSystemUnit().equals(RADIAN.divide(SECOND));<br>}
 	 * <br>assert(REVOLUTION.divide(MINUTE).isAngularVelocity()); // Returns true. </code>
 	 *
 	 * @return the unscaled metric unit from which this unit is derived.
