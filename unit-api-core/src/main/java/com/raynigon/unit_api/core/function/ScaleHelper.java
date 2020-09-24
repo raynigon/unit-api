@@ -32,16 +32,13 @@ package com.raynigon.unit_api.core.function;
 import com.raynigon.unit_api.core.quantities.ComparableQuantity;
 import com.raynigon.unit_api.core.quantities.NumberQuantity;
 
+import javax.measure.Quantity;
+import javax.measure.Unit;
+import javax.measure.UnitConverter;
 import java.util.Optional;
 import java.util.function.BinaryOperator;
 import java.util.function.UnaryOperator;
 
-import javax.measure.Quantity;
-import javax.measure.Quantity.Scale;
-import javax.measure.Unit;
-import javax.measure.UnitConverter;
-
-import static javax.measure.Quantity.Scale.*;
 import static javax.measure.Quantity.Scale.ABSOLUTE;
 import static javax.measure.Quantity.Scale.RELATIVE;
 

@@ -1,7 +1,6 @@
 package com.raynigon.unit_api.jpa.type;
 
 import com.raynigon.unit_api.core.annotation.QuantityShape;
-import com.raynigon.unit_api.core.service.UnitsApiService;
 import com.raynigon.unit_api.jpa.exception.QuantityPackingException;
 import org.hibernate.type.descriptor.WrapperOptions;
 import org.hibernate.type.descriptor.java.AbstractTypeDescriptor;

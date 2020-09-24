@@ -50,9 +50,9 @@ import java.util.logging.Logger;
  * @version 1.4, August 21, 2019
  * @since 2.0
  */
-public class Calculus {
+public final class CalculusUtils {
 	
-	private static final Logger log = Logger.getLogger(Calculus.class.getName());
+	private static final Logger log = Logger.getLogger(CalculusUtils.class.getName());
 
 	/**
 	 * Memoization of Pi by number-of-digits.

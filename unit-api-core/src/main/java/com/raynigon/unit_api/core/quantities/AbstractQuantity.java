@@ -39,7 +39,7 @@ import javax.measure.quantity.Dimensionless;
 
 import static javax.measure.Quantity.Scale.ABSOLUTE;
 
-import com.raynigon.unit_api.core.function.Calculus;
+import com.raynigon.unit_api.core.function.CalculusUtils;
 import com.raynigon.unit_api.core.function.NumberSystem;
 import com.raynigon.unit_api.core.function.ScaleHelper;
 import com.raynigon.unit_api.core.function.UnitSupplier;
@@ -330,7 +330,7 @@ public abstract class AbstractQuantity<Q extends Quantity<Q>> implements Compara
     }
 
     protected NumberSystem numberSystem() {
-        return Calculus.currentNumberSystem();
+        return CalculusUtils.currentNumberSystem();
     }
 
 }

@@ -91,7 +91,7 @@ public interface MultiplyConverter extends UnitConverter, Converter<Number, Numb
 	 */
 	public static MultiplyConverter of(Number factor) {
 
-		NumberSystem ns = Calculus.currentNumberSystem();
+		NumberSystem ns = CalculusUtils.currentNumberSystem();
 
 		if (ns.isOne(factor)) {
 			return identity();
@@ -166,7 +166,7 @@ public interface MultiplyConverter extends UnitConverter, Converter<Number, Numb
 		
 		// as the spec allows for Prefix.getValue() to also return non integer numbers, 
 		// we do have to account for these (rare) cases 
-		NumberSystem ns = Calculus.currentNumberSystem();
+		NumberSystem ns = CalculusUtils.currentNumberSystem();
 		if(!ns.isInteger(prefix.getValue())) {
 		    Number factor = ns.power(prefix.getValue(), prefix.getExponent());
 		    return of(factor);    

@@ -115,11 +115,11 @@ final class PowerOfPiConverter extends AbstractConverter
 	    synchronized ($lock1) {
 	       if(scaleFactor==null) {
 	           
-	           int nbrDigits = Calculus.MATH_CONTEXT.getPrecision();
+	           int nbrDigits = CalculusUtils.MATH_CONTEXT.getPrecision();
 	           if (nbrDigits == 0) {
 	               throw new ArithmeticException("Pi multiplication with unlimited precision");
 	           }
-	           BigDecimal pi = Calculus.Pi.ofNumDigits(nbrDigits);
+	           BigDecimal pi = CalculusUtils.Pi.ofNumDigits(nbrDigits);
 	           
 	           scaleFactor = Calculator.of(pi)
 	                   .power(exponent)

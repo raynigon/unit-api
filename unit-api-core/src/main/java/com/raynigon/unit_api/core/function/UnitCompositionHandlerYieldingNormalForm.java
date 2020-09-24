@@ -47,7 +47,7 @@ public class UnitCompositionHandlerYieldingNormalForm implements ConverterCompos
   private final Map<Class<? extends AbstractConverter>, Integer> normalFormOrder;
 
   public UnitCompositionHandlerYieldingNormalForm() {
-    normalFormOrder = Calculus.getNormalFormOrder();
+    normalFormOrder = CalculusUtils.getNormalFormOrder();
   }
 
   @Override

@@ -61,7 +61,7 @@ public final class AddConverter extends AbstractConverter implements ValueSuppli
    *          the offset value.
    */
   public AddConverter(Number offset) {
-    this.offset = Calculus.currentNumberSystem().narrow(offset);
+    this.offset = CalculusUtils.currentNumberSystem().narrow(offset);
   }
 
   /**
@@ -75,7 +75,7 @@ public final class AddConverter extends AbstractConverter implements ValueSuppli
   
   @Override
   public boolean isIdentity() {
-    return Calculus.currentNumberSystem().isZero(offset);
+    return CalculusUtils.currentNumberSystem().isZero(offset);
   }
 
   @Override
@@ -85,14 +85,14 @@ public final class AddConverter extends AbstractConverter implements ValueSuppli
 
   @Override
   protected AbstractConverter reduce(AbstractConverter that) {
-    NumberSystem ns = Calculus.currentNumberSystem();
+    NumberSystem ns = CalculusUtils.currentNumberSystem();
     Number newOffset = ns.add(offset, ((AddConverter)that).offset);
     return new AddConverter(newOffset);
   }
   
   @Override
   public AddConverter inverseWhenNotIdentity() {
-    NumberSystem ns = Calculus.currentNumberSystem();
+    NumberSystem ns = CalculusUtils.currentNumberSystem();
     Number newOffset = ns.negate(offset);
     return new AddConverter(newOffset);
   }
@@ -106,7 +106,7 @@ public final class AddConverter extends AbstractConverter implements ValueSuppli
 
   @Override
   public String transformationLiteral() {
-    NumberSystem ns = Calculus.currentNumberSystem();
+    NumberSystem ns = CalculusUtils.currentNumberSystem();
     int signum = ns.signum(offset);
     return String.format("x -> x %s %s", signum < 0 ? "-" : "+", ns.abs(offset));
   }
@@ -145,7 +145,7 @@ public final class AddConverter extends AbstractConverter implements ValueSuppli
       return 0;
     }
     if (o instanceof AddConverter) {
-      NumberSystem ns = Calculus.currentNumberSystem();  
+      NumberSystem ns = CalculusUtils.currentNumberSystem();
       return ns.compare(this.getValue(), ((AddConverter) o).getValue());
     }
     return -1;

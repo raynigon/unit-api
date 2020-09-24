@@ -239,7 +239,7 @@ public final class RationalNumber extends Number {
 	public BigDecimal bigDecimalValue() {
 		synchronized ($lock1) {
 			if (divisionResult == null) {
-				divisionResult = new BigDecimal(absDividend).divide(new BigDecimal(absDivisor), Calculus.MATH_CONTEXT);
+				divisionResult = new BigDecimal(absDividend).divide(new BigDecimal(absDivisor), CalculusUtils.MATH_CONTEXT);
 				if (signum < 0) {
 					divisionResult = divisionResult.negate();
 				}

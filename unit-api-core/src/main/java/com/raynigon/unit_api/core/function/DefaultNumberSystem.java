@@ -210,7 +210,7 @@ public class DefaultNumberSystem implements NumberSystem {
         } else {
             
             final MathContext mathContext = 
-                    new MathContext(Calculus.MATH_CONTEXT.getPrecision(), RoundingMode.FLOOR);
+                    new MathContext(CalculusUtils.MATH_CONTEXT.getPrecision(), RoundingMode.FLOOR);
             
             final BigDecimal decimal_x = (type_x == NumberType.RATIONAL)
                     ? ((RationalNumber) absX).bigDecimalValue()
@@ -391,13 +391,13 @@ public class DefaultNumberSystem implements NumberSystem {
             
         }
         if(number instanceof BigDecimal) {
-            return ((BigDecimal) number).pow(exponent, Calculus.MATH_CONTEXT);
+            return ((BigDecimal) number).pow(exponent, CalculusUtils.MATH_CONTEXT);
         }
         if(number instanceof RationalNumber) {
             ((RationalNumber) number).pow(exponent);
         }
         if(number instanceof Double || number instanceof Float) {
-            return toBigDecimal(number).pow(exponent, Calculus.MATH_CONTEXT);
+            return toBigDecimal(number).pow(exponent, CalculusUtils.MATH_CONTEXT);
         }
         throw unsupportedNumberType(number);
     }
@@ -664,11 +664,11 @@ public class DefaultNumberSystem implements NumberSystem {
         if(wide instanceof BigDecimal) {
             
             if(narrow instanceof BigDecimal) {
-                return ((BigDecimal) wide).add((BigDecimal) narrow, Calculus.MATH_CONTEXT);
+                return ((BigDecimal) wide).add((BigDecimal) narrow, CalculusUtils.MATH_CONTEXT);
             }
             
             if(narrow instanceof Double || narrow instanceof Float) {
-                return ((BigDecimal) wide).add(BigDecimal.valueOf(narrow.doubleValue()), Calculus.MATH_CONTEXT);
+                return ((BigDecimal) wide).add(BigDecimal.valueOf(narrow.doubleValue()), CalculusUtils.MATH_CONTEXT);
             }
             
             if(narrow instanceof RationalNumber) {
@@ -745,11 +745,11 @@ public class DefaultNumberSystem implements NumberSystem {
         if(wide instanceof BigDecimal) {
             
             if(narrow instanceof BigDecimal) {
-                return ((BigDecimal) wide).multiply((BigDecimal) narrow, Calculus.MATH_CONTEXT);
+                return ((BigDecimal) wide).multiply((BigDecimal) narrow, CalculusUtils.MATH_CONTEXT);
             }
             
             if(narrow instanceof Double || narrow instanceof Float) {
-                return ((BigDecimal) wide).multiply(BigDecimal.valueOf(narrow.doubleValue()), Calculus.MATH_CONTEXT);
+                return ((BigDecimal) wide).multiply(BigDecimal.valueOf(narrow.doubleValue()), CalculusUtils.MATH_CONTEXT);
             }
             
             if(narrow instanceof RationalNumber) {

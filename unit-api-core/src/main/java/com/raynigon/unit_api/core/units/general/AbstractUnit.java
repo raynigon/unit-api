@@ -32,7 +32,7 @@ package com.raynigon.unit_api.core.units.general;
 import com.raynigon.unit_api.core.function.AbstractConverter;
 import com.raynigon.unit_api.core.function.AddConverter;
 import com.raynigon.unit_api.core.function.Calculator;
-import com.raynigon.unit_api.core.function.Calculus;
+import com.raynigon.unit_api.core.function.CalculusUtils;
 import com.raynigon.unit_api.core.function.DimensionalModel;
 import com.raynigon.unit_api.core.function.MultiplyConverter;
 import com.raynigon.unit_api.core.function.Nameable;
@@ -48,7 +48,6 @@ import javax.measure.Quantity;
 import javax.measure.UnconvertibleException;
 import javax.measure.Unit;
 import javax.measure.UnitConverter;
-import javax.measure.format.MeasurementParseException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.HashMap;
@@ -290,14 +289,14 @@ public abstract class AbstractUnit<Q extends Quantity<Q>>
 
     @Override
     public final Unit<Q> shift(Number offset) {
-        if (Calculus.currentNumberSystem().isZero(offset))
+        if (CalculusUtils.currentNumberSystem().isZero(offset))
             return this;
         return transform(new AddConverter(offset));
     }
 
     @Override
     public final Unit<Q> multiply(Number factor) {
-        if (Calculus.currentNumberSystem().isOne(factor))
+        if (CalculusUtils.currentNumberSystem().isOne(factor))
             return this;
         return transform(MultiplyConverter.of(factor));
     }
@@ -423,7 +422,7 @@ public abstract class AbstractUnit<Q extends Quantity<Q>>
      */
     @Override
     public final Unit<Q> divide(Number divisor) {
-        if (Calculus.currentNumberSystem().isOne(divisor))
+        if (CalculusUtils.currentNumberSystem().isOne(divisor))
             return this;
         Number factor = Calculator.of(divisor).reciprocal().peek();
         return transform(MultiplyConverter.of(factor));
