@@ -4,6 +4,8 @@ import com.raynigon.unit_api.core.units.si.acceleration.MetrePerSquaredSecond;
 import com.raynigon.unit_api.core.units.si.dimensionless.One;
 import com.raynigon.unit_api.core.units.si.dimensionless.Percent;
 import com.raynigon.unit_api.core.units.si.electrical.current.Ampere;
+import com.raynigon.unit_api.core.units.si.electrical.current.MilliAmpere;
+import com.raynigon.unit_api.core.units.si.electrical.potential.MilliVolt;
 import com.raynigon.unit_api.core.units.si.electrical.potential.Volt;
 import com.raynigon.unit_api.core.units.si.energy.Joule;
 import com.raynigon.unit_api.core.units.si.energy.KiloWattHour;
@@ -59,8 +61,16 @@ public class SISystemUnitsConstants {
         return quantity(value, new Percent());
     }
 
+    public static Quantity<ElectricCurrent> MilliAmpere(Number value){
+        return quantity(value, new MilliAmpere());
+    }
+
     public static Quantity<ElectricCurrent> Ampere(Number value){
         return quantity(value, new Ampere());
+    }
+
+    public static Quantity<ElectricPotential> MilliVolt(Number value){
+        return quantity(value, new MilliVolt());
     }
 
     public static Quantity<ElectricPotential> Volt(Number value){
