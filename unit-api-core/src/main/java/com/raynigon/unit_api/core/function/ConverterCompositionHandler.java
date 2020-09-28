@@ -29,13 +29,12 @@
  */
 package com.raynigon.unit_api.core.function;
 
-
 import java.util.function.BiPredicate;
 import java.util.function.BinaryOperator;
 
 /**
  * Functional interface for handling the composition (concatenation) of two unit converters.
- * 
+ *
  * @author Andi Huber
  * @author Werner Keil
  * @version 1.2
@@ -43,37 +42,35 @@ import java.util.function.BinaryOperator;
  */
 public interface ConverterCompositionHandler {
 
-    /**
-     * Takes two converters {@code left}, {@code right} and returns a (not necessarily new) 
-     * converter that is equivalent to the mathematical composition of these:
-     * <p>
-     * compose(left, right) === left o right 
-     * 
-     * <p>
-     * Implementation Note: Instead of using AbstractConverter as parameter 
-     * and result types, this could be generalized to UnitConverter, but that 
-     * would require some careful changes within AbstractConverter itself.
-     *  
-     * @param left
-     * @param right
-     * @param canReduce
-     * @param doReduce
-     * @return
-     */
-    public AbstractConverter compose(
-            AbstractConverter left, 
-            AbstractConverter right,
-            BiPredicate<AbstractConverter, AbstractConverter> canReduce,
-            BinaryOperator<AbstractConverter> doReduce);
-    
-    // -- FACTORIES (BUILT-IN) 
-    
-    /**
-     * @return the default built-in UnitCompositionHandler which is yielding a normal-form, 
-     * required to decide whether two UnitConverters are equivalent
-     */
-    public static ConverterCompositionHandler yieldingNormalForm() {
-        return new UnitCompositionHandlerYieldingNormalForm();
-    }
+  /**
+   * Takes two converters {@code left}, {@code right} and returns a (not necessarily new) converter
+   * that is equivalent to the mathematical composition of these:
+   *
+   * <p>compose(left, right) === left o right
+   *
+   * <p>Implementation Note: Instead of using AbstractConverter as parameter and result types, this
+   * could be generalized to UnitConverter, but that would require some careful changes within
+   * AbstractConverter itself.
+   *
+   * @param left
+   * @param right
+   * @param canReduce
+   * @param doReduce
+   * @return
+   */
+  public AbstractConverter compose(
+      AbstractConverter left,
+      AbstractConverter right,
+      BiPredicate<AbstractConverter, AbstractConverter> canReduce,
+      BinaryOperator<AbstractConverter> doReduce);
 
+  // -- FACTORIES (BUILT-IN)
+
+  /**
+   * @return the default built-in UnitCompositionHandler which is yielding a normal-form, required
+   *     to decide whether two UnitConverters are equivalent
+   */
+  public static ConverterCompositionHandler yieldingNormalForm() {
+    return new UnitCompositionHandlerYieldingNormalForm();
+  }
 }

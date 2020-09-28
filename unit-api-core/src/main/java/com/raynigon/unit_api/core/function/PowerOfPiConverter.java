@@ -31,147 +31,140 @@ package com.raynigon.unit_api.core.function;
 
 import java.math.BigDecimal;
 import java.util.Objects;
-
 import javax.measure.UnitConverter;
 
 /**
- * This class represents a converter multiplying numeric values by a factor of
- * Pi to the power of an integer exponent (π^exponent).
+ * This class represents a converter multiplying numeric values by a factor of Pi to the power of an
+ * integer exponent (π^exponent).
+ *
  * @author Andi Huber
  * @author Werner Keil
  * @version 1.5, Jun 21, 2019
  * @since 2.0
  */
-final class PowerOfPiConverter extends AbstractConverter 
- implements MultiplyConverter, IntExponentSupplier {
-	private static final long serialVersionUID = 5000593326722785126L;
-	private final Object $lock1 = new Object[0]; // serializable lock for 'scaleFactor'
-	
-	private final int exponent;
-	private final int hashCode;
-	private transient Number scaleFactor;
+final class PowerOfPiConverter extends AbstractConverter
+    implements MultiplyConverter, IntExponentSupplier {
+  private static final long serialVersionUID = 5000593326722785126L;
+  private final Object $lock1 = new Object[0]; // serializable lock for 'scaleFactor'
 
-	/**
-     * A converter by Pi to the power of 1.
-     *
-     * @since  2.0
-     */
-    public static final PowerOfPiConverter ONE = of(1);
-	
-	/**
-	 * Creates a converter with the specified exponent.
-	 * 
-	 * @param exponent
-	 *            the exponent for the factor π^exponent.
-	 */
-	public static PowerOfPiConverter of(int exponent) {
-		return new PowerOfPiConverter(exponent);
-	}
+  private final int exponent;
+  private final int hashCode;
+  private transient Number scaleFactor;
 
-	protected PowerOfPiConverter(int exponent) {
-		this.exponent = exponent;
-		this.hashCode = Objects.hash(exponent);
-	}
+  /**
+   * A converter by Pi to the power of 1.
+   *
+   * @since 2.0
+   */
+  public static final PowerOfPiConverter ONE = of(1);
 
-	public int getExponent() {
-		return exponent;
-	}
+  /**
+   * Creates a converter with the specified exponent.
+   *
+   * @param exponent the exponent for the factor π^exponent.
+   */
+  public static PowerOfPiConverter of(int exponent) {
+    return new PowerOfPiConverter(exponent);
+  }
 
-	@Override
-	public boolean isIdentity() {
-		return exponent == 0; // x^0 = 1, for any x!=0
-	}
+  protected PowerOfPiConverter(int exponent) {
+    this.exponent = exponent;
+    this.hashCode = Objects.hash(exponent);
+  }
 
-	@Override
-	public boolean isLinear() {
-		return true;
-	}
+  public int getExponent() {
+    return exponent;
+  }
 
-	@Override
-	public AbstractConverter inverseWhenNotIdentity() {
-		return new PowerOfPiConverter(-exponent);
-	}
-	
-    @Override
-    protected Number convertWhenNotIdentity(Number value) {
-        return Calculator.of(getFactor())
-              .multiply(value)
-              .peek();
-    }
+  @Override
+  public boolean isIdentity() {
+    return exponent == 0; // x^0 = 1, for any x!=0
+  }
 
-	@Override
-	protected boolean canReduceWith(AbstractConverter that) {
-		return that instanceof PowerOfPiConverter;
-	}
+  @Override
+  public boolean isLinear() {
+    return true;
+  }
 
-	@Override
-	protected AbstractConverter reduce(AbstractConverter that) {
-		return new PowerOfPiConverter(this.exponent + ((PowerOfPiConverter)that).exponent);
-	}
-	
-	@Override
-    public Number getValue() {
-	    
-	    synchronized ($lock1) {
-	       if(scaleFactor==null) {
-	           
-	           int nbrDigits = CalculusUtils.MATH_CONTEXT.getPrecision();
-	           if (nbrDigits == 0) {
-	               throw new ArithmeticException("Pi multiplication with unlimited precision");
-	           }
-	           BigDecimal pi = CalculusUtils.Pi.ofNumDigits(nbrDigits);
-	           
-	           scaleFactor = Calculator.of(pi)
-	                   .power(exponent)
-	                   .peek();
-	       }
+  @Override
+  public AbstractConverter inverseWhenNotIdentity() {
+    return new PowerOfPiConverter(-exponent);
+  }
+
+  @Override
+  protected Number convertWhenNotIdentity(Number value) {
+    return Calculator.of(getFactor()).multiply(value).peek();
+  }
+
+  @Override
+  protected boolean canReduceWith(AbstractConverter that) {
+    return that instanceof PowerOfPiConverter;
+  }
+
+  @Override
+  protected AbstractConverter reduce(AbstractConverter that) {
+    return new PowerOfPiConverter(this.exponent + ((PowerOfPiConverter) that).exponent);
+  }
+
+  @Override
+  public Number getValue() {
+
+    synchronized ($lock1) {
+      if (scaleFactor == null) {
+
+        int nbrDigits = CalculusUtils.MATH_CONTEXT.getPrecision();
+        if (nbrDigits == 0) {
+          throw new ArithmeticException("Pi multiplication with unlimited precision");
         }
+        BigDecimal pi = CalculusUtils.Pi.ofNumDigits(nbrDigits);
 
-        return scaleFactor;
+        scaleFactor = Calculator.of(pi).power(exponent).peek();
+      }
     }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (obj instanceof UnitConverter) {
-			UnitConverter other = (UnitConverter) obj;
-			if(this.isIdentity() && other.isIdentity()) {
-				return true;
-			}
-		}
-		if (obj instanceof PowerOfPiConverter) {
-			PowerOfPiConverter other = (PowerOfPiConverter) obj;
-			return this.exponent == other.exponent;
-		}
-		return false;
-	}
+    return scaleFactor;
+  }
 
-	@Override
-	public final String transformationLiteral() {
-		return String.format("x -> x * π^%s", exponent);
-	}
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj instanceof UnitConverter) {
+      UnitConverter other = (UnitConverter) obj;
+      if (this.isIdentity() && other.isIdentity()) {
+        return true;
+      }
+    }
+    if (obj instanceof PowerOfPiConverter) {
+      PowerOfPiConverter other = (PowerOfPiConverter) obj;
+      return this.exponent == other.exponent;
+    }
+    return false;
+  }
 
-	@Override
-	public int compareTo(UnitConverter o) {
-		if (this == o) {
-			return 0;
-		}
-		if(this.isIdentity() && o.isIdentity()) {
-			return 0;
-		}
-		if (o instanceof PowerOfPiConverter) {
-			PowerOfPiConverter other = (PowerOfPiConverter) o;
-			return Integer.compare(exponent, other.exponent);
-		}
-		return this.getClass().getName().compareTo(o.getClass().getName());
-	}
+  @Override
+  public final String transformationLiteral() {
+    return String.format("x -> x * π^%s", exponent);
+  }
 
-	@Override
-	public int hashCode() {
-		return hashCode;
-	}
+  @Override
+  public int compareTo(UnitConverter o) {
+    if (this == o) {
+      return 0;
+    }
+    if (this.isIdentity() && o.isIdentity()) {
+      return 0;
+    }
+    if (o instanceof PowerOfPiConverter) {
+      PowerOfPiConverter other = (PowerOfPiConverter) o;
+      return Integer.compare(exponent, other.exponent);
+    }
+    return this.getClass().getName().compareTo(o.getClass().getName());
+  }
 
-   
+  @Override
+  public int hashCode() {
+    return hashCode;
+  }
 }

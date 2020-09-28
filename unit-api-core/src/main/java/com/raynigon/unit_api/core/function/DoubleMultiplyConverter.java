@@ -30,116 +30,105 @@
 package com.raynigon.unit_api.core.function;
 
 import java.util.Objects;
-
 import javax.measure.UnitConverter;
+
 /**
- * <p>
- * This class represents a converter multiplying numeric values by a constant
- * scaling factor (<code>double</code> based).
- * </p>
- * 
+ * This class represents a converter multiplying numeric values by a constant scaling factor (<code>
+ * double</code> based).
+ *
  * @author <a href="mailto:jean-marie@dautelle.com">Jean-Marie Dautelle</a>
  * @author <a href="mailto:werner@units.tech">Werner Keil</a>
  * @author Andi Huber
  * @version 1.4, Jun 23, 2019
  * @since 1.0
  */
-final class DoubleMultiplyConverter 
-extends AbstractConverter 
-implements MultiplyConverter {
+final class DoubleMultiplyConverter extends AbstractConverter implements MultiplyConverter {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 6588759878444545649L;
+  /** */
+  private static final long serialVersionUID = 6588759878444545649L;
 
-	/**
-	 * Holds the scale factor.
-	 */
-	private final double doubleFactor;
+  /** Holds the scale factor. */
+  private final double doubleFactor;
 
-	/**
-	 * Creates a multiply converter with the specified scale factor.
-	 * 
-	 * @param factor
-	 *            the scaling factor.
-	 */
-	private DoubleMultiplyConverter(double factor) {
-		this.doubleFactor = factor;
-	}
+  /**
+   * Creates a multiply converter with the specified scale factor.
+   *
+   * @param factor the scaling factor.
+   */
+  private DoubleMultiplyConverter(double factor) {
+    this.doubleFactor = factor;
+  }
 
-	/**
-	 * Creates a multiply converter with the specified scale factor.
-	 * 
-	 * @param factor
-	 *            the scaling factor.
-	 */
-	public static DoubleMultiplyConverter of(double factor) {
-		return new DoubleMultiplyConverter(factor);
-	}
+  /**
+   * Creates a multiply converter with the specified scale factor.
+   *
+   * @param factor the scaling factor.
+   */
+  public static DoubleMultiplyConverter of(double factor) {
+    return new DoubleMultiplyConverter(factor);
+  }
 
-	@Override
-	public boolean isIdentity() {
-		return doubleFactor == 1.0;
-	}
+  @Override
+  public boolean isIdentity() {
+    return doubleFactor == 1.0;
+  }
 
-	@Override
-	protected boolean canReduceWith(AbstractConverter that) {
-		return that instanceof DoubleMultiplyConverter;
-	}
+  @Override
+  protected boolean canReduceWith(AbstractConverter that) {
+    return that instanceof DoubleMultiplyConverter;
+  }
 
-	@Override
-	protected AbstractConverter reduce(AbstractConverter that) {
-		return new DoubleMultiplyConverter(doubleFactor * ((DoubleMultiplyConverter) that).doubleFactor);
-	}
+  @Override
+  protected AbstractConverter reduce(AbstractConverter that) {
+    return new DoubleMultiplyConverter(
+        doubleFactor * ((DoubleMultiplyConverter) that).doubleFactor);
+  }
 
-	@Override
-	public DoubleMultiplyConverter inverseWhenNotIdentity() {
-		return new DoubleMultiplyConverter(1.0 / doubleFactor);
-	}
+  @Override
+  public DoubleMultiplyConverter inverseWhenNotIdentity() {
+    return new DoubleMultiplyConverter(1.0 / doubleFactor);
+  }
 
-    @Override
-    protected Number convertWhenNotIdentity(Number value) {
-        return Calculator.of(doubleFactor)
-              .multiply(value)
-              .peek();
+  @Override
+  protected Number convertWhenNotIdentity(Number value) {
+    return Calculator.of(doubleFactor).multiply(value).peek();
+  }
+
+  @Override
+  public final String transformationLiteral() {
+    return String.format("x -> x * %s", doubleFactor);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
     }
-	
-	@Override
-	public final String transformationLiteral() {
-		return String.format("x -> x * %s", doubleFactor);
-	}
+    if (obj instanceof DoubleMultiplyConverter) {
+      DoubleMultiplyConverter that = (DoubleMultiplyConverter) obj;
+      return Objects.equals(doubleFactor, that.doubleFactor);
+    }
+    return false;
+  }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (obj instanceof DoubleMultiplyConverter) {
-		    DoubleMultiplyConverter that = (DoubleMultiplyConverter) obj;
-			return Objects.equals(doubleFactor, that.doubleFactor);
-		}
-		return false;
-	}
+  @Override
+  public int hashCode() {
+    return Objects.hashCode(doubleFactor);
+  }
 
-	@Override
-	public int hashCode() {
-		return Objects.hashCode(doubleFactor);
-	}
+  @Override
+  public Double getValue() {
+    return doubleFactor;
+  }
 
-	@Override
-	public Double getValue() {
-		return doubleFactor;
-	}
-
-	@Override
-	public int compareTo(UnitConverter o) {
-		if (this == o) {
-			return 0;
-		}
-		if (o instanceof DoubleMultiplyConverter) {
-			return getValue().compareTo(((DoubleMultiplyConverter) o).getValue());
-		}
-		return -1;
-	}
+  @Override
+  public int compareTo(UnitConverter o) {
+    if (this == o) {
+      return 0;
+    }
+    if (o instanceof DoubleMultiplyConverter) {
+      return getValue().compareTo(((DoubleMultiplyConverter) o).getValue());
+    }
+    return -1;
+  }
 }

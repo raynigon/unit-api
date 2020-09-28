@@ -32,11 +32,12 @@ package com.raynigon.unit_api.core.function;
 /**
  * Represents a supplier of int-valued base.
  *
- * <p>There is no requirement that a new or distinct result be returned each
- * time the supplier is invoked.
+ * <p>There is no requirement that a new or distinct result be returned each time the supplier is
+ * invoked.
  *
- * <p>This is a <a href="http://docs.oracle.com/javase/8/docs/api/java/util/function/package-summary.html#package.description">functional interface</a>
- * whose functional method is {@link #getBase()}.
+ * <p>This is a <a
+ * href="http://docs.oracle.com/javase/8/docs/api/java/util/function/package-summary.html#package.description">functional
+ * interface</a> whose functional method is {@link #getBase()}.
  *
  * @author Werner Keil
  * @version 0.2, $Date: 2018-05-10 $
@@ -45,10 +46,10 @@ package com.raynigon.unit_api.core.function;
 @FunctionalInterface
 public interface IntBaseSupplier {
 
-    /**
-     * Gets a base value.
-     *
-     * @return a base value
-     */
-    int getBase();
+  /**
+   * Gets a base value.
+   *
+   * @return a base value
+   */
+  int getBase();
 }

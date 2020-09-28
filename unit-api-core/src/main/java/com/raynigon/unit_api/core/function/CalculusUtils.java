@@ -41,156 +41,142 @@ import java.util.ServiceLoader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 /**
  * Facade for internal number arithmetic.
- * 
+ *
  * @author Andi Huber
  * @author Werner Keil
  * @version 1.4, August 21, 2019
  * @since 2.0
  */
 public final class CalculusUtils {
-	
-	private static final Logger log = Logger.getLogger(CalculusUtils.class.getName());
 
-	/**
-	 * Memoization of Pi by number-of-digits.
-	 */
-	private static final Map<Integer, BigDecimal> piCache = new HashMap<>();
+  private static final Logger log = Logger.getLogger(CalculusUtils.class.getName());
 
-	private final static Map<Class<? extends AbstractConverter>, Integer> normalFormOrder = new HashMap<>(9);
+  /** Memoization of Pi by number-of-digits. */
+  private static final Map<Integer, BigDecimal> piCache = new HashMap<>();
 
-	/**
-	 * The default MathContext used for BigDecimal calculus.
-	 */
-	public static final MathContext DEFAULT_MATH_CONTEXT = MathContext.DECIMAL128;
+  private static final Map<Class<? extends AbstractConverter>, Integer> normalFormOrder =
+      new HashMap<>(9);
 
-	/**
-	 * Exposes (non-final) the MathContext used for BigDecimal calculus.
-	 */
-	public static MathContext MATH_CONTEXT = DEFAULT_MATH_CONTEXT;
-	
-	private static NumberSystem currentSystem;
+  /** The default MathContext used for BigDecimal calculus. */
+  public static final MathContext DEFAULT_MATH_CONTEXT = MathContext.DECIMAL128;
 
-    /**
-     * All available {@link NumberSystem NumberSystems} used for Number arithmetic.
-     */
-    public static List<NumberSystem> getAvailableNumberSystems() {
-        List<NumberSystem> systems = new ArrayList<>();
-        ServiceLoader<NumberSystem> loader = ServiceLoader.load(NumberSystem.class);
-        loader.forEach(NumberSystem -> {
-            systems.add(NumberSystem);
+  /** Exposes (non-final) the MathContext used for BigDecimal calculus. */
+  public static MathContext MATH_CONTEXT = DEFAULT_MATH_CONTEXT;
+
+  private static NumberSystem currentSystem;
+
+  /** All available {@link NumberSystem NumberSystems} used for Number arithmetic. */
+  public static List<NumberSystem> getAvailableNumberSystems() {
+    List<NumberSystem> systems = new ArrayList<>();
+    ServiceLoader<NumberSystem> loader = ServiceLoader.load(NumberSystem.class);
+    loader.forEach(
+        NumberSystem -> {
+          systems.add(NumberSystem);
         });
-        return systems;
+    return systems;
+  }
+
+  /** Returns the current {@link NumberSystem} used for Number arithmetic. */
+  public static NumberSystem currentNumberSystem() {
+    if (currentSystem == null) {
+      currentSystem = new DefaultNumberSystem();
+    }
+    return currentSystem;
+  }
+
+  /**
+   * Sets the current number system
+   *
+   * @param system the new current number system.
+   * @see #currentNumberSystem
+   */
+  public static void setCurrentNumberSystem(NumberSystem system) {
+    currentSystem = system;
+  }
+
+  /**
+   * Pi calculation with Machin's formula.
+   *
+   * @see <a href= "http://mathworld.wolfram.com/PiFormulas.html" >Pi Formulas</a>
+   */
+  static final class Pi {
+
+    private static final BigDecimal TWO = new BigDecimal("2");
+    private static final BigDecimal THREE = new BigDecimal("3");
+    private static final BigDecimal FOUR = new BigDecimal("4");
+    private static final BigDecimal FIVE = new BigDecimal("5");
+    private static final BigDecimal TWO_HUNDRED_THIRTY_NINE = new BigDecimal("239");
+
+    private Pi() {}
+
+    public static BigDecimal ofNumDigits(int numDigits) {
+
+      if (numDigits <= 0) {
+        throw new IllegalArgumentException("numDigits is required to be greater than zero");
+      }
+
+      return piCache.computeIfAbsent(
+          numDigits,
+          __ -> {
+            final int calcDigits = numDigits + 10;
+            return FOUR.multiply(
+                    (FOUR.multiply(arccot(FIVE, calcDigits)))
+                        .subtract(arccot(TWO_HUNDRED_THIRTY_NINE, calcDigits)))
+                .setScale(numDigits, RoundingMode.DOWN);
+          });
     }
 
-    /**
-     * Returns the current {@link NumberSystem} used for Number arithmetic.
-     */
-    public static NumberSystem currentNumberSystem() {
-    	if (currentSystem == null) {
-    		currentSystem = new DefaultNumberSystem();
-    	}
-        return currentSystem;
-    }
-    
-    /**
-     * Sets the current number system
-     *
-     * @param system
-     *          the new current number system.
-     * @see #currentNumberSystem
-     */
-    public static void setCurrentNumberSystem(NumberSystem system) {
-    	currentSystem = system;
-    }
+    /** Compute arccot via the Taylor series expansion. */
+    private static BigDecimal arccot(BigDecimal x, int numDigits) {
+      BigDecimal unity = BigDecimal.ONE.setScale(numDigits, RoundingMode.DOWN);
+      BigDecimal sum = unity.divide(x, RoundingMode.DOWN);
+      BigDecimal xpower = new BigDecimal(sum.toString());
+      BigDecimal term = null;
+      int nTerms = 0;
 
-	/**
-	 * Pi calculation with Machin's formula.
-	 * 
-	 * @see <a href= "http://mathworld.wolfram.com/PiFormulas.html" >Pi Formulas</a>
-	 * 
-	 */
-	static final class Pi {
-
-		private static final BigDecimal TWO = new BigDecimal("2");
-		private static final BigDecimal THREE = new BigDecimal("3");
-		private static final BigDecimal FOUR = new BigDecimal("4");
-		private static final BigDecimal FIVE = new BigDecimal("5");
-		private static final BigDecimal TWO_HUNDRED_THIRTY_NINE = new BigDecimal("239");
-
-		private Pi() {
-		}
-
-		public static BigDecimal ofNumDigits(int numDigits) {
-			
-			if(numDigits<=0) {
-				throw new IllegalArgumentException("numDigits is required to be greater than zero");
-			}
-			
-			return piCache.computeIfAbsent(numDigits, __->{
-				
-				final int calcDigits = numDigits + 10;
-				return FOUR
-						.multiply((FOUR.multiply(arccot(FIVE, calcDigits)))
-						.subtract(arccot(TWO_HUNDRED_THIRTY_NINE, calcDigits)))
-						.setScale(numDigits, RoundingMode.DOWN);
-				
-			});
-		}
-
-		/** Compute arccot via the Taylor series expansion. */
-		private static BigDecimal arccot(BigDecimal x, int numDigits) {
-			BigDecimal unity = BigDecimal.ONE.setScale(numDigits, RoundingMode.DOWN);
-			BigDecimal sum = unity.divide(x, RoundingMode.DOWN);
-			BigDecimal xpower = new BigDecimal(sum.toString());
-			BigDecimal term = null;
-			int nTerms = 0;
-
-			BigDecimal nearZero = BigDecimal.ONE.scaleByPowerOfTen(-numDigits);
-			log.log(Level.FINER, ()->"arccot: ARGUMENT=" + x + " (nearZero=" + nearZero + ")");
-			boolean add = false;
-			// Add one term of Taylor series each time thru loop. Stop looping
-			// when _term_
-			// gets very close to zero.
-			for (BigDecimal n = THREE; term == null || !term.equals(BigDecimal.ZERO); n = n.add(TWO)) {
-				if (term != null && term.compareTo(nearZero) < 0)
-					break;
-				xpower = xpower.divide(x.pow(2), RoundingMode.DOWN);
-				term = xpower.divide(n, RoundingMode.DOWN);
-				sum = add ? sum.add(term) : sum.subtract(term);
-				add = !add;
-				if(log.isLoggable(Level.FINEST)) {
-				    log.log(Level.FINEST, "arccot: term=" + term);    
-				}
-				nTerms++;
-			}
-			if(log.isLoggable(Level.FINEST)) {
-			    log.log(Level.FINER, "arccot: done. nTerms=" + nTerms);
-			}
-			return sum;
-		}
-	}
-	
-	// -- NORMAL FORM TABLE OF COMPOSITION
-
-    public static Map<Class<? extends AbstractConverter>, Integer> getNormalFormOrder() {
-        synchronized (normalFormOrder) {
-            if(normalFormOrder.isEmpty()) {
-                normalFormOrder.put(AbstractConverter.IDENTITY.getClass(), 0);
-                normalFormOrder.put(PowerOfIntConverter.class, 1);
-                normalFormOrder.put(RationalConverter.class, 2); 
-                normalFormOrder.put(PowerOfPiConverter.class, 3);
-                normalFormOrder.put(DoubleMultiplyConverter.class, 4);
-                normalFormOrder.put(AddConverter.class, 5);
-                normalFormOrder.put(LogConverter.class, 6); 
-                normalFormOrder.put(ExpConverter.class, 7);
-                normalFormOrder.put(AbstractConverter.Pair.class, 99);        
-            }
+      BigDecimal nearZero = BigDecimal.ONE.scaleByPowerOfTen(-numDigits);
+      log.log(Level.FINER, () -> "arccot: ARGUMENT=" + x + " (nearZero=" + nearZero + ")");
+      boolean add = false;
+      // Add one term of Taylor series each time thru loop. Stop looping
+      // when _term_
+      // gets very close to zero.
+      for (BigDecimal n = THREE; term == null || !term.equals(BigDecimal.ZERO); n = n.add(TWO)) {
+        if (term != null && term.compareTo(nearZero) < 0) break;
+        xpower = xpower.divide(x.pow(2), RoundingMode.DOWN);
+        term = xpower.divide(n, RoundingMode.DOWN);
+        sum = add ? sum.add(term) : sum.subtract(term);
+        add = !add;
+        if (log.isLoggable(Level.FINEST)) {
+          log.log(Level.FINEST, "arccot: term=" + term);
         }
-        
-        return Collections.unmodifiableMap(normalFormOrder);
+        nTerms++;
+      }
+      if (log.isLoggable(Level.FINEST)) {
+        log.log(Level.FINER, "arccot: done. nTerms=" + nTerms);
+      }
+      return sum;
     }
-	
+  }
+
+  // -- NORMAL FORM TABLE OF COMPOSITION
+
+  public static Map<Class<? extends AbstractConverter>, Integer> getNormalFormOrder() {
+    synchronized (normalFormOrder) {
+      if (normalFormOrder.isEmpty()) {
+        normalFormOrder.put(AbstractConverter.IDENTITY.getClass(), 0);
+        normalFormOrder.put(PowerOfIntConverter.class, 1);
+        normalFormOrder.put(RationalConverter.class, 2);
+        normalFormOrder.put(PowerOfPiConverter.class, 3);
+        normalFormOrder.put(DoubleMultiplyConverter.class, 4);
+        normalFormOrder.put(AddConverter.class, 5);
+        normalFormOrder.put(LogConverter.class, 6);
+        normalFormOrder.put(ExpConverter.class, 7);
+        normalFormOrder.put(AbstractConverter.Pair.class, 99);
+      }
+    }
+
+    return Collections.unmodifiableMap(normalFormOrder);
+  }
 }

@@ -29,109 +29,102 @@
  */
 package com.raynigon.unit_api.core.quantities;
 
-import com.raynigon.unit_api.core.function.Calculator;
-import com.raynigon.unit_api.core.function.ScaleHelper;
-
 import static javax.measure.Quantity.Scale.ABSOLUTE;
 
+import com.raynigon.unit_api.core.function.Calculator;
+import com.raynigon.unit_api.core.function.ScaleHelper;
 import javax.measure.Quantity;
 import javax.measure.Unit;
 
 /**
- * Implementation of {@link ComparableQuantity} that holds a Java {@link Number}, 
- * which represented this quantity's amount.
- * <p> 
- * This object is immutable. 
+ * Implementation of {@link ComparableQuantity} that holds a Java {@link Number}, which represented
+ * this quantity's amount.
+ *
+ * <p>This object is immutable.
+ *
  * <p>
  *
  * @see AbstractQuantity
  * @see Quantity
  * @see ComparableQuantity
- * @param <Q>
- *          The type of the quantity.
+ * @param <Q> The type of the quantity.
  * @author Andi Huber
  * @author Werner Keil
  * @version 1.5
  * @since 1.0
- * 
  */
 public class NumberQuantity<Q extends Quantity<Q>> extends AbstractQuantity<Q> {
 
-    private static final long serialVersionUID = -6494337491031528402L;
-    
-    private final Number value;
+  private static final long serialVersionUID = -6494337491031528402L;
 
-    /**
-     * @since 2.0
-     */
-    public NumberQuantity(Number number, Unit<Q> unit, Scale sc) {
-      super(unit, sc);
-      value = Calculator.of(number).peek(); // takes care of invalid number values (infinity, ...)
-    }
+  private final Number value;
 
-    public NumberQuantity(Number number, Unit<Q> unit) {
-        this(number, unit, ABSOLUTE); 
-    }
+  /** @since 2.0 */
+  public NumberQuantity(Number number, Unit<Q> unit, Scale sc) {
+    super(unit, sc);
+    value = Calculator.of(number).peek(); // takes care of invalid number values (infinity, ...)
+  }
 
-    @Override
-    public ComparableQuantity<Q> add(Quantity<Q> that) {
-        return ScaleHelper.addition(this, that,
-                (thisValue, thatValue) -> Calculator.of(thisValue).add(thatValue).peek());
-    }
+  public NumberQuantity(Number number, Unit<Q> unit) {
+    this(number, unit, ABSOLUTE);
+  }
 
-    @Override
-    public ComparableQuantity<Q> subtract(Quantity<Q> that) {
-        return ScaleHelper.addition(this, that, 
-                (thisValue, thatValue) -> Calculator.of(thisValue).subtract(thatValue).peek());
-    }
+  @Override
+  public ComparableQuantity<Q> add(Quantity<Q> that) {
+    return ScaleHelper.addition(
+        this, that, (thisValue, thatValue) -> Calculator.of(thisValue).add(thatValue).peek());
+  }
 
-    @Override
-    public ComparableQuantity<?> divide(Quantity<?> that) {
-        return ScaleHelper.multiplication(this, that, 
-                (thisValue, thatValue) -> Calculator.of(thisValue).divide(thatValue).peek(),
-                Unit::divide);
-    }
+  @Override
+  public ComparableQuantity<Q> subtract(Quantity<Q> that) {
+    return ScaleHelper.addition(
+        this, that, (thisValue, thatValue) -> Calculator.of(thisValue).subtract(thatValue).peek());
+  }
 
-    @Override
-    public ComparableQuantity<Q> divide(Number divisor) {
-        return ScaleHelper.scalarMultiplication(this, thisValue -> 
-                Calculator.of(thisValue).divide(divisor).peek());
-    }
+  @Override
+  public ComparableQuantity<?> divide(Quantity<?> that) {
+    return ScaleHelper.multiplication(
+        this,
+        that,
+        (thisValue, thatValue) -> Calculator.of(thisValue).divide(thatValue).peek(),
+        Unit::divide);
+  }
 
-    @Override
-    public ComparableQuantity<?> multiply(Quantity<?> that) {
-        return ScaleHelper.multiplication(this, that, 
-                (thisValue, thatValue) -> Calculator.of(thisValue).multiply(thatValue).peek(),
-                Unit::multiply);
-    }
+  @Override
+  public ComparableQuantity<Q> divide(Number divisor) {
+    return ScaleHelper.scalarMultiplication(
+        this, thisValue -> Calculator.of(thisValue).divide(divisor).peek());
+  }
 
-    @Override
-    public ComparableQuantity<Q> multiply(Number factor) {
-        return ScaleHelper.scalarMultiplication(this, thisValue -> 
-                Calculator.of(thisValue).multiply(factor).peek());
-    }
+  @Override
+  public ComparableQuantity<?> multiply(Quantity<?> that) {
+    return ScaleHelper.multiplication(
+        this,
+        that,
+        (thisValue, thatValue) -> Calculator.of(thisValue).multiply(thatValue).peek(),
+        Unit::multiply);
+  }
 
-    @Override
-    public ComparableQuantity<?> inverse() {
-        final Number resultValueInThisUnit = Calculator
-                .of(getValue())
-                .reciprocal()
-                .peek();
-        return new NumberQuantity<>(resultValueInThisUnit, getUnit().inverse(), getScale());
-    }
+  @Override
+  public ComparableQuantity<Q> multiply(Number factor) {
+    return ScaleHelper.scalarMultiplication(
+        this, thisValue -> Calculator.of(thisValue).multiply(factor).peek());
+  }
 
-    @Override
-    public Quantity<Q> negate() {
-        final Number resultValueInThisUnit = Calculator
-                .of(getValue())
-                .negate()
-                .peek();
-        return new NumberQuantity<>(resultValueInThisUnit, getUnit(), getScale());
-    }
+  @Override
+  public ComparableQuantity<?> inverse() {
+    final Number resultValueInThisUnit = Calculator.of(getValue()).reciprocal().peek();
+    return new NumberQuantity<>(resultValueInThisUnit, getUnit().inverse(), getScale());
+  }
 
-    @Override
-    public Number getValue() {
-        return value;
-    }
+  @Override
+  public Quantity<Q> negate() {
+    final Number resultValueInThisUnit = Calculator.of(getValue()).negate().peek();
+    return new NumberQuantity<>(resultValueInThisUnit, getUnit(), getScale());
+  }
 
+  @Override
+  public Number getValue() {
+    return value;
+  }
 }
