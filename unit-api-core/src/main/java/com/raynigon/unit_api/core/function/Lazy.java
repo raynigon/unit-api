@@ -33,54 +33,55 @@ import java.util.Objects;
 import java.util.function.Supplier;
 
 /**
- * Holder of an instance of type T, supporting the <em>compute-if-absent</em> idiom in a thread-safe manner.
- * <p>
- * Not serializable!     
- * 
+ * Holder of an instance of type T, supporting the <em>compute-if-absent</em> idiom in a thread-safe
+ * manner.
+ *
+ * <p>Not serializable!
+ *
  * @author Andi Huber
  * @since 2.0.3
  */
 public class Lazy<T> {
-    private final Supplier<? extends T> supplier;
-    private T value;
-    private boolean memorized;
+  private final Supplier<? extends T> supplier;
+  private T value;
+  private boolean memorized;
 
-    public Lazy(Supplier<? extends T> supplier) {
-        this.supplier = Objects.requireNonNull(supplier, "supplier is required");
-    }
+  public Lazy(Supplier<? extends T> supplier) {
+    this.supplier = Objects.requireNonNull(supplier, "supplier is required");
+  }
 
-    public boolean isMemorized() {
-        synchronized (this) {
-            return memorized;    
-        }
+  public boolean isMemorized() {
+    synchronized (this) {
+      return memorized;
     }
+  }
 
-    public void clear() {
-        synchronized (this) {
-            this.memorized = false;
-            this.value = null;
-        }
+  public void clear() {
+    synchronized (this) {
+      this.memorized = false;
+      this.value = null;
     }
+  }
 
-    public T get() {
-        synchronized (this) {
-            if(memorized) {
-                return value;
-            }
-            memorized = true;
-            return value = supplier.get();    
-        }
+  public T get() {
+    synchronized (this) {
+      if (memorized) {
+        return value;
+      }
+      memorized = true;
+      return value = supplier.get();
     }
-    
-    public void set(T value) {
-        synchronized (this) {
-            if(memorized) {
-                throw new IllegalStateException(
-                        String.format("cannot set value '%s' on Lazy that has already memoized a value", ""+value));
-            }
-            memorized = true;
-            this.value = value;
-        }
-    }
+  }
 
+  public void set(T value) {
+    synchronized (this) {
+      if (memorized) {
+        throw new IllegalStateException(
+            String.format(
+                "cannot set value '%s' on Lazy that has already memoized a value", "" + value));
+      }
+      memorized = true;
+      this.value = value;
+    }
+  }
 }

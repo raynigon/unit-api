@@ -30,13 +30,11 @@
 package com.raynigon.unit_api.core.function;
 
 import java.util.Objects;
-
 import javax.measure.UnitConverter;
 
-
 /**
- * <p>
- * This class represents a logarithmic converter of limited precision. Such converter is typically used to create logarithmic unit. For example:<code>
+ * This class represents a logarithmic converter of limited precision. Such converter is typically
+ * used to create logarithmic unit. For example:<code>
  * Unit &lt;Dimensionless&gt; BEL = Unit.ONE.transform(new LogConverter(10).inverse()); </code>
  *
  * @author <a href="mailto:jean-marie@dautelle.com">Jean-Marie Dautelle</a>
@@ -45,116 +43,108 @@ import javax.measure.UnitConverter;
  * @version 1.2, Jun 21, 2019
  * @since 1.0
  */
-public final class LogConverter extends AbstractConverter implements ValueSupplier<String> { // implements
-	// Immutable<String>
-	// {
+public final class LogConverter extends AbstractConverter
+    implements ValueSupplier<String> { // implements
+  // Immutable<String>
+  // {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -7584688290961460870L;
+  /** */
+  private static final long serialVersionUID = -7584688290961460870L;
 
-	/**
-	 * Holds the logarithmic base.
-	 */
-	private final double base;
-	/**
-	 * Holds the natural logarithm of the base.
-	 */
-	private final double logOfBase;
+  /** Holds the logarithmic base. */
+  private final double base;
+  /** Holds the natural logarithm of the base. */
+  private final double logOfBase;
 
-	/**
-	 * Returns a logarithmic converter having the specified base.
-	 *
-	 * @param base
-	 *          the logarithmic base (e.g. <code>Math.E</code> for the Natural Logarithm).
-	 */
-	public LogConverter(double base) {
-		this.base = base;
-		this.logOfBase = Math.log(base);
-	}
+  /**
+   * Returns a logarithmic converter having the specified base.
+   *
+   * @param base the logarithmic base (e.g. <code>Math.E</code> for the Natural Logarithm).
+   */
+  public LogConverter(double base) {
+    this.base = base;
+    this.logOfBase = Math.log(base);
+  }
 
-	/**
-	 * Returns the logarithmic base of this converter.
-	 *
-	 * @return the logarithmic base (e.g. <code>Math.E</code> for the Natural Logarithm).
-	 */
-	public double getBase() {
-		return base;
-	}
+  /**
+   * Returns the logarithmic base of this converter.
+   *
+   * @return the logarithmic base (e.g. <code>Math.E</code> for the Natural Logarithm).
+   */
+  public double getBase() {
+    return base;
+  }
 
-	@Override
-	public boolean isIdentity() {
-		return false;
-	}
+  @Override
+  public boolean isIdentity() {
+    return false;
+  }
 
-	@Override
-	protected boolean canReduceWith(AbstractConverter that) {
-		if(that instanceof ExpConverter) {
-			return ((ExpConverter)that).getBase() == base; // can compose with exp to identity, provided it has same base
-		}
-		return false;
-	}
-
-	@Override
-	protected AbstractConverter reduce(AbstractConverter that) {
-		return AbstractConverter.IDENTITY;
-	}
-
-	@Override
-	public AbstractConverter inverseWhenNotIdentity() {
-		return new ExpConverter(base);
-	}
-
-	@Override
-	public final String transformationLiteral() {
-		if (base == Math.E) return "x -> ln(x)";
-		return String.format("x -> log(base=%s, x)", base);
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (obj instanceof LogConverter) {
-			LogConverter that = (LogConverter) obj;
-			return Objects.equals(base, that.base);
-		}
-		return false;
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(base);
-	}
-
-    @Override
-    protected Number convertWhenNotIdentity(Number value) {
-        return Calculator.of(value)
-              .log()
-              .divide(logOfBase)
-              .peek();
+  @Override
+  protected boolean canReduceWith(AbstractConverter that) {
+    if (that instanceof ExpConverter) {
+      return ((ExpConverter) that).getBase()
+          == base; // can compose with exp to identity, provided it has same base
     }
+    return false;
+  }
 
-	@Override
-	public boolean isLinear() {
-		return false;
-	}
+  @Override
+  protected AbstractConverter reduce(AbstractConverter that) {
+    return AbstractConverter.IDENTITY;
+  }
 
-	@Override
-	public String getValue() {
-		return toString();
-	}
+  @Override
+  public AbstractConverter inverseWhenNotIdentity() {
+    return new ExpConverter(base);
+  }
 
-	@Override
-	public int compareTo(UnitConverter o) {
-		if (this == o) {
-			return 0;
-		}
-		if (o instanceof ValueSupplier) {
-			return getValue().compareTo(String.valueOf(((ValueSupplier<?>) o).getValue()));
-		}
-		return -1;
-	}
+  @Override
+  public final String transformationLiteral() {
+    if (base == Math.E) return "x -> ln(x)";
+    return String.format("x -> log(base=%s, x)", base);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj instanceof LogConverter) {
+      LogConverter that = (LogConverter) obj;
+      return Objects.equals(base, that.base);
+    }
+    return false;
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(base);
+  }
+
+  @Override
+  protected Number convertWhenNotIdentity(Number value) {
+    return Calculator.of(value).log().divide(logOfBase).peek();
+  }
+
+  @Override
+  public boolean isLinear() {
+    return false;
+  }
+
+  @Override
+  public String getValue() {
+    return toString();
+  }
+
+  @Override
+  public int compareTo(UnitConverter o) {
+    if (this == o) {
+      return 0;
+    }
+    if (o instanceof ValueSupplier) {
+      return getValue().compareTo(String.valueOf(((ValueSupplier<?>) o).getValue()));
+    }
+    return -1;
+  }
 }

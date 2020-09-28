@@ -30,65 +30,63 @@
 package com.raynigon.unit_api.core.units.general;
 
 import java.io.Serializable;
-
 import javax.measure.Quantity;
 import javax.measure.Unit;
 import javax.measure.UnitConverter;
 
 /**
- * Unit specialized for the Java SE platform. It extends {@link Unit} with
- * {@linkplain Comparable} and {@linkplain Serializable }
- * 
+ * Unit specialized for the Java SE platform. It extends {@link Unit} with {@linkplain Comparable}
+ * and {@linkplain Serializable }
+ *
  * @author werner
- * @param <Q>	QuantityType
+ * @param <Q> QuantityType
  * @version 1.4, July 2, 2019
  * @since 1.0.9
  */
-public interface ComparableUnit<Q extends Quantity<Q>> extends Unit<Q>, Comparable<Unit<Q>>, Serializable {
+public interface ComparableUnit<Q extends Quantity<Q>>
+    extends Unit<Q>, Comparable<Unit<Q>>, Serializable {
 
-	/**
-	 * Compares two instances of {@code Unit<Q>}, doing the conversion of unit if necessary.
-	 *
-	 * @param that the {@code Unit<Q>} to be compared with this instance.
-	 * @return {@code true} if {@code that < this}.
-	 * @throws NullPointerException if the unit is null
-	 * 
-	 * @see <a href= "https://dictionary.cambridge.org/dictionary/english/equivalent">Cambridge Dictionary: equivalent</a>
-	 * @see <a href= "https://www.lexico.com/en/definition/equivalent">LEXICO: equivalent</a>
-	 */
-	boolean isEquivalentTo(Unit<Q> that);
+  /**
+   * Compares two instances of {@code Unit<Q>}, doing the conversion of unit if necessary.
+   *
+   * @param that the {@code Unit<Q>} to be compared with this instance.
+   * @return {@code true} if {@code that < this}.
+   * @throws NullPointerException if the unit is null
+   * @see <a href= "https://dictionary.cambridge.org/dictionary/english/equivalent">Cambridge
+   *     Dictionary: equivalent</a>
+   * @see <a href= "https://www.lexico.com/en/definition/equivalent">LEXICO: equivalent</a>
+   */
+  boolean isEquivalentTo(Unit<Q> that);
 
-	/**
-	 * Indicates if this unit belongs to the set of coherent SI units (unscaled SI
-	 * units).
-	 * 
-	 * The base and coherent derived units of the SI form a coherent set, designated
-	 * the set of coherent SI units. The word coherent is used here in the following
-	 * sense: when coherent units are used, equations between the numerical values
-	 * of quantities take exactly the same form as the equations between the
-	 * quantities themselves. Thus if only units from a coherent set are used,
-	 * conversion factors between units are never required.
-	 * 
-	 * @return <code>equals(toSystemUnit())</code>
-	 */
-	boolean isSystemUnit();
+  /**
+   * Indicates if this unit belongs to the set of coherent SI units (unscaled SI units).
+   *
+   * <p>The base and coherent derived units of the SI form a coherent set, designated the set of
+   * coherent SI units. The word coherent is used here in the following sense: when coherent units
+   * are used, equations between the numerical values of quantities take exactly the same form as
+   * the equations between the quantities themselves. Thus if only units from a coherent set are
+   * used, conversion factors between units are never required.
+   *
+   * @return <code>equals(toSystemUnit())</code>
+   */
+  boolean isSystemUnit();
 
-	/**
-	 * Returns the system unit (unscaled SI unit) from which this unit is derived.
-	 * They can be be used to identify a quantity given the unit. For example:<br>
-	 * <code> static boolean isAngularVelocity(AbstractUnit&lt;?&gt; unit) {<br>&nbsp;&nbsp;return unit.getSystemUnit().equals(RADIAN.divide(SECOND));<br>}
-	 * <br>assert(REVOLUTION.divide(MINUTE).isAngularVelocity()); // Returns true. </code>
-	 *
-	 * @return the unscaled metric unit from which this unit is derived.
-	 */
-	Unit<Q> getSystemUnit();
-	
-	/**
-	 * Returns the converter from this unit to its unscaled {@link #getSystemUnit
-	 * System Unit} unit.
-	 *
-	 * @return <code>getConverterTo(this.toSystemUnit())</code>
-	 * @see #getSystemUnit
-	 */
-	UnitConverter getSystemConverter();
+  /**
+   * Returns the system unit (unscaled SI unit) from which this unit is derived. They can be be used
+   * to identify a quantity given the unit. For example:<br>
+   * <code>
+   *  static boolean isAngularVelocity(AbstractUnit&lt;?&gt; unit) {<br>&nbsp;&nbsp;return unit.getSystemUnit().equals(RADIAN.divide(SECOND));<br>}
+   * <br>assert(REVOLUTION.divide(MINUTE).isAngularVelocity()); // Returns true. </code>
+   *
+   * @return the unscaled metric unit from which this unit is derived.
+   */
+  Unit<Q> getSystemUnit();
+
+  /**
+   * Returns the converter from this unit to its unscaled {@link #getSystemUnit System Unit} unit.
+   *
+   * @return <code>getConverterTo(this.toSystemUnit())</code>
+   * @see #getSystemUnit
+   */
+  UnitConverter getSystemConverter();
 }

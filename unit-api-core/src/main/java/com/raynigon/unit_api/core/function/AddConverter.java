@@ -30,13 +30,11 @@
 package com.raynigon.unit_api.core.function;
 
 import java.util.Objects;
-
 import javax.measure.UnitConverter;
 
 /**
- * <p>
- * This class represents a converter adding a constant offset to numeric values (<code>double</code> based).
- * </p>
+ * This class represents a converter adding a constant offset to numeric values (<code>double</code>
+ * based).
  *
  * @author <a href="mailto:jean-marie@dautelle.com">Jean-Marie Dautelle</a>
  * @author Werner Keil
@@ -45,20 +43,15 @@ import javax.measure.UnitConverter;
  */
 public final class AddConverter extends AbstractConverter implements ValueSupplier<Number> {
 
-  /**
-     * 
-     */
+  /** */
   private static final long serialVersionUID = -2981335308595652284L;
-  /**
-   * Holds the offset.
-   */
+  /** Holds the offset. */
   private final Number offset;
 
   /**
    * Creates an additive converter having the specified offset.
    *
-   * @param offset
-   *          the offset value.
+   * @param offset the offset value.
    */
   public AddConverter(Number offset) {
     this.offset = CalculusUtils.currentNumberSystem().narrow(offset);
@@ -72,7 +65,7 @@ public final class AddConverter extends AbstractConverter implements ValueSuppli
   public Number getOffset() {
     return offset;
   }
-  
+
   @Override
   public boolean isIdentity() {
     return CalculusUtils.currentNumberSystem().isZero(offset);
@@ -80,16 +73,16 @@ public final class AddConverter extends AbstractConverter implements ValueSuppli
 
   @Override
   protected boolean canReduceWith(AbstractConverter that) {
-  	return that instanceof AddConverter;
+    return that instanceof AddConverter;
   }
 
   @Override
   protected AbstractConverter reduce(AbstractConverter that) {
     NumberSystem ns = CalculusUtils.currentNumberSystem();
-    Number newOffset = ns.add(offset, ((AddConverter)that).offset);
+    Number newOffset = ns.add(offset, ((AddConverter) that).offset);
     return new AddConverter(newOffset);
   }
-  
+
   @Override
   public AddConverter inverseWhenNotIdentity() {
     NumberSystem ns = CalculusUtils.currentNumberSystem();
@@ -99,9 +92,7 @@ public final class AddConverter extends AbstractConverter implements ValueSuppli
 
   @Override
   protected Number convertWhenNotIdentity(Number value) {
-      return Calculator.of(offset)
-              .add(value)
-              .peek();
+    return Calculator.of(offset).add(value).peek();
   }
 
   @Override
@@ -150,8 +141,4 @@ public final class AddConverter extends AbstractConverter implements ValueSuppli
     }
     return -1;
   }
-
-
-
-
 }

@@ -34,11 +34,12 @@ import javax.measure.UnitConverter;
 /**
  * Provides a {@link UnitConverter} to implementations
  *
- * <p>There is no requirement that a distinct result be returned each
- * time the supplier is invoked, unless implementing classes enforce it.
+ * <p>There is no requirement that a distinct result be returned each time the supplier is invoked,
+ * unless implementing classes enforce it.
  *
- * <p>This is a <a href="http://download.java.net/jdk8/docs/api/java/util/function/package-summary.html">functional interface</a>
- * whose functional method is {@link #getConverter()}.
+ * <p>This is a <a
+ * href="http://download.java.net/jdk8/docs/api/java/util/function/package-summary.html">functional
+ * interface</a> whose functional method is {@link #getConverter()}.
  *
  * @author Werner Keil
  * @version 1.0
@@ -47,8 +48,6 @@ import javax.measure.UnitConverter;
 @FunctionalInterface
 public interface UnitConverterSupplier {
 
-    /**
-     * @return a converter
-     */
-    UnitConverter getConverter();
+  /** @return a converter */
+  UnitConverter getConverter();
 }

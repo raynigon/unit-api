@@ -30,14 +30,14 @@
 package com.raynigon.unit_api.core.function;
 
 /**
- * Represents a supplier of <code>T</code>-valued multiplication factors. This is a
- * a <code>T</code>.-producing specialization of {@code Supplier}.
+ * Represents a supplier of <code>T</code>-valued multiplication factors. This is a a <code>T</code>
+ * .-producing specialization of {@code Supplier}.
  *
- * <p>There is no requirement that a distinct result be returned each
- * time the supplier is invoked.
+ * <p>There is no requirement that a distinct result be returned each time the supplier is invoked.
  *
- * <p>This is a <a href="http://download.java.net/jdk8/docs/api/java/util/function/package-summary.html">functional interface</a>
- * whose functional method is {@link #getFactor()}.
+ * <p>This is a <a
+ * href="http://download.java.net/jdk8/docs/api/java/util/function/package-summary.html">functional
+ * interface</a> whose functional method is {@link #getFactor()}.
  *
  * @author Werner Keil
  * @param <T> the type of factor
@@ -47,5 +47,5 @@ package com.raynigon.unit_api.core.function;
 @FunctionalInterface
 public interface FactorSupplier<T> {
 
-    T getFactor();
+  T getFactor();
 }

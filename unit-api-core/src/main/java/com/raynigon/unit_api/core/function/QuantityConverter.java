@@ -33,27 +33,26 @@ import javax.measure.Quantity;
 import javax.measure.Unit;
 
 /**
- *  Represents an operation to convert quantities.
- * <p>
- * This is a <a href=
+ * Represents an operation to convert quantities.
+ *
+ * <p>This is a <a href=
  * "http://docs.oracle.com/javase/8/docs/api/java/util/function/package-summary.html#package.description"
  * >functional interface</a> whose functional method is {@link #to}.
  *
-*  @author <a href="mailto:units@catmedia.us">Werner Keil</a>
+ * @author <a href="mailto:units@catmedia.us">Werner Keil</a>
  * @version 1.5, 2019-04-07
- * @param <Q>
- *            The type to convert to.
+ * @param <Q> The type to convert to.
  * @see <a href="http://en.wikipedia.org/wiki/Data_conversion">Wikipedia: Data Conversion</a>
  * @since 1.0.3
  */
 @FunctionalInterface
 public interface QuantityConverter<Q extends Quantity<Q>> {
 
-    /**
-     * Returns a quantity converted into another unit.
-     * @param unit
-     *            the {@code Unit} to convert to.
-     * @return the converted result.
-     */
-    Quantity<Q> to(Unit<Q> unit);
+  /**
+   * Returns a quantity converted into another unit.
+   *
+   * @param unit the {@code Unit} to convert to.
+   * @return the converted result.
+   */
+  Quantity<Q> to(Unit<Q> unit);
 }

@@ -30,26 +30,23 @@
 package com.raynigon.unit_api.core.function;
 
 import com.raynigon.unit_api.core.units.general.UnitDimension;
-
 import java.util.Map;
-
 import javax.measure.Dimension;
 
 /**
- * <p>
  * This class represents the physical model used for dimensional analysis.
- * </p>
  *
- * <p>
- * In principle, dimensions of physical quantities could be defined as "fundamental" (such as momentum or energy or electric current) making such
- * quantities uncommensurate (not comparable). Modern physics has cast doubt on the very existence of incompatible fundamental dimensions of physical
- * quantities. For example, most physicists do not recognize temperature, {@link UnitDimension#TEMPERATURE Θ}, as a fundamental dimension since it
- * essentially expresses the energy per particle per degree of freedom, which can be expressed in terms of energy (or mass, length, and time). To
- * support, such model the method {@link #getDimensionalTransform} may returns a non-null value for distinct dimensions.
- * </p>
- * 
- * <p>
- * The default model is {@link StandardModel Standard}. Applications may use one of the predefined model or create their own. <code>
+ * <p>In principle, dimensions of physical quantities could be defined as "fundamental" (such as
+ * momentum or energy or electric current) making such quantities uncommensurate (not comparable).
+ * Modern physics has cast doubt on the very existence of incompatible fundamental dimensions of
+ * physical quantities. For example, most physicists do not recognize temperature, {@link
+ * UnitDimension#TEMPERATURE Θ}, as a fundamental dimension since it essentially expresses the
+ * energy per particle per degree of freedom, which can be expressed in terms of energy (or mass,
+ * length, and time). To support, such model the method {@link #getDimensionalTransform} may returns
+ * a non-null value for distinct dimensions.
+ *
+ * <p>The default model is {@link StandardModel Standard}. Applications may use one of the
+ * predefined model or create their own. <code>
  *     DimensionalModel relativistic = new DimensionalModel() {
  *         public Dimension getFundamentalDimension(Dimension dimension) {
  *             if (dimension.equals(QuantityDimension.LENGTH)) return QuantityDimension.TIME; // Consider length derived from time.
@@ -68,9 +65,9 @@ import javax.measure.Dimension;
  *        cleanup();
  *     }
  *     </code>
- * </p>
- * 
- * @see <a href="http://en.wikipedia.org/wiki/Dimensional_analysis">Wikipedia: Dimensional Analysis</a>
+ *
+ * @see <a href="http://en.wikipedia.org/wiki/Dimensional_analysis">Wikipedia: Dimensional
+ *     Analysis</a>
  * @author <a href="mailto:jean-marie@dautelle.com">Jean-Marie Dautelle</a>
  * @author <a href="mailto:werner@units.tech">Werner Keil</a>
  * @version 1.2, $Date: 2019-08-21 $
@@ -78,9 +75,7 @@ import javax.measure.Dimension;
  */
 public abstract class DimensionalModel {
 
-  /**
-   * Holds the current model.
-   */
+  /** Holds the current model. */
   private static DimensionalModel currentModel = new StandardModel();
 
   /**
@@ -95,54 +90,49 @@ public abstract class DimensionalModel {
   /**
    * Sets the current dimensional model
    *
-   * @param model
-   *          the new current model.
+   * @param model the new current model.
    * @see #current
    */
   protected static void setCurrent(DimensionalModel model) {
     currentModel = model;
   }
 
-  /**
-   * DimensionalModel constructor (allows for derivation).
-   */
-  protected DimensionalModel() {
-  }
+  /** DimensionalModel constructor (allows for derivation). */
+  protected DimensionalModel() {}
 
   /**
-   * Returns the fundamental dimension for the one specified. If the specified dimension is a dimensional product, the dimensional product of its
-   * fundamental dimensions is returned. Physical quantities are considered commensurate only if their fundamental dimensions are equals using the
-   * current physics model.
+   * Returns the fundamental dimension for the one specified. If the specified dimension is a
+   * dimensional product, the dimensional product of its fundamental dimensions is returned.
+   * Physical quantities are considered commensurate only if their fundamental dimensions are equals
+   * using the current physics model.
    *
-   * @param dimension
-   *          the dimension for which the fundamental dimension is returned.
+   * @param dimension the dimension for which the fundamental dimension is returned.
    * @return <code>this</code> or a rational product of fundamental dimension.
    */
   public Dimension getFundamentalDimension(Dimension dimension) {
     Map<? extends Dimension, Integer> dimensions = dimension.getBaseDimensions();
-    if (dimensions == null)
-      return dimension; // Fundamental dimension.
+    if (dimensions == null) return dimension; // Fundamental dimension.
     // Dimensional Product.
     Dimension fundamentalProduct = UnitDimension.NONE;
     for (Map.Entry<? extends Dimension, Integer> e : dimensions.entrySet()) {
-      fundamentalProduct = fundamentalProduct.multiply(this.getFundamentalDimension(e.getKey())).pow(e.getValue());
+      fundamentalProduct =
+          fundamentalProduct.multiply(this.getFundamentalDimension(e.getKey())).pow(e.getValue());
     }
     return fundamentalProduct;
   }
 
   /**
-   * Returns the dimensional transform of the specified dimension. If the specified dimension is a fundamental dimension or a product of fundamental
-   * dimensions the identity converter is returned; otherwise the converter from the system unit (SI) of the specified dimension to the system unit
-   * (SI) of its fundamental dimension is returned.
+   * Returns the dimensional transform of the specified dimension. If the specified dimension is a
+   * fundamental dimension or a product of fundamental dimensions the identity converter is
+   * returned; otherwise the converter from the system unit (SI) of the specified dimension to the
+   * system unit (SI) of its fundamental dimension is returned.
    *
-   * @param dimension
-   *          the dimension for which the dimensional transform is returned.
+   * @param dimension the dimension for which the dimensional transform is returned.
    * @return the dimensional transform (identity for fundamental dimensions).
    */
   public AbstractConverter getDimensionalTransform(Dimension dimension) {
     Map<? extends Dimension, Integer> dimensions = dimension.getBaseDimensions();
-    if (dimensions == null)
-      return AbstractConverter.IDENTITY; // Fundamental dimension.
+    if (dimensions == null) return AbstractConverter.IDENTITY; // Fundamental dimension.
     // Dimensional Product.
     AbstractConverter toFundamental = AbstractConverter.IDENTITY;
     for (Map.Entry<? extends Dimension, Integer> e : dimensions.entrySet()) {
@@ -155,7 +145,7 @@ public abstract class DimensionalModel {
         cvtr = cvtr.inverse();
       }
       for (int j = 0; j < pow; j++) {
-        toFundamental = (AbstractConverter) toFundamental.concatenate(cvtr); 
+        toFundamental = (AbstractConverter) toFundamental.concatenate(cvtr);
       }
     }
     return toFundamental;
