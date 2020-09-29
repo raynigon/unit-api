@@ -31,6 +31,7 @@ import com.raynigon.unit_api.core.units.si.time.MicroSecond;
 import com.raynigon.unit_api.core.units.si.time.MilliSecond;
 import com.raynigon.unit_api.core.units.si.time.Minute;
 import com.raynigon.unit_api.core.units.si.time.Second;
+
 import javax.measure.Quantity;
 import javax.measure.quantity.Acceleration;
 import javax.measure.quantity.Dimensionless;
@@ -48,119 +49,181 @@ import javax.measure.quantity.Time;
 
 public class SISystemUnitsConstants {
 
-  public static Quantity<Acceleration> MetrePerSquaredSecond(Number value) {
-    return quantity(value, new MetrePerSquaredSecond());
-  }
+    public static final MetrePerSquaredSecond MetrePerSquaredSecond = new MetrePerSquaredSecond();
 
-  public static Quantity<Dimensionless> Number(Number value) {
-    return quantity(value, new One());
-  }
+    public static final One One = new One();
 
-  public static Quantity<Dimensionless> Percent(Number value) {
-    return quantity(value, new Percent());
-  }
+    public static final Percent Percent = new Percent();
 
-  public static Quantity<ElectricCurrent> MilliAmpere(Number value) {
-    return quantity(value, new MilliAmpere());
-  }
+    public static final MilliAmpere MilliAmpere = new MilliAmpere();
 
-  public static Quantity<ElectricCurrent> Ampere(Number value) {
-    return quantity(value, new Ampere());
-  }
+    public static final Ampere Ampere = new Ampere();
 
-  public static Quantity<ElectricPotential> MilliVolt(Number value) {
-    return quantity(value, new MilliVolt());
-  }
+    public static final MilliVolt MilliVolt = new MilliVolt();
 
-  public static Quantity<ElectricPotential> Volt(Number value) {
-    return quantity(value, new Volt());
-  }
+    public static final Volt Volt = new Volt();
 
-  public static Quantity<Energy> Joule(Number value) {
-    return quantity(value, new Joule());
-  }
+    public static final Joule Joule = new Joule();
 
-  public static Quantity<Energy> KiloWattHour(Number value) {
-    return quantity(value, new KiloWattHour());
-  }
+    public static final KiloWattHour KiloWattHour = new KiloWattHour();
 
-  public static Quantity<Energy> WattHour(Number value) {
-    return quantity(value, new WattHour());
-  }
+    public static final WattHour WattHour = new WattHour();
 
-  public static Quantity<Energy> MilliWattHour(Number value) {
-    return quantity(value, new MilliWattHour());
-  }
+    public static final MilliWattHour MilliWattHour = new MilliWattHour();
 
-  public static Quantity<Force> Newton(Number value) {
-    return quantity(value, new Newton());
-  }
+    public static final Newton Newton = new Newton();
 
-  public static Quantity<Frequency> Hertz(Number value) {
-    return quantity(value, new Hertz());
-  }
+    public static final Hertz Hertz = new Hertz();
 
-  public static Quantity<Length> Millimetre(Number value) {
-    return quantity(value, new Millimetre());
-  }
+    public static final Millimetre Millimetre = new Millimetre();
 
-  public static Quantity<Length> Centimetre(Number value) {
-    return quantity(value, new Centimetre());
-  }
+    public static final Centimetre Centimetre = new Centimetre();
 
-  public static Quantity<Length> Metre(Number value) {
-    return quantity(value, new Metre());
-  }
+    public static final Metre Metre = new Metre();
 
-  public static Quantity<Length> Kilometre(Number value) {
-    return quantity(value, new Kilometre());
-  }
+    public static final Kilometre Kilometre = new Kilometre();
 
-  public static Quantity<Mass> Kilogram(Number value) {
-    return quantity(value, new Kilogram());
-  }
+    public static final Kilogram Kilogram = new Kilogram();
 
-  public static Quantity<Power> MilliWatt(Number value) {
-    return quantity(value, new MilliWatt());
-  }
+    public static final MilliWatt MilliWatt = new MilliWatt();
 
-  public static Quantity<Power> Watt(Number value) {
-    return quantity(value, new Watt());
-  }
+    public static final Watt Watt = new Watt();
 
-  public static Quantity<Speed> KilometrePerHour(Number value) {
-    return quantity(value, new KilometrePerHour());
-  }
+    public static final KilometrePerHour KilometrePerHour = new KilometrePerHour();
 
-  public static Quantity<Speed> MetrePerSecond(Number value) {
-    return quantity(value, new MetrePerSecond());
-  }
+    public static final MetrePerSecond MetrePerSecond = new MetrePerSecond();
 
-  public static Quantity<Temperature> Celsius(Number value) {
-    return quantity(value, new Celsius());
-  }
+    public static final Celsius Celsius = new Celsius();
 
-  public static Quantity<Temperature> Kelvin(Number value) {
-    return quantity(value, new Kelvin());
-  }
+    public static final Kelvin Kelvin = new Kelvin();
 
-  public static Quantity<Time> Hour(Number value) {
-    return quantity(value, new Hour());
-  }
+    public static final Hour Hour = new Hour();
 
-  public static Quantity<Time> Minute(Number value) {
-    return quantity(value, new Minute());
-  }
+    public static final Minute Minute = new Minute();
 
-  public static Quantity<Time> Second(Number value) {
-    return quantity(value, new Second());
-  }
+    public static final Second Second = new Second();
 
-  public static Quantity<Time> MilliSecond(Number value) {
-    return quantity(value, new MilliSecond());
-  }
+    public static final MilliSecond MilliSecond = new MilliSecond();
 
-  public static Quantity<Time> MicroSecond(Number value) {
-    return quantity(value, new MicroSecond());
-  }
+    public static final MicroSecond MicroSecond = new MicroSecond();
+
+    /*
+     * Quantity Factory Methods
+     * */
+
+    public static Quantity<Acceleration> MetrePerSquaredSecond(Number value) {
+        return quantity(value, MetrePerSquaredSecond);
+    }
+
+    public static Quantity<Dimensionless> Number(Number value) {
+        return quantity(value, One);
+    }
+
+    public static Quantity<Dimensionless> Percent(Number value) {
+        return quantity(value, Percent);
+    }
+
+    public static Quantity<ElectricCurrent> MilliAmpere(Number value) {
+        return quantity(value, MilliAmpere);
+    }
+
+    public static Quantity<ElectricCurrent> Ampere(Number value) {
+        return quantity(value, Ampere);
+    }
+
+    public static Quantity<ElectricPotential> MilliVolt(Number value) {
+        return quantity(value, MilliVolt);
+    }
+
+    public static Quantity<ElectricPotential> Volt(Number value) {
+        return quantity(value, Volt);
+    }
+
+    public static Quantity<Energy> Joule(Number value) {
+        return quantity(value, Joule);
+    }
+
+    public static Quantity<Energy> KiloWattHour(Number value) {
+        return quantity(value, KiloWattHour);
+    }
+
+    public static Quantity<Energy> WattHour(Number value) {
+        return quantity(value, WattHour);
+    }
+
+    public static Quantity<Energy> MilliWattHour(Number value) {
+        return quantity(value, MilliWattHour);
+    }
+
+    public static Quantity<Force> Newton(Number value) {
+        return quantity(value, Newton);
+    }
+
+    public static Quantity<Frequency> Hertz(Number value) {
+        return quantity(value, Hertz);
+    }
+
+    public static Quantity<Length> Millimetre(Number value) {
+        return quantity(value, Millimetre);
+    }
+
+    public static Quantity<Length> Centimetre(Number value) {
+        return quantity(value, Centimetre);
+    }
+
+    public static Quantity<Length> Metre(Number value) {
+        return quantity(value, Metre);
+    }
+
+    public static Quantity<Length> Kilometre(Number value) {
+        return quantity(value, Kilometre);
+    }
+
+    public static Quantity<Mass> Kilogram(Number value) {
+        return quantity(value, Kilogram);
+    }
+
+    public static Quantity<Power> MilliWatt(Number value) {
+        return quantity(value, MilliWatt);
+    }
+
+    public static Quantity<Power> Watt(Number value) {
+        return quantity(value, Watt);
+    }
+
+    public static Quantity<Speed> KilometrePerHour(Number value) {
+        return quantity(value, KilometrePerHour);
+    }
+
+    public static Quantity<Speed> MetrePerSecond(Number value) {
+        return quantity(value, MetrePerSecond);
+    }
+
+    public static Quantity<Temperature> Celsius(Number value) {
+        return quantity(value, Celsius);
+    }
+
+    public static Quantity<Temperature> Kelvin(Number value) {
+        return quantity(value, Kelvin);
+    }
+
+    public static Quantity<Time> Hour(Number value) {
+        return quantity(value, Hour);
+    }
+
+    public static Quantity<Time> Minute(Number value) {
+        return quantity(value, Minute);
+    }
+
+    public static Quantity<Time> Second(Number value) {
+        return quantity(value, Second);
+    }
+
+    public static Quantity<Time> MilliSecond(Number value) {
+        return quantity(value, MilliSecond);
+    }
+
+    public static Quantity<Time> MicroSecond(Number value) {
+        return quantity(value, MicroSecond);
+    }
 }

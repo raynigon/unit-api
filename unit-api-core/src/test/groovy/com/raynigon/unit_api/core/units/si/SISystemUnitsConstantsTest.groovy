@@ -12,6 +12,21 @@ import static com.raynigon.unit_api.core.service.UnitsApiService.quantity
 class SISystemUnitsConstantsTest extends Specification {
 
     @Unroll
+    def "constant #unit.getSimpleName() exists"() {
+        given:
+        Class constantsClass = SISystemUnitsConstants.class
+
+        when:
+        constantsClass.getField(unit.getSimpleName())
+
+        then:
+        noExceptionThrown()
+
+        where:
+        unit << units()
+    }
+
+    @Unroll
     def "factory method #unit.getSimpleName() exists"() {
         given:
         Class constantsClass = SISystemUnitsConstants.class
