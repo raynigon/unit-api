@@ -237,7 +237,7 @@ class DefaultNumberSystemSpec extends Specification {
         def numberSystem = new DefaultNumberSystem()
 
         when:
-        def result = numberSystem.narrow(value)
+        def result = numberSystem.narrow(value as Number)
 
         then:
         expectedType.isInstance(result)
@@ -317,20 +317,21 @@ class DefaultNumberSystemSpec extends Specification {
 
         when:
         def result = numberSystem.isLessThanOne(value)
+        println(value + " " + result)
 
         then:
         result == expected
 
         where:
-        value               | expected
-        Double.valueOf(0)   | true
-        new BigDecimal("0") | true
-        new BigDecimal(0)   | true
-        0                   | true
-        Double.valueOf(1)   | false
-        new BigDecimal("1") | false
-        new BigDecimal(1)   | false
-        1                   | false
+        value                 | expected
+        Double.valueOf(0)     | true
+        new BigDecimal("0")   | true
+        new BigDecimal(0)     | true
+        0                     | true
+        Double.valueOf(1.0)   | false
+        new BigDecimal("1.0") | false
+        new BigDecimal(1)     | false
+        1                     | false
     }
 
     def "isInteger"() {
