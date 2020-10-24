@@ -41,7 +41,7 @@ class ExpConverterSpec extends Specification {
     def 'inverse of ExpConverter is LogConverter'() {
         given:
         ExpConverter expConverter = ExpConverter.of(base as double)
-        LogConverter invertedConverter = expConverter.inverse()
+        AbstractConverter invertedConverter = expConverter.inverse()
         LogConverter logConverter = new LogConverter(base as double)
 
         when:
