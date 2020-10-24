@@ -32,6 +32,7 @@ package com.raynigon.unit_api.core.function;
 import static javax.measure.Quantity.Scale.ABSOLUTE;
 import static javax.measure.Quantity.Scale.RELATIVE;
 
+import com.raynigon.unit_api.core.function.unitconverter.AbstractConverter;
 import com.raynigon.unit_api.core.quantities.ComparableQuantity;
 import com.raynigon.unit_api.core.quantities.NumberQuantity;
 import java.util.Optional;

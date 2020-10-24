@@ -1,6 +1,6 @@
 package com.raynigon.unit_api.core.units.general;
 
-import com.raynigon.unit_api.core.function.AbstractConverter;
+import com.raynigon.unit_api.core.function.unitconverter.AbstractConverter;
 import java.util.Map;
 import java.util.Objects;
 import javax.measure.Dimension;

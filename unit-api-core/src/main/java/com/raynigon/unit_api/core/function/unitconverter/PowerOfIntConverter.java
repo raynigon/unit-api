@@ -27,7 +27,12 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.raynigon.unit_api.core.function;
+package com.raynigon.unit_api.core.function.unitconverter;
+
+import com.raynigon.unit_api.core.function.Calculator;
+import com.raynigon.unit_api.core.function.IntBaseSupplier;
+import com.raynigon.unit_api.core.function.IntExponentSupplier;
+import com.raynigon.unit_api.core.function.RationalNumber;
 
 import java.math.BigInteger;
 import java.util.Objects;

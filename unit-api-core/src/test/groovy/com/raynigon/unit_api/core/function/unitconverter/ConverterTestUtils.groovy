@@ -1,4 +1,4 @@
-package com.raynigon.unit_api.core.function
+package com.raynigon.unit_api.core.function.unitconverter
 
 class ConverterTestUtils {
 

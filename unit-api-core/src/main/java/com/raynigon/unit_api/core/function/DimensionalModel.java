@@ -29,6 +29,7 @@
  */
 package com.raynigon.unit_api.core.function;
 
+import com.raynigon.unit_api.core.function.unitconverter.AbstractConverter;
 import com.raynigon.unit_api.core.units.general.UnitDimension;
 import java.util.Map;
 import javax.measure.Dimension;

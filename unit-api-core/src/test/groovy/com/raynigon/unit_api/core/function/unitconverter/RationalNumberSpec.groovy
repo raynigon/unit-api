@@ -1,8 +1,9 @@
-package com.raynigon.unit_api.core.function
+package com.raynigon.unit_api.core.function.unitconverter
 
+import com.raynigon.unit_api.core.function.RationalNumber
 import spock.lang.Specification
 
-import static com.raynigon.unit_api.core.function.ConverterTestUtils.closeTo
+import static ConverterTestUtils.closeTo
 
 class RationalNumberSpec extends Specification {
 

@@ -29,6 +29,9 @@
  */
 package com.raynigon.unit_api.core.function;
 
+import com.raynigon.unit_api.core.function.unitconverter.AbstractConverter;
+import com.raynigon.unit_api.core.function.unitconverter.PowerOfIntConverter;
+
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.BiPredicate;

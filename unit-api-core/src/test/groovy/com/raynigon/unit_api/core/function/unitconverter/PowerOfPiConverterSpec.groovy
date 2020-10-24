@@ -1,9 +1,10 @@
-package com.raynigon.unit_api.core.function
+package com.raynigon.unit_api.core.function.unitconverter
+
 
 import spock.lang.Ignore
 import spock.lang.Specification
 
-import static com.raynigon.unit_api.core.function.ConverterTestUtils.closeTo
+import static ConverterTestUtils.closeTo
 
 class PowerOfPiConverterSpec extends Specification {
 

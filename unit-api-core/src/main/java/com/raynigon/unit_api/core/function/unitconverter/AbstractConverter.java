@@ -27,7 +27,9 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.raynigon.unit_api.core.function;
+package com.raynigon.unit_api.core.function.unitconverter;
+
+import com.raynigon.unit_api.core.function.*;
 
 import java.io.Serializable;
 import java.util.ArrayList;

@@ -29,12 +29,12 @@ package com.raynigon.unit_api.core.units.general;
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import com.raynigon.unit_api.core.function.AbstractConverter;
-import com.raynigon.unit_api.core.function.AddConverter;
+import com.raynigon.unit_api.core.function.unitconverter.AbstractConverter;
+import com.raynigon.unit_api.core.function.unitconverter.AddConverter;
 import com.raynigon.unit_api.core.function.Calculator;
 import com.raynigon.unit_api.core.function.CalculusUtils;
 import com.raynigon.unit_api.core.function.DimensionalModel;
-import com.raynigon.unit_api.core.function.MultiplyConverter;
+import com.raynigon.unit_api.core.function.unitconverter.MultiplyConverter;
 import com.raynigon.unit_api.core.function.Nameable;
 import com.raynigon.unit_api.core.function.PrefixOperator;
 import com.raynigon.unit_api.core.function.RationalNumber;

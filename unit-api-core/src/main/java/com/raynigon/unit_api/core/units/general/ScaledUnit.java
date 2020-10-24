@@ -1,6 +1,6 @@
 package com.raynigon.unit_api.core.units.general;
 
-import com.raynigon.unit_api.core.function.MultiplyConverter;
+import com.raynigon.unit_api.core.function.unitconverter.MultiplyConverter;
 import java.util.Objects;
 import javax.measure.Prefix;
 import javax.measure.Quantity;

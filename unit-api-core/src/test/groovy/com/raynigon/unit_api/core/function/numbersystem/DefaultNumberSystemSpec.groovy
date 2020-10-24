@@ -1,11 +1,13 @@
-package com.raynigon.unit_api.core.function
+package com.raynigon.unit_api.core.function.numbersystem
 
+import com.raynigon.unit_api.core.function.RationalNumber
 import spock.lang.Specification
 import spock.lang.Unroll
 
-import static com.raynigon.unit_api.core.function.ConverterTestUtils.closeTo
+import static com.raynigon.unit_api.core.function.unitconverter.ConverterTestUtils.closeTo
 
 class DefaultNumberSystemSpec extends Specification {
+
 
     @Unroll
     def "add numbers - result of type #expectedType"() {
@@ -79,15 +81,28 @@ class DefaultNumberSystemSpec extends Specification {
         expectedType.isInstance(result)
 
         and:
-        result == expectedResult
+        closeTo(result, expectedResult, 0.0001)
 
         where:
         x    | y    | expectedResult | expectedType
         4.0f | 2.0d | 2.0            | BigDecimal.class
         5.0d | 2.0d | 2.5            | BigDecimal.class
+        0.0d | 1.0d | 0              | BigDecimal.class
+        4    | 2    | 2            | RationalNumber.class
     }
 
-    def "divide numbers with remainder"() {
+    def "division by zero throws exception"() {
+        given:
+        def numberSystem = new DefaultNumberSystem()
+
+        when:
+        numberSystem.divide(1, 0)
+
+        then:
+        thrown(IllegalArgumentException)
+    }
+
+    def "divide numbers with remainder - result of type #expectedType"() {
         given:
         def numberSystem = new DefaultNumberSystem()
 
@@ -104,6 +119,19 @@ class DefaultNumberSystemSpec extends Specification {
         4.0f | 2.0d | false       | 2.0      | 0
         5.0d | 2.0d | false       | 2.0      | 1
         5.0d | 2.0d | true        | 2.0      | 1
+        0.0d | 1.0d | true        | 0.0      | 0
+        5    | 2    | true        | 2        | 1
+    }
+
+    def "division with remainder by zero throws exception"() {
+        given:
+        def numberSystem = new DefaultNumberSystem()
+
+        when:
+        numberSystem.divideAndRemainder(1, 0, true)
+
+        then:
+        thrown(ArithmeticException)
     }
 
     def "reciprocal"() {
@@ -117,10 +145,12 @@ class DefaultNumberSystemSpec extends Specification {
         result.toDouble() == expectedResult
 
         where:
-        value | expectedResult
-        1     | 1
-        2     | 0.5
-        0.5   | 2
+        value                  | expectedResult
+        1                      | 1
+        2                      | 0.5
+        0.5                    | 2
+        0.5f                   | 2
+        RationalNumber.of(2.0) | RationalNumber.of(0.5)
     }
 
     def "signum"() {

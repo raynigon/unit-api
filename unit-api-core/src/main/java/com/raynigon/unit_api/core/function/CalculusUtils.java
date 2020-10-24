@@ -29,6 +29,9 @@
  */
 package com.raynigon.unit_api.core.function;
 
+import com.raynigon.unit_api.core.function.numbersystem.DefaultNumberSystem;
+import com.raynigon.unit_api.core.function.unitconverter.*;
+
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
@@ -101,7 +104,7 @@ public final class CalculusUtils {
    *
    * @see <a href= "http://mathworld.wolfram.com/PiFormulas.html" >Pi Formulas</a>
    */
-  static final class Pi {
+  public static final class Pi {
 
     private static final BigDecimal TWO = new BigDecimal("2");
     private static final BigDecimal THREE = new BigDecimal("3");

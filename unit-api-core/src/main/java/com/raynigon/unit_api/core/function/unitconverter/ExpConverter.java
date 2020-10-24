@@ -27,49 +27,61 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.raynigon.unit_api.core.function;
+package com.raynigon.unit_api.core.function.unitconverter;
+
+import com.raynigon.unit_api.core.function.Calculator;
+import com.raynigon.unit_api.core.function.ValueSupplier;
 
 import java.util.Objects;
 import javax.measure.UnitConverter;
 
 /**
- * This class represents a logarithmic converter of limited precision. Such converter is typically
- * used to create logarithmic unit. For example:<code>
- * Unit &lt;Dimensionless&gt; BEL = Unit.ONE.transform(new LogConverter(10).inverse()); </code>
+ * This class represents a exponential converter of limited precision. Such converter is used to
+ * create inverse of logarithmic unit.
+ *
+ * <p>This class is package private, instances are created using the {@link LogConverter#inverse()}
+ * method.
  *
  * @author <a href="mailto:jean-marie@dautelle.com">Jean-Marie Dautelle</a>
  * @author <a href="mailto:werner@units.tech">Werner Keil</a>
  * @author Andi Huber
- * @version 1.2, Jun 21, 2019
+ * @version 1.5, Jun 21, 2019
  * @since 1.0
  */
-public final class LogConverter extends AbstractConverter
-    implements ValueSupplier<String> { // implements
-  // Immutable<String>
-  // {
+public final class ExpConverter extends AbstractConverter implements ValueSupplier<String> {
 
   /** */
-  private static final long serialVersionUID = -7584688290961460870L;
+  private static final long serialVersionUID = -8851436813812059827L;
 
   /** Holds the logarithmic base. */
   private final double base;
+
   /** Holds the natural logarithm of the base. */
   private final double logOfBase;
 
   /**
-   * Returns a logarithmic converter having the specified base.
+   * Creates a logarithmic converter having the specified base.
    *
    * @param base the logarithmic base (e.g. <code>Math.E</code> for the Natural Logarithm).
    */
-  public LogConverter(double base) {
+  public ExpConverter(double base) {
     this.base = base;
     this.logOfBase = Math.log(base);
   }
 
   /**
-   * Returns the logarithmic base of this converter.
+   * Creates a logarithmic converter having the specified base.
    *
-   * @return the logarithmic base (e.g. <code>Math.E</code> for the Natural Logarithm).
+   * @param base the logarithmic base (e.g. <code>Math.E</code> for the Natural Logarithm).
+   */
+  public static ExpConverter of(double base) {
+    return new ExpConverter(base);
+  }
+
+  /**
+   * Returns the exponential base of this converter.
+   *
+   * @return the exponential base (e.g. <code>Math.E</code> for the Natural Exponential).
    */
   public double getBase() {
     return base;
@@ -82,9 +94,9 @@ public final class LogConverter extends AbstractConverter
 
   @Override
   protected boolean canReduceWith(AbstractConverter that) {
-    if (that instanceof ExpConverter) {
-      return ((ExpConverter) that).getBase()
-          == base; // can compose with exp to identity, provided it has same base
+    if (that instanceof LogConverter) {
+      return ((LogConverter) that).getBase()
+          == base; // can compose with log to identity, provided it has same base
     }
     return false;
   }
@@ -96,13 +108,16 @@ public final class LogConverter extends AbstractConverter
 
   @Override
   public AbstractConverter inverseWhenNotIdentity() {
-    return new ExpConverter(base);
+    return new LogConverter(base);
   }
 
   @Override
   public final String transformationLiteral() {
-    if (base == Math.E) return "x -> ln(x)";
-    return String.format("x -> log(base=%s, x)", base);
+    if (base == Math.E) return "x -> e^x";
+
+    if (base < 0) return String.format("x -> (%s)^x", base);
+
+    return String.format("x -> %s^x", base);
   }
 
   @Override
@@ -110,8 +125,8 @@ public final class LogConverter extends AbstractConverter
     if (this == obj) {
       return true;
     }
-    if (obj instanceof LogConverter) {
-      LogConverter that = (LogConverter) obj;
+    if (obj instanceof ExpConverter) {
+      ExpConverter that = (ExpConverter) obj;
       return Objects.equals(base, that.base);
     }
     return false;
@@ -124,7 +139,7 @@ public final class LogConverter extends AbstractConverter
 
   @Override
   protected Number convertWhenNotIdentity(Number value) {
-    return Calculator.of(value).log().divide(logOfBase).peek();
+    return Calculator.of(logOfBase).multiply(value).exp().peek();
   }
 
   @Override
@@ -137,13 +152,14 @@ public final class LogConverter extends AbstractConverter
     return toString();
   }
 
+  @SuppressWarnings("rawtypes")
   @Override
   public int compareTo(UnitConverter o) {
     if (this == o) {
       return 0;
     }
     if (o instanceof ValueSupplier) {
-      return getValue().compareTo(String.valueOf(((ValueSupplier<?>) o).getValue()));
+      return getValue().compareTo(String.valueOf(((ValueSupplier) o).getValue()));
     }
     return -1;
   }

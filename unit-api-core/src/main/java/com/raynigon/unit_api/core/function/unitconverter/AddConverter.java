@@ -27,76 +27,84 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.raynigon.unit_api.core.function;
+package com.raynigon.unit_api.core.function.unitconverter;
+
+import com.raynigon.unit_api.core.function.Calculator;
+import com.raynigon.unit_api.core.function.CalculusUtils;
+import com.raynigon.unit_api.core.function.NumberSystem;
+import com.raynigon.unit_api.core.function.ValueSupplier;
 
 import java.util.Objects;
 import javax.measure.UnitConverter;
 
 /**
- * This class represents a converter multiplying numeric values by a constant scaling factor (<code>
- * double</code> based).
+ * This class represents a converter adding a constant offset to numeric values (<code>double</code>
+ * based).
  *
  * @author <a href="mailto:jean-marie@dautelle.com">Jean-Marie Dautelle</a>
- * @author <a href="mailto:werner@units.tech">Werner Keil</a>
+ * @author Werner Keil
  * @author Andi Huber
- * @version 1.4, Jun 23, 2019
- * @since 1.0
+ * @version 1.2, Jun 21, 2019
  */
-public final class DoubleMultiplyConverter extends AbstractConverter implements MultiplyConverter {
+public final class AddConverter extends AbstractConverter implements ValueSupplier<Number> {
 
   /** */
-  private static final long serialVersionUID = 6588759878444545649L;
-
-  /** Holds the scale factor. */
-  private final double doubleFactor;
+  private static final long serialVersionUID = -2981335308595652284L;
+  /** Holds the offset. */
+  private final Number offset;
 
   /**
-   * Creates a multiply converter with the specified scale factor.
+   * Creates an additive converter having the specified offset.
    *
-   * @param factor the scaling factor.
+   * @param offset the offset value.
    */
-  private DoubleMultiplyConverter(double factor) {
-    this.doubleFactor = factor;
+  public AddConverter(Number offset) {
+    this.offset = CalculusUtils.currentNumberSystem().narrow(offset);
   }
 
   /**
-   * Creates a multiply converter with the specified scale factor.
+   * Returns the offset value for this add converter.
    *
-   * @param factor the scaling factor.
+   * @return the offset value.
    */
-  public static DoubleMultiplyConverter of(double factor) {
-    return new DoubleMultiplyConverter(factor);
+  public Number getOffset() {
+    return offset;
   }
 
   @Override
   public boolean isIdentity() {
-    return doubleFactor == 1.0;
+    return CalculusUtils.currentNumberSystem().isZero(offset);
   }
 
   @Override
   protected boolean canReduceWith(AbstractConverter that) {
-    return that instanceof DoubleMultiplyConverter;
+    return that instanceof AddConverter;
   }
 
   @Override
   protected AbstractConverter reduce(AbstractConverter that) {
-    return new DoubleMultiplyConverter(
-        doubleFactor * ((DoubleMultiplyConverter) that).doubleFactor);
+    NumberSystem ns = CalculusUtils.currentNumberSystem();
+    Number newOffset = ns.add(offset, ((AddConverter) that).offset);
+    return new AddConverter(newOffset);
   }
 
   @Override
-  public DoubleMultiplyConverter inverseWhenNotIdentity() {
-    return new DoubleMultiplyConverter(1.0 / doubleFactor);
+  public AddConverter inverseWhenNotIdentity() {
+    NumberSystem ns = CalculusUtils.currentNumberSystem();
+    Number newOffset = ns.negate(offset);
+    return new AddConverter(newOffset);
   }
 
   @Override
   protected Number convertWhenNotIdentity(Number value) {
-    return Calculator.of(doubleFactor).multiply(value).peek();
+    return Calculator.of(offset).add(value).peek();
   }
 
   @Override
-  public final String transformationLiteral() {
-    return String.format("x -> x * %s", doubleFactor);
+  public String transformationLiteral() {
+    NumberSystem ns = CalculusUtils.currentNumberSystem();
+    int signum = ns.signum(offset);
+    return String.format("x -> x %s %s", signum < 0 ? "-" : "+", ns.abs(offset));
   }
 
   @Override
@@ -104,21 +112,27 @@ public final class DoubleMultiplyConverter extends AbstractConverter implements 
     if (this == obj) {
       return true;
     }
-    if (obj instanceof DoubleMultiplyConverter) {
-      DoubleMultiplyConverter that = (DoubleMultiplyConverter) obj;
-      return Objects.equals(doubleFactor, that.doubleFactor);
+    if (obj instanceof AddConverter) {
+      AddConverter other = (AddConverter) obj;
+      return Objects.equals(offset, other.offset);
     }
+
     return false;
   }
 
   @Override
   public int hashCode() {
-    return Objects.hashCode(doubleFactor);
+    return Objects.hashCode(offset);
   }
 
   @Override
-  public Double getValue() {
-    return doubleFactor;
+  public boolean isLinear() {
+    return isIdentity();
+  }
+
+  @Override
+  public Number getValue() {
+    return offset;
   }
 
   @Override
@@ -126,8 +140,9 @@ public final class DoubleMultiplyConverter extends AbstractConverter implements 
     if (this == o) {
       return 0;
     }
-    if (o instanceof DoubleMultiplyConverter) {
-      return getValue().compareTo(((DoubleMultiplyConverter) o).getValue());
+    if (o instanceof AddConverter) {
+      NumberSystem ns = CalculusUtils.currentNumberSystem();
+      return ns.compare(this.getValue(), ((AddConverter) o).getValue());
     }
     return -1;
   }

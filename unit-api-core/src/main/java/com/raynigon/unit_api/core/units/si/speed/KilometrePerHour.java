@@ -1,6 +1,6 @@
 package com.raynigon.unit_api.core.units.si.speed;
 
-import com.raynigon.unit_api.core.function.MultiplyConverter;
+import com.raynigon.unit_api.core.function.unitconverter.MultiplyConverter;
 import com.raynigon.unit_api.core.units.general.IUnit;
 import com.raynigon.unit_api.core.units.general.TransformedUnit;
 import com.raynigon.unit_api.core.units.si.SISystem;

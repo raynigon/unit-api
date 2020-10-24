@@ -29,6 +29,8 @@
  */
 package com.raynigon.unit_api.core.function;
 
+import com.raynigon.unit_api.core.function.unitconverter.AbstractConverter;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.BiPredicate;

@@ -1,9 +1,10 @@
-package com.raynigon.unit_api.core.function
+package com.raynigon.unit_api.core.function.unitconverter
+
 
 import spock.lang.Specification
 import spock.lang.Unroll
 
-import static com.raynigon.unit_api.core.function.ConverterTestUtils.closeTo
+import static ConverterTestUtils.closeTo
 
 class DoubleMultiplyConverterSpec extends Specification {
 

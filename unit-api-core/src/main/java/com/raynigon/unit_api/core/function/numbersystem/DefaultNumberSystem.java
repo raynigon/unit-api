@@ -27,7 +27,11 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.raynigon.unit_api.core.function;
+package com.raynigon.unit_api.core.function.numbersystem;
+
+import com.raynigon.unit_api.core.function.CalculusUtils;
+import com.raynigon.unit_api.core.function.NumberSystem;
+import com.raynigon.unit_api.core.function.RationalNumber;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -46,93 +50,11 @@ import java.util.function.UnaryOperator;
  */
 public class DefaultNumberSystem implements NumberSystem {
 
-  /** In order of increasing number type 'widening'. */
-  private enum NumberType {
-
-    // integer types
-    BYTE_BOXED(true, Byte.class, (byte) 1, (byte) 0),
-    SHORT_BOXED(true, Short.class, (short) 1, (short) 0),
-    INTEGER_BOXED(true, Integer.class, 1, 0),
-    INTEGER_ATOMIC(true, AtomicInteger.class, 1, 0),
-    LONG_BOXED(true, Long.class, 1L, 0L),
-    LONG_ATOMIC(true, AtomicLong.class, 1L, 0),
-    BIG_INTEGER(true, BigInteger.class, BigInteger.ONE, BigInteger.ZERO),
-
-    // rational types
-    RATIONAL(false, RationalNumber.class, RationalNumber.ONE, RationalNumber.ZERO),
-
-    // fractional types
-    FLOAT_BOXED(false, Float.class, 1.f, 0.f),
-    DOUBLE_BOXED(false, Double.class, 1.d, 0.d),
-    BIG_DECIMAL(false, BigDecimal.class, BigDecimal.ONE, BigDecimal.ZERO),
-    ;
-    private final boolean integerOnly;
-    private final Class<? extends Number> type;
-    private final Number one;
-    private final Number zero;
-
-    private NumberType(boolean integerOnly, Class<? extends Number> type, Number one, Number zero) {
-
-      this.integerOnly = integerOnly;
-      this.type = type;
-      this.one = one;
-      this.zero = zero;
-    }
-
-    public boolean isIntegerOnly() {
-      return integerOnly;
-    }
-
-    @SuppressWarnings("unused")
-    public Class<? extends Number> getType() {
-      return type;
-    }
-
-    // 'hardcoded' for performance reasons
-    static NumberType valueOf(Number number) {
-      if (number instanceof Long) {
-        return LONG_BOXED;
-      }
-      if (number instanceof AtomicLong) {
-        return LONG_ATOMIC;
-      }
-      if (number instanceof Integer) {
-        return INTEGER_BOXED;
-      }
-      if (number instanceof AtomicInteger) {
-        return INTEGER_ATOMIC;
-      }
-      if (number instanceof Double) {
-        return DOUBLE_BOXED;
-      }
-      if (number instanceof Short) {
-        return SHORT_BOXED;
-      }
-      if (number instanceof Byte) {
-        return BYTE_BOXED;
-      }
-      if (number instanceof Float) {
-        return FLOAT_BOXED;
-      }
-      if (number instanceof BigDecimal) {
-        return BIG_DECIMAL;
-      }
-      if (number instanceof BigInteger) {
-        return BIG_INTEGER;
-      }
-      if (number instanceof RationalNumber) {
-        return RATIONAL;
-      }
-      final String msg = String.format("Unsupported number type '%s'", number.getClass().getName());
-      throw new IllegalArgumentException(msg);
-    }
-  }
-
   @Override
   public Number add(Number x, Number y) {
 
-    final NumberType type_x = NumberType.valueOf(x);
-    final NumberType type_y = NumberType.valueOf(y);
+    final DefaultNumberType type_x = DefaultNumberType.valueOf(x);
+    final DefaultNumberType type_y = DefaultNumberType.valueOf(y);
 
     final boolean reorder_args = type_y.ordinal() > type_x.ordinal();
 
@@ -147,8 +69,8 @@ public class DefaultNumberSystem implements NumberSystem {
   @Override
   public Number multiply(Number x, Number y) {
 
-    final NumberType type_x = NumberType.valueOf(x);
-    final NumberType type_y = NumberType.valueOf(y);
+    final DefaultNumberType type_x = DefaultNumberType.valueOf(x);
+    final DefaultNumberType type_y = DefaultNumberType.valueOf(y);
 
     final boolean reorder_args = type_y.ordinal() > type_x.ordinal();
 
@@ -180,8 +102,8 @@ public class DefaultNumberSystem implements NumberSystem {
     final Number absX = abs(x);
     final Number absY = abs(y);
 
-    final NumberType type_x = NumberType.valueOf(absX);
-    final NumberType type_y = NumberType.valueOf(absY);
+    final DefaultNumberType type_x = DefaultNumberType.valueOf(absX);
+    final DefaultNumberType type_y = DefaultNumberType.valueOf(absY);
 
     // if x and y are both integer types than we can calculate integer results,
     // otherwise we resort to BigDecimal
@@ -202,11 +124,11 @@ public class DefaultNumberSystem implements NumberSystem {
           new MathContext(CalculusUtils.MATH_CONTEXT.getPrecision(), RoundingMode.FLOOR);
 
       final BigDecimal decimal_x =
-          (type_x == NumberType.RATIONAL)
+          (type_x == DefaultNumberType.RATIONAL)
               ? ((RationalNumber) absX).bigDecimalValue()
               : toBigDecimal(absX);
       final BigDecimal decimal_y =
-          (type_y == NumberType.RATIONAL)
+          (type_y == DefaultNumberType.RATIONAL)
               ? ((RationalNumber) absY).bigDecimalValue()
               : toBigDecimal(absY);
 
@@ -477,8 +399,8 @@ public class DefaultNumberSystem implements NumberSystem {
   @Override
   public int compare(Number x, Number y) {
 
-    final NumberType type_x = NumberType.valueOf(x);
-    final NumberType type_y = NumberType.valueOf(y);
+    final DefaultNumberType type_x = DefaultNumberType.valueOf(x);
+    final DefaultNumberType type_y = DefaultNumberType.valueOf(y);
 
     final boolean reorder_args = type_y.ordinal() > type_x.ordinal();
 
@@ -487,25 +409,25 @@ public class DefaultNumberSystem implements NumberSystem {
 
   @Override
   public boolean isZero(Number number) {
-    NumberType numberType = NumberType.valueOf(number);
+    DefaultNumberType numberType = DefaultNumberType.valueOf(number);
     return compare(numberType.zero, number) == 0;
   }
 
   @Override
   public boolean isOne(Number number) {
-    NumberType numberType = NumberType.valueOf(number);
+    DefaultNumberType numberType = DefaultNumberType.valueOf(number);
     return compare(numberType.one, number) == 0;
   }
 
   @Override
   public boolean isLessThanOne(Number number) {
-    NumberType numberType = NumberType.valueOf(number);
+    DefaultNumberType numberType = DefaultNumberType.valueOf(number);
     return compare(numberType.one, number) > 0;
   }
 
   @Override
   public boolean isInteger(Number number) {
-    NumberType numberType = NumberType.valueOf(number);
+    DefaultNumberType numberType = DefaultNumberType.valueOf(number);
     return isInteger(numberType, number);
   }
 
@@ -536,10 +458,10 @@ public class DefaultNumberSystem implements NumberSystem {
   }
 
   private boolean isIntegerOnly(Number number) {
-    return NumberType.valueOf(number).isIntegerOnly();
+    return DefaultNumberType.valueOf(number).isIntegerOnly();
   }
 
-  private boolean isInteger(NumberType numberType, Number number) {
+  private boolean isInteger(DefaultNumberType numberType, Number number) {
     if (numberType.isIntegerOnly()) {
       return true; // numberType only allows integer
     }
@@ -618,7 +540,7 @@ public class DefaultNumberSystem implements NumberSystem {
     throw unsupportedNumberType(number);
   }
 
-  private Number addWideAndNarrow(NumberType wideType, Number wide, Number narrow) {
+  private Number addWideAndNarrow(DefaultNumberType wideType, Number wide, Number narrow) {
 
     if (wideType.isIntegerOnly()) {
       // at this point we know, that narrow must also be an integer-only type
@@ -694,7 +616,7 @@ public class DefaultNumberSystem implements NumberSystem {
     return BigDecimal.valueOf(wide.doubleValue()).add(BigDecimal.valueOf(narrow.longValue()));
   }
 
-  private Number multiplyWideAndNarrow(NumberType wideType, Number wide, Number narrow) {
+  private Number multiplyWideAndNarrow(DefaultNumberType wideType, Number wide, Number narrow) {
 
     if (wideType.isIntegerOnly()) {
       // at this point we know, that narrow must also be an integer-only type
@@ -771,7 +693,7 @@ public class DefaultNumberSystem implements NumberSystem {
     return BigDecimal.valueOf(wide.doubleValue()).multiply(BigDecimal.valueOf(narrow.longValue()));
   }
 
-  private int compareWideVsNarrow(NumberType wideType, Number wide, Number narrow) {
+  private int compareWideVsNarrow(DefaultNumberType wideType, Number wide, Number narrow) {
 
     if (wideType.isIntegerOnly()) {
       // at this point we know, that narrow must also be an integer-only type

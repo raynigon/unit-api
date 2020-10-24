@@ -30,7 +30,7 @@ package com.raynigon.unit_api.core.units.general;
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import com.raynigon.unit_api.core.function.AbstractConverter;
+import com.raynigon.unit_api.core.function.unitconverter.AbstractConverter;
 import com.raynigon.unit_api.core.function.Lazy;
 import com.raynigon.unit_api.core.units.si.dimensionless.One;
 import java.io.Serializable;
