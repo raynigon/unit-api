@@ -31,6 +31,7 @@ nav:
       - Jpa Starter: modules/jpa-starter.md
       - Springdoc Starter: modules/springdoc-starter.md
       - Kotlin Module: modules/kotlin-module.md
+  - JavaDoc: javadoc_ref.md
   - Contribution: contribution.md
 extra:
   latest_version: 1.0.1

@@ -1,6 +1,9 @@
 package com.raynigon.unit_api.core.function
 
 import spock.lang.Specification
+import spock.lang.Unroll
+
+import static com.raynigon.unit_api.core.function.ConverterTestUtils.closeTo
 
 class AddConverterSpec extends Specification {
 
@@ -54,17 +57,20 @@ class AddConverterSpec extends Specification {
         converter.inverse().toString() == "Add(x -> x - 10)"
     }
 
-    def 'AddConverter is no identity converter'() {
+    @Unroll
+    def 'identity returns #expectedIdentity for offset #offset'() {
         expect:
-        !converter.isIdentity()
+        new AddConverter(offset).isIdentity() == expectedIdentity
+
+        where:
+        offset | expectedIdentity
+        0      | true
+        1      | false
+        -1     | false
     }
 
     def 'conversion steps is a valid list'() {
         expect:
         converter.getConversionSteps() != null
-    }
-
-    private boolean closeTo(Number actual, Number expected, Number delta) {
-        return Math.abs(expected - actual) <= delta
     }
 }

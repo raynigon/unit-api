@@ -1,4 +1,4 @@
-# Javadoc
+# JavaDoc
 
 Current Javadocs are provided [here](https://unit-api.raynigon.com/javadoc/master/).
 
@@ -11,4 +11,5 @@ Current Javadocs are provided [here](https://unit-api.raynigon.com/javadoc/maste
 
 ## Released Versions
 
+ - [1.0.1](https://unit-api.raynigon.com/javadoc/v1.0.1)
  - [1.0.0](https://unit-api.raynigon.com/javadoc/v1.0.0)
