@@ -9,7 +9,7 @@ import java.util.stream.Collectors
 
 import static com.raynigon.unit_api.core.service.UnitsApiService.quantity
 
-class SISystemUnitsConstantsTest extends Specification {
+class SISystemUnitsConstantsSpec extends Specification {
 
     @Unroll
     def "constant #unit.getSimpleName() exists"() {

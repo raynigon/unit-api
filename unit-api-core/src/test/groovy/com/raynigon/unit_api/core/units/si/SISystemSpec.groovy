@@ -24,7 +24,7 @@ import spock.lang.Unroll
 import static com.raynigon.unit_api.core.service.UnitsApiService.quantity
 
 
-class SISystemTest extends Specification {
+class SISystemSpec extends Specification {
 
     @Unroll
     def 'registered unit: #symbol'() {
