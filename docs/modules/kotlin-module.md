@@ -20,11 +20,11 @@ the following dependencies to your pom.xml/build.gradle file:
 
 Kotlin allows custom operators. This Library provides the following operators for the Quantity class:
 
-- Comparison (<,>,<=,>=,==,!=)
-- Addition (+)
-- Substraction (-)
-- Multiplication (*)
-- Division (/)
+* Comparison (<,>,<=,>=,==,!=)
+* Addition (+)
+* Substraction (-)
+* Multiplication (*)
+* Division (/)
 
 ### Examples
 
