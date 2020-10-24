@@ -42,7 +42,7 @@ import javax.measure.UnitConverter;
  * @version 1.5, Jun 21, 2019
  * @since 2.0
  */
-final class PowerOfPiConverter extends AbstractConverter
+public final class PowerOfPiConverter extends AbstractConverter
     implements MultiplyConverter, IntExponentSupplier {
   private static final long serialVersionUID = 5000593326722785126L;
   private final Object $lock1 = new Object[0]; // serializable lock for 'scaleFactor'

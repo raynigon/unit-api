@@ -1,6 +1,7 @@
 package com.raynigon.unit_api.core.service
 
 import com.raynigon.unit_api.core.units.si.energy.Joule
+import com.raynigon.unit_api.core.units.si.length.Metre
 import spock.lang.Specification
 
 import javax.measure.Unit
@@ -29,5 +30,10 @@ class UnitsApiServiceSpec extends Specification {
     def 'resolve m/s2'() {
         expect:
         UnitsApiService.getInstance().getUnit("m/s²") != null
+    }
+
+    def 'service loader works'(){
+        expect:
+        UnitsApiService.getInstance().getUnit("WTF") == new Metre()
     }
 }

@@ -42,7 +42,7 @@ import javax.measure.UnitConverter;
  * @version 1.4, Jun 23, 2019
  * @since 1.0
  */
-final class DoubleMultiplyConverter extends AbstractConverter implements MultiplyConverter {
+public final class DoubleMultiplyConverter extends AbstractConverter implements MultiplyConverter {
 
   /** */
   private static final long serialVersionUID = 6588759878444545649L;
