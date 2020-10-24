@@ -6,6 +6,11 @@ import static com.raynigon.unit_api.core.function.ConverterTestUtils.closeTo
 
 class ExpConverterSpec extends Specification {
 
+    def 'identity returns false'(){
+        expect:
+        !new ExpConverter(10.0).isIdentity()
+    }
+
     def 'get base returns base value'() {
         given:
         def converter = new ExpConverter(10.0)
