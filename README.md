@@ -1,6 +1,7 @@
 # unit-api
 
-> This Library provides the integration of the [unit-api](https://github.com/unitsofmeasurement) into various frameworks.
+Implementation of [JSR-385](https://www.jcp.org/en/jsr/detail?id=385) with focus on the SI System redefinition, modularity and support for Java SE 8/9 and above.
+Integration in various Frameworks, Libraries and Languages, such as Spring Boot, Hibernate, Jackson, Kotlin and more.  
 
 ![CI](https://github.com/raynigon/unit-api/workflows/CI/badge.svg)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/05af413562694d6ba3b3a923d86da210)](https://app.codacy.com/manual/raynigon/unit-api?utm_source=github.com&utm_medium=referral&utm_content=raynigon/unit-api&utm_campaign=Badge_Grade_Dashboard)
