@@ -30,32 +30,32 @@ Kotlin allows custom operators. This Library provides the following operators fo
 
 === "Comparison"
     ```kotlin
-    val small = Quantities.getQuantity(3, Units.METRE)
-    val large = Quantities.getQuantity(4, Units.METRE)
+    val small = Metre(3)
+    val large = Metre(4)
     val comp = small < large // true
     ```
 === "Addition"
     ```kotlin
-    val x = Quantities.getQuantity(3, Units.METRE)
-    val y = Quantities.getQuantity(4, Units.METRE)
+    val x = Metre(3)
+    val y = Metre(4)
     val result = x + y // "7m"
     ```
 === "Substraction"
     ```kotlin
-    val x = Quantities.getQuantity(3, Units.METRE)
-    val y = Quantities.getQuantity(4, Units.METRE)
+    val x = Metre(3)
+    val y = Metre(4)
     val result = y - x // "1m"
     ```
 === "Multiplication"
     ```kotlin
-    val x = Quantities.getQuantity(3, Units.METRE)
-    val y = Quantities.getQuantity(4, Units.METRE)
+    val x = Metre(3)
+    val y = Metre(4)
     val result = x * y // "12m²"
     ```
 === "Division"
     ```kotlin
-    val x = Quantities.getQuantity(8, Units.METRE)
-    val y = Quantities.getQuantity(4, Units.METRE)
+    val x = Metre(8)
+    val y = Metre(4)
     val result = y / x // "2"
     ```
 
