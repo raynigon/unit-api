@@ -1,15 +1,20 @@
 package com.raynigon.unit_api.core.function.unitconverter
 
+import spock.lang.Shared
 import spock.lang.Specification
+import spock.lang.Unroll
 
 import javax.measure.UnitConverter
 
 class AbstractConverterSpec extends Specification {
 
+    @Shared
     AbstractConverterImplConverter converter = new AbstractConverterImplConverter()
 
     def setup() {
-        converter = new AbstractConverterImplConverter()
+        converter.identity = false
+        converter.linear = false
+        converter.transformationLiteral = "-1"
     }
 
     def "Equals"() {
@@ -23,6 +28,7 @@ class AbstractConverterSpec extends Specification {
     def "ToString"() {
         given:
         converter.identity = identity
+        converter.transformationLiteral = tranformationLiteral
 
         when:
         def result = converter.toString()
@@ -31,59 +37,94 @@ class AbstractConverterSpec extends Specification {
         result == expected
 
         where:
-        identity | expected
-        true     | "AbstractConverterImpl(IDENTITY)"
-        false    | "AbstractConverterImpl(-1)"
+        identity | tranformationLiteral | expected
+        true     | "-1"                 | "AbstractConverterImpl(IDENTITY)"
+        false    | "-1"                 | "AbstractConverterImpl(-1)"
+        false    | ""                   | "AbstractConverterImpl"
+        false    | null                 | "AbstractConverterImpl"
     }
 
     def "TransformationLiteral"() {
-        // TODO
+        expect:
+        converter.transformationLiteral() == "-1"
     }
 
     def "InverseWhenNotIdentity"() {
-        // TODO
+        expect:
+        converter.inverseWhenNotIdentity() == converter
     }
 
     def "Inverse"() {
-        // TODO
+        expect:
+        converter.inverse() == converter
     }
 
     def "CanReduceWith"() {
-        // TODO
+        when:
+        def result = converter.canReduceWith(converter)
+
+        then:
+        !result
     }
 
     def "Reduce"() {
-        // TODO
+        when:
+        converter.reduce(converter)
+
+        then:
+        thrown(IllegalStateException)
     }
 
-    def "Concatenate"() {
-        // TODO
+    @Unroll
+    def "concatenate with identity #identity"() {
+
+        given:
+        converter.identity = identity
+
+        when:
+        def result = converter.concatenate(other)
+
+        then:
+        result.toString() == expected.toString()
+
+        where:
+        identity | other                              | expected
+        true     | IdentityMultiplyConverter.INSTANCE | converter
+        false    | nonIdentityConverter()             | new AbstractConverter.Pair(converter, nonIdentityConverter())
     }
 
     def "GetConversionSteps"() {
-        // TODO
+        expect:
+        converter.getConversionSteps() == [converter]
     }
 
     def "ConvertWhenNotIdentity"() {
-        // TODO
+        expect:
+        converter.convertWhenNotIdentity(1.0) == 2.0
     }
 
     def "Convert"() {
-        // TODO
-    }
-
-    def "TestConvert"() {
-        // TODO
+        expect:
+        converter.convert(1.0) == 2.0
     }
 
     def "LinearFactor"() {
-        // TODO
+        expect:
+        converter.linearFactor() == Optional.empty()
+    }
+
+    MultiplyConverter nonIdentityConverter() {
+        MultiplyConverter converterMock = Mock()
+        converterMock.isIdentity() >> false
+        converterMock.getConversionSteps() >> []
+        return converterMock
     }
 
     class AbstractConverterImplConverter extends AbstractConverter {
 
         public boolean identity = false
         public boolean linear = false
+        public String transformationLiteral = "-1"
 
         @Override
         boolean equals(Object cvtr) {
@@ -97,12 +138,12 @@ class AbstractConverterSpec extends Specification {
 
         @Override
         protected String transformationLiteral() {
-            return "-1"
+            return transformationLiteral
         }
 
         @Override
         protected AbstractConverter inverseWhenNotIdentity() {
-            return value - 1
+            return this
         }
 
         @Override
