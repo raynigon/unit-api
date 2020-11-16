@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JavaType
 import com.fasterxml.jackson.databind.type.SimpleType
 import com.fasterxml.jackson.databind.type.TypeBindings
 import com.fasterxml.jackson.databind.type.TypeFactory
+import com.raynigon.unit_api.core.units.si.speed.KilometrePerHour
 import com.raynigon.unit_api.jackson.annotation.JsonUnit
 import io.swagger.v3.core.converter.AnnotatedType
 import io.swagger.v3.oas.models.media.Schema
@@ -15,7 +16,7 @@ import java.lang.annotation.Annotation
 
 class UnitApiPropertyCustomizerSpec extends Specification {
 
-    def 'convert quantity without annotation'(){
+    def 'convert quantity without annotation'() {
 
         given:
         def customizer = new UnitApiPropertyCustomizer()
@@ -41,7 +42,7 @@ class UnitApiPropertyCustomizerSpec extends Specification {
         result.description == "speed is given in Metre per Second (m/s)"
     }
 
-    def 'convert quantity with annotation'(){
+    def 'convert quantity with annotation'() {
 
         given:
         def customizer = new UnitApiPropertyCustomizer()
@@ -61,12 +62,13 @@ class UnitApiPropertyCustomizerSpec extends Specification {
         annotatedType.ctxAnnotations([
                 jsonUnit
         ] as Annotation[])
+        jsonUnit.value() >> JsonUnit.NoneUnit.class
 
         when:
         def result = customizer.customize(property, annotatedType)
 
         then:
-        1 * jsonUnit.unit() >> "km/h"
+        2 * jsonUnit.unit() >> KilometrePerHour.class
 
         and:
         result.type == "number | string"

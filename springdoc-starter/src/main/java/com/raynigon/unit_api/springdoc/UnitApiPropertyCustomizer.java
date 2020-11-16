@@ -3,6 +3,7 @@ package com.raynigon.unit_api.springdoc;
 import com.fasterxml.jackson.databind.type.SimpleType;
 import com.raynigon.unit_api.core.service.UnitsApiService;
 import com.raynigon.unit_api.jackson.annotation.JsonUnit;
+import com.raynigon.unit_api.jackson.annotation.JsonUnitHelper;
 import io.swagger.v3.core.converter.AnnotatedType;
 import io.swagger.v3.oas.models.media.Schema;
 import java.lang.reflect.Type;
@@ -38,7 +39,7 @@ public class UnitApiPropertyCustomizer implements PropertyCustomizer {
             .findFirst()
             .orElse(null);
     if (jsonUnit == null) return unit;
-    Unit<?> resolvedUnit = UnitsApiService.getInstance().getUnit(jsonUnit.unit());
+    Unit<?> resolvedUnit = JsonUnitHelper.getUnitInstance(jsonUnit);
     return resolvedUnit != null ? resolvedUnit : unit;
   }
 
