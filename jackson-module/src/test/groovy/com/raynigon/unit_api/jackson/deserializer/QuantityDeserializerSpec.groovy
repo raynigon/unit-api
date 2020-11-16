@@ -91,7 +91,7 @@ class QuantityDeserializerSpec extends Specification {
 
     static class MetricSpeedEntity {
 
-        @JsonUnit(unit = "km/h")
+        @JsonUnit(unit = KilometrePerHour)
         public Quantity<Speed> speed
     }
 

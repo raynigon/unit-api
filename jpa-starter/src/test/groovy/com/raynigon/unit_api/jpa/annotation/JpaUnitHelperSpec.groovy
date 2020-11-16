@@ -1,6 +1,7 @@
 package com.raynigon.unit_api.jpa.annotation
 
 import com.raynigon.unit_api.core.annotation.QuantityShape
+import com.raynigon.unit_api.core.units.si.length.Metre
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -48,22 +49,22 @@ class JpaUnitHelperSpec extends Specification {
         jpaUnit.value() >> value
 
         when:
-        def result = JpaUnitHelper.getUnitName(jpaUnit)
+        def result = JpaUnitHelper.getUnitInstance(jpaUnit)
 
         then:
         expectedResult == result
 
         where:
-        value | unit | expectedResult
-        ""    | ""   | null
-        "m"   | ""   | "m"
-        ""    | "m"  | "m"
+        value            | unit             | expectedResult
+        JpaUnit.NoneUnit | JpaUnit.NoneUnit | null
+        Metre            | JpaUnit.NoneUnit | new Metre()
+        JpaUnit.NoneUnit | Metre            | new Metre()
     }
 
     def 'determine unit name with null parameter'() {
 
         expect:
-        JpaUnitHelper.getUnitName(null) == null
+        JpaUnitHelper.getUnitInstance(null) == null
     }
 
     def 'determine quantityType'() {

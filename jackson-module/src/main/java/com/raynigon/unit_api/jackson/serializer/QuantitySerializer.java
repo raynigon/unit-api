@@ -8,9 +8,11 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.ContextualSerializer;
 import com.raynigon.unit_api.core.annotation.QuantityShape;
 import com.raynigon.unit_api.core.service.UnitsApiService;
+import com.raynigon.unit_api.core.units.general.IUnit;
 import com.raynigon.unit_api.jackson.annotation.JsonUnit;
 import com.raynigon.unit_api.jackson.annotation.JsonUnitHelper;
 import com.raynigon.unit_api.jackson.exception.UnknownUnitException;
+
 import java.io.IOException;
 import javax.measure.Quantity;
 import javax.measure.Unit;
@@ -18,56 +20,57 @@ import javax.measure.Unit;
 @SuppressWarnings("rawtypes")
 public class QuantitySerializer extends JsonSerializer<Quantity> implements ContextualSerializer {
 
-  private Unit<?> unit;
-  private QuantityShape shape = QuantityShape.NUMBER;
+    private Unit<?> unit;
+    private QuantityShape shape = QuantityShape.NUMBER;
 
-  public QuantitySerializer() {}
-
-  public QuantitySerializer(Unit<?> unit, QuantityShape shape) {
-    this.unit = unit;
-    this.shape = shape;
-  }
-
-  @Override
-  @SuppressWarnings({"unchecked", "rawtypes"})
-  public JsonSerializer<?> createContextual(SerializerProvider prov, BeanProperty property)
-      throws JsonMappingException {
-    Class<Quantity> quantityType =
-        (Class<Quantity>) property.getType().getBindings().getBoundType(0).getRawClass();
-    unit = UnitsApiService.getInstance().getUnit(quantityType);
-
-    JsonUnit unitWrapper = property.getAnnotation(JsonUnit.class);
-    if (unitWrapper == null) return new QuantitySerializer(unit, shape);
-    shape = JsonUnitHelper.getShape(unitWrapper);
-    String unitName = JsonUnitHelper.getUnitName(unitWrapper);
-
-    if (unitName != null) {
-      unit = UnitsApiService.getInstance().getUnit(unitName);
-    }
-    if (unit == null) {
-      throw new UnknownUnitException(prov.getGenerator(), unitName);
+    public QuantitySerializer() {
     }
 
-    return new QuantitySerializer(unit, shape);
-  }
+    public QuantitySerializer(Unit<?> unit, QuantityShape shape) {
+        this.unit = unit;
+        this.shape = shape;
+    }
 
-  @Override
-  @SuppressWarnings({"unchecked", "rawtypes"})
-  public void serialize(Quantity quantity, JsonGenerator gen, SerializerProvider serializers)
-      throws IOException {
-    Quantity convertedQuantity = quantity;
-    if (this.unit != null) {
-      convertedQuantity = quantity.to(unit);
+    @Override
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    public JsonSerializer<?> createContextual(SerializerProvider prov, BeanProperty property)
+            throws JsonMappingException {
+        Class<Quantity> quantityType =
+                (Class<Quantity>) property.getType().getBindings().getBoundType(0).getRawClass();
+        unit = UnitsApiService.getInstance().getUnit(quantityType);
+
+        JsonUnit unitWrapper = property.getAnnotation(JsonUnit.class);
+        if (unitWrapper == null) return new QuantitySerializer(unit, shape);
+        shape = JsonUnitHelper.getShape(unitWrapper);
+        IUnit<?> unitInstance = JsonUnitHelper.getUnitInstance(unitWrapper);
+
+        if (unitInstance != null) {
+            unit = unitInstance;
+        }
+        if (unit == null) {
+            throw new UnknownUnitException(prov.getGenerator(), quantityType);
+        }
+
+        return new QuantitySerializer(unit, shape);
     }
-    switch (shape) {
-      case NUMBER:
-        gen.writeNumber(convertedQuantity.getValue().doubleValue());
-        break;
-      case STRING:
-        gen.writeString(UnitsApiService.getInstance().format(convertedQuantity));
-        break;
-      default:
-        // TODO raise exception
+
+    @Override
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    public void serialize(Quantity quantity, JsonGenerator gen, SerializerProvider serializers)
+            throws IOException {
+        Quantity convertedQuantity = quantity;
+        if (this.unit != null) {
+            convertedQuantity = quantity.to(unit);
+        }
+        switch (shape) {
+            case NUMBER:
+                gen.writeNumber(convertedQuantity.getValue().doubleValue());
+                break;
+            case STRING:
+                gen.writeString(UnitsApiService.getInstance().format(convertedQuantity));
+                break;
+            default:
+                // TODO raise exception
+        }
     }
-  }
 }

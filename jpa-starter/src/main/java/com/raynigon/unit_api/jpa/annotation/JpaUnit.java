@@ -4,10 +4,13 @@ import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.METHOD;
 
 import com.raynigon.unit_api.core.annotation.QuantityShape;
+import com.raynigon.unit_api.core.units.general.IUnit;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import javax.measure.Quantity;
+import javax.measure.quantity.Volume;
 
 @Target({METHOD, FIELD})
 @Retention(RetentionPolicy.RUNTIME)
@@ -18,14 +21,14 @@ public @interface JpaUnit {
    *
    * @return the unit which should be used for serialization/deserialization
    */
-  String value() default "";
+  Class<? extends IUnit<?>> value() default NoneUnit.class;
 
   /**
    * Specifies the unit in which the Quantity is serialized/deserialized
    *
    * @return the unit which should be used for serialization/deserialization
    */
-  String unit() default "";
+  Class<? extends IUnit<?>> unit() default NoneUnit.class;
 
   /**
    * Serialize the Quantity as String
@@ -41,4 +44,6 @@ public @interface JpaUnit {
    *     serialization/deserialization
    */
   Class<? extends Quantity<?>> quantityType() default NoneQuantity.class;
+
+  interface NoneUnit extends IUnit<Volume>{}
 }

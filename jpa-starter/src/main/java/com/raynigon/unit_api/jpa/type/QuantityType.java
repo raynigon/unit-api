@@ -2,6 +2,7 @@ package com.raynigon.unit_api.jpa.type;
 
 import com.raynigon.unit_api.core.annotation.QuantityShape;
 import com.raynigon.unit_api.core.service.UnitsApiService;
+import com.raynigon.unit_api.core.units.general.IUnit;
 import com.raynigon.unit_api.core.units.si.dimensionless.One;
 import com.raynigon.unit_api.jpa.annotation.JpaUnit;
 import com.raynigon.unit_api.jpa.annotation.JpaUnitHelper;
@@ -56,14 +57,11 @@ public class QuantityType extends AbstractSingleColumnStandardBasicType<Quantity
 
     private Unit<?> resolveUnit(JpaUnit jpaUnit, String entity, String property) {
         Class<? extends Quantity<?>> quantityType = JpaUnitHelper.getQuantityType(jpaUnit);
-        String unitName = JpaUnitHelper.getUnitName(jpaUnit);
-        if (quantityType == null && unitName == null) {
+        IUnit<?> unitInstance = JpaUnitHelper.getUnitInstance(jpaUnit);
+        if (quantityType == null && unitInstance == null) {
             throw new UnitNotFound("Either QuantityType or unit has to be specified in Entity: " + entity + " on Property: " + property);
-        } else if (unitName != null) {
-            Unit<?> unit = UnitsApiService.getInstance().getUnit(unitName);
-            if (unit == null)
-                throw new UnitNotFound("Invalid unit: " + unitName + " in Entity: " + entity + " on Property: " + property);
-            return unit;
+        } else if (unitInstance != null) {
+            return unitInstance;
         } else {
             @SuppressWarnings({"rawtypes", "unchecked"})
             Unit<?> unit = UnitsApiService.getInstance().getUnit((Class) quantityType);
