@@ -5,6 +5,7 @@ import com.raynigon.unit_api.core.units.si.speed.KilometrePerHour
 import com.raynigon.unit_api.core.units.si.speed.MetrePerSecond
 import com.raynigon.unit_api.jackson.UnitApiModule
 import com.raynigon.unit_api.jackson.annotation.JsonUnit
+import com.raynigon.unit_api.jackson.config.UnitApiFeature
 import spock.lang.Specification
 
 import javax.measure.Quantity
@@ -16,7 +17,11 @@ class QuantityDeserializerSpec extends Specification {
 
     def setup() {
         mapper = new ObjectMapper()
-        mapper.registerModule(new UnitApiModule())
+        mapper.registerModule(
+                UnitApiModule.create()
+                        .enable(UnitApiFeature.SYSTEM_UNIT_ON_MISSING_ANNOTATION)
+                        .build()
+        )
     }
 
     def 'metric speed with number deserialization'() {

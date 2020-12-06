@@ -15,7 +15,6 @@ class BasicEntity {
 
     public String id
 
-    @JsonUnit(unit = KilometrePerHour)
     public Quantity<Speed> speed
 
     @JsonUnit(unit = Celsius, shape = QuantityShape.STRING)

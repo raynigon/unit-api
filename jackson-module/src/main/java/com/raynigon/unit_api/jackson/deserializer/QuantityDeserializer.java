@@ -4,56 +4,73 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonTokenId;
 import com.fasterxml.jackson.databind.BeanProperty;
 import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.deser.ContextualDeserializer;
+import com.fasterxml.jackson.databind.type.TypeBindings;
 import com.raynigon.unit_api.core.service.UnitsApiService;
-import com.raynigon.unit_api.core.units.general.IUnit;
+import com.raynigon.unit_api.jackson.config.UnitApiConfig;
 import com.raynigon.unit_api.jackson.annotation.JsonUnit;
 import com.raynigon.unit_api.jackson.annotation.JsonUnitHelper;
+import com.raynigon.unit_api.jackson.exception.MissingUnitException;
 import com.raynigon.unit_api.jackson.exception.UnknownUnitException;
 
 import java.io.IOException;
+import java.util.Objects;
 import javax.measure.Quantity;
 import javax.measure.Unit;
 
 import org.apache.commons.lang3.StringUtils;
 
+import static com.raynigon.unit_api.jackson.config.UnitApiFeature.SYSTEM_UNIT_ON_MISSING_ANNOTATION;
+
 public class QuantityDeserializer extends JsonDeserializer<Quantity<?>>
         implements ContextualDeserializer {
 
+    private final UnitApiConfig config;
     private Unit<?> unit;
-    private boolean forceUnit;
+    private boolean force;
 
-    public QuantityDeserializer() {
-        this(null, false);
+    public QuantityDeserializer(UnitApiConfig config) {
+        this(config, null, false);
     }
 
-    protected QuantityDeserializer(Unit<?> unit, boolean forceUnit) {
+    public QuantityDeserializer(UnitApiConfig config, Unit<?> unit, boolean force) {
+        Objects.requireNonNull(config);
+        this.config = config;
         this.unit = unit;
-        this.forceUnit = forceUnit;
+        this.force = force;
     }
 
     @Override
     @SuppressWarnings({"unchecked", "rawtypes"})
     public JsonDeserializer<?> createContextual(DeserializationContext ctxt, BeanProperty property)
             throws JsonMappingException {
-        Class<Quantity> quantityType =
-                (Class<Quantity>) property.getType().getBindings().getBoundType(0).getRawClass();
-        this.unit = UnitsApiService.getInstance().getUnit(quantityType);
+        Unit<?> unit = null;
+        TypeBindings bindings = property.getType().getBindings();
+        JavaType boundType = bindings.getBoundType(0);
+        Class<Quantity> quantityType = (Class<Quantity>) boundType.getRawClass();
 
         JsonUnit unitWrapper = property.getAnnotation(JsonUnit.class);
-        if (unitWrapper == null) return new QuantityDeserializer(unit, false);
-
-        IUnit<?> unitInstance = JsonUnitHelper.getUnitInstance(unitWrapper);
-        if (unitInstance != null) {
-            this.unit = unitInstance;
-        }
-        if (this.unit == null) {
-            throw new UnknownUnitException(ctxt.getParser(), quantityType);
+        if (unitWrapper != null) {
+            unit = JsonUnitHelper.getUnitInstance(unitWrapper);
+            if (unit == null) {
+                throw new UnknownUnitException(ctxt.getParser(), quantityType);
+            }
+            return new QuantityDeserializer(config, unit, true);
         }
 
-        return new QuantityDeserializer(unit, true);
+        // Use System Unit only if the feature was activated
+        if (config.isEnabled(SYSTEM_UNIT_ON_MISSING_ANNOTATION)) {
+            unit = UnitsApiService.getInstance().getUnit(quantityType);
+            if (unit == null) {
+                throw new UnknownUnitException(ctxt.getParser(), quantityType);
+            }
+            return new QuantityDeserializer(config, unit, false);
+        }
+
+        return new QuantityDeserializer(config, null, false);
     }
 
     @Override
@@ -62,29 +79,36 @@ public class QuantityDeserializer extends JsonDeserializer<Quantity<?>>
             case JsonTokenId.ID_STRING:
                 String strValue = p.getValueAsString();
                 if (StringUtils.isNumeric(strValue)) {
-                    return createQuantity(strValue);
+                    return createQuantity(strValue, ctxt);
                 }
                 return resolveQuantity(strValue);
             case JsonTokenId.ID_NUMBER_INT:
+                return createQuantity(p.getLongValue(), ctxt);
             case JsonTokenId.ID_NUMBER_FLOAT:
-                return createQuantity(p.getDoubleValue());
+                return createQuantity(p.getDoubleValue(), ctxt);
             case JsonTokenId.ID_START_ARRAY:
             default:
-                return null;
+                return (Quantity<?>) ctxt.handleUnexpectedToken(Quantity.class, p);
         }
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     private Quantity<?> resolveQuantity(String value) {
         Quantity<?> result = UnitsApiService.getInstance().parseQuantity(value);
-        return forceUnit ? result.to((Unit) this.unit) : result;
+        if (this.unit != null && force) {
+            return result.to((Unit) this.unit);
+        }
+        return result;
     }
 
-    private Quantity<?> createQuantity(String value) {
-        return UnitsApiService.getInstance().createQuantity(Double.parseDouble(value), unit);
+    private Quantity<?> createQuantity(String value, DeserializationContext ctxt) throws MissingUnitException {
+        return createQuantity(Double.parseDouble(value), ctxt);
     }
 
-    private Quantity<?> createQuantity(double value) {
+    private Quantity<?> createQuantity(Number value, DeserializationContext ctxt) throws MissingUnitException {
+        if (unit == null) {
+            throw new MissingUnitException(ctxt.getParser(), "?");
+        }
         return UnitsApiService.getInstance().createQuantity(value, unit);
     }
 }

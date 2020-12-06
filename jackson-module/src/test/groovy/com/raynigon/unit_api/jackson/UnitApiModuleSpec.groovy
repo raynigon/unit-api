@@ -1,6 +1,7 @@
 package com.raynigon.unit_api.jackson
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.raynigon.unit_api.jackson.config.UnitApiFeature
 import com.raynigon.unit_api.jackson.helpers.BasicEntity
 import spock.lang.Specification
 
@@ -39,5 +40,32 @@ class UnitApiModuleSpec extends Specification {
 
         and:
         result.id == "1"
+    }
+
+    def 'basic builder works'() {
+
+        when:
+        def module = UnitApiModule.create().enable(UnitApiFeature.SYSTEM_UNIT_ON_MISSING_ANNOTATION).build()
+
+        then:
+        module.getConfig().isEnabled(UnitApiFeature.SYSTEM_UNIT_ON_MISSING_ANNOTATION)
+    }
+
+    def 'withFeatures builder works'() {
+
+        when:
+        def module = UnitApiModule.withFeatures(UnitApiFeature.SYSTEM_UNIT_ON_MISSING_ANNOTATION)
+
+        then:
+        module.getConfig().isEnabled(UnitApiFeature.SYSTEM_UNIT_ON_MISSING_ANNOTATION)
+    }
+
+    def 'withoutFeatures builder works'() {
+
+        when:
+        def module = UnitApiModule.withoutFeatures(UnitApiFeature.SYSTEM_UNIT_ON_MISSING_ANNOTATION)
+
+        then:
+        !module.getConfig().isEnabled(UnitApiFeature.SYSTEM_UNIT_ON_MISSING_ANNOTATION)
     }
 }

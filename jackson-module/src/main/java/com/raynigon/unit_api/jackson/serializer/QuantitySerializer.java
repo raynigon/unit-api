@@ -9,24 +9,30 @@ import com.fasterxml.jackson.databind.ser.ContextualSerializer;
 import com.raynigon.unit_api.core.annotation.QuantityShape;
 import com.raynigon.unit_api.core.service.UnitsApiService;
 import com.raynigon.unit_api.core.units.general.IUnit;
+import com.raynigon.unit_api.jackson.config.UnitApiConfig;
 import com.raynigon.unit_api.jackson.annotation.JsonUnit;
 import com.raynigon.unit_api.jackson.annotation.JsonUnitHelper;
 import com.raynigon.unit_api.jackson.exception.UnknownUnitException;
 
 import java.io.IOException;
+import java.util.Objects;
 import javax.measure.Quantity;
 import javax.measure.Unit;
 
 @SuppressWarnings("rawtypes")
 public class QuantitySerializer extends JsonSerializer<Quantity> implements ContextualSerializer {
 
+    private final UnitApiConfig config;
     private Unit<?> unit;
-    private QuantityShape shape = QuantityShape.NUMBER;
+    private QuantityShape shape;
 
-    public QuantitySerializer() {
+    public QuantitySerializer(UnitApiConfig config) {
+        this(config, null, QuantityShape.NUMBER);
     }
 
-    public QuantitySerializer(Unit<?> unit, QuantityShape shape) {
+    public QuantitySerializer(UnitApiConfig config, Unit<?> unit, QuantityShape shape) {
+        Objects.requireNonNull(config);
+        this.config = config;
         this.unit = unit;
         this.shape = shape;
     }
@@ -40,7 +46,7 @@ public class QuantitySerializer extends JsonSerializer<Quantity> implements Cont
         unit = UnitsApiService.getInstance().getUnit(quantityType);
 
         JsonUnit unitWrapper = property.getAnnotation(JsonUnit.class);
-        if (unitWrapper == null) return new QuantitySerializer(unit, shape);
+        if (unitWrapper == null) return new QuantitySerializer(config, unit, shape);
         shape = JsonUnitHelper.getShape(unitWrapper);
         IUnit<?> unitInstance = JsonUnitHelper.getUnitInstance(unitWrapper);
 
@@ -51,7 +57,7 @@ public class QuantitySerializer extends JsonSerializer<Quantity> implements Cont
             throw new UnknownUnitException(prov.getGenerator(), quantityType);
         }
 
-        return new QuantitySerializer(unit, shape);
+        return new QuantitySerializer(config, unit, shape);
     }
 
     @Override

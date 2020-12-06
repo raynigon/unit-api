@@ -1,6 +1,6 @@
 # Unit API
 
-![](./logo.png)
+![](assets/logo.png)
 
 ## About
 
