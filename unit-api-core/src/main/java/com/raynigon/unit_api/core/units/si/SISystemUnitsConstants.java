@@ -5,6 +5,7 @@ import static com.raynigon.unit_api.core.service.UnitsApiService.quantity;
 import com.raynigon.unit_api.core.units.si.acceleration.MetrePerSquaredSecond;
 import com.raynigon.unit_api.core.units.si.dimensionless.One;
 import com.raynigon.unit_api.core.units.si.dimensionless.Percent;
+import com.raynigon.unit_api.core.units.si.electrical.charge.AmpereHour;
 import com.raynigon.unit_api.core.units.si.electrical.charge.Coulomb;
 import com.raynigon.unit_api.core.units.si.electrical.current.Ampere;
 import com.raynigon.unit_api.core.units.si.electrical.current.MilliAmpere;
@@ -64,6 +65,8 @@ public class SISystemUnitsConstants {
     public static final MilliVolt MilliVolt = new MilliVolt();
 
     public static final Volt Volt = new Volt();
+
+    public static final AmpereHour AmpereHour = new AmpereHour();
 
     public static final Coulomb Coulomb = new Coulomb();
 
@@ -141,6 +144,10 @@ public class SISystemUnitsConstants {
 
     public static Quantity<ElectricPotential> Volt(Number value) {
         return quantity(value, Volt);
+    }
+
+    public static Quantity<ElectricCharge> AmpereHour(Number value) {
+        return quantity(value, AmpereHour);
     }
 
     public static Quantity<ElectricCharge> Coulomb(Number value) {
