@@ -13,6 +13,9 @@ jobs:
       - uses: actions/setup-java@v1
         with:
           java-version: 8
+      - id: vars
+        name: Determine Version
+        run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
       - name: Publish
         uses: eskatos/gradle-command-action@v1.3.2
         env:
@@ -34,10 +37,25 @@ jobs:
           add: 'mkdocs.yml'
           author_name: Github Actions
           author_email: 10846939+raynigon@users.noreply.github.com
-          message: 'Update mkdocs.yml due to Release'
+          message: 'Update mkdocs.yml with new Release ${{ steps.vars.outputs.tag }}'
           ref: 'released'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Leave this line unchanged
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v3
+        with:
+          branch: 'released'
+          delete-branch: true
+          title: '[Release] Version ${{ steps.vars.outputs.tag }}'
+          body: |
+            Version ${{ steps.vars.outputs.tag }} was released.
+            We need to update the documentation.
+            Please merge this PR asap!
+          labels: |
+            release
+          assignees: raynigon
+          reviewers: raynigon
+          draft: false
       - name: Copy Assets
         run: |
           mkdir -p build/jars/
