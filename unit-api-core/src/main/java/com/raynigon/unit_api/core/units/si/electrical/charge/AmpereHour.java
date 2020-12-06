@@ -1,17 +1,14 @@
 package com.raynigon.unit_api.core.units.si.electrical.charge;
 
 import com.raynigon.unit_api.core.function.unitconverter.MultiplyConverter;
-import com.raynigon.unit_api.core.units.general.AlternateUnit;
 import com.raynigon.unit_api.core.units.general.IUnit;
 import com.raynigon.unit_api.core.units.general.TransformedUnit;
 import com.raynigon.unit_api.core.units.si.SISystem;
 import com.raynigon.unit_api.core.units.si.electrical.current.Ampere;
 import com.raynigon.unit_api.core.units.si.time.Hour;
-import com.raynigon.unit_api.core.units.si.time.Second;
 
 import javax.measure.Unit;
 import javax.measure.quantity.ElectricCharge;
-import javax.measure.quantity.Energy;
 
 public class AmpereHour extends TransformedUnit<ElectricCharge> implements IUnit<ElectricCharge> {
 

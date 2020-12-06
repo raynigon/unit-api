@@ -1,15 +1,12 @@
 package com.raynigon.unit_api.core.units.si.electrical.charge;
 
 import com.raynigon.unit_api.core.units.general.AlternateUnit;
-import com.raynigon.unit_api.core.units.general.BaseUnit;
-import com.raynigon.unit_api.core.units.general.UnitDimension;
 import com.raynigon.unit_api.core.units.si.SISystem;
 import com.raynigon.unit_api.core.units.si.electrical.current.Ampere;
 import com.raynigon.unit_api.core.units.si.time.Second;
 
 import javax.measure.Unit;
 import javax.measure.quantity.ElectricCharge;
-import javax.measure.quantity.ElectricCurrent;
 
 public class Coulomb extends AlternateUnit<ElectricCharge> {
 
