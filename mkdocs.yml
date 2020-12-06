@@ -9,8 +9,8 @@ theme:
     primary: 'blue'
     accent: 'teal'
   font: false
-  logo: 'logo.svg'
-  favicon: 'logo.ico'
+  logo: 'assets/logo.svg'
+  favicon: 'assets/logo.ico'
 repo_name: 'unit-api'
 repo_url: 'https://github.com/raynigon/unit-api'
 markdown_extensions:

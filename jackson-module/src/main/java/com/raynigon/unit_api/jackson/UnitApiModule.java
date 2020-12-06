@@ -21,11 +21,14 @@ public class UnitApiModule extends SimpleModule {
                     BuildVersion.GROUP_ID,
                     BuildVersion.ARTIFACT_ID);
 
+    private final UnitApiConfig config;
+
     public UnitApiModule() {
         this(new UnitApiConfig(0));
     }
 
     public UnitApiModule(UnitApiConfig config) {
+        this.config = config;
         addSerializer(Quantity.class, new QuantitySerializer(config));
         addDeserializer(Quantity.class, new QuantityDeserializer(config));
     }
@@ -40,8 +43,20 @@ public class UnitApiModule extends SimpleModule {
         return VERSION;
     }
 
+    public UnitApiConfig getConfig() {
+        return config;
+    }
+
     public static Builder create() {
         return new Builder();
+    }
+
+    public static UnitApiModule withFeatures(UnitApiFeature... features) {
+        return new Builder().enable(features).build();
+    }
+
+    public static UnitApiModule withoutFeatures(UnitApiFeature... features) {
+        return new Builder().disable(features).build();
     }
 
     static class Builder {
