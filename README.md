@@ -10,7 +10,7 @@ Integration in various Frameworks, Libraries and Languages, such as Spring Boot,
 
 
 <a href="https://unit-api.raynigon.com/" target="_blank">
-    <img src="./docs/logo.png" width="250" height="250">
+    <img src="./docs/assets/logo.png" width="250" height="250">
 </a>
 
 ## [Read the documentation here](http://unit-api.raynigon.com)
