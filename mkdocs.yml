@@ -1,7 +1,6 @@
 site_name: Unit API
 plugins:
   - search
-  - codeinclude
   - markdownextradata
 theme:
   name: 'material'
