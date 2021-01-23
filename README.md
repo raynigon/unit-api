@@ -20,6 +20,6 @@ Integration in various Frameworks, Libraries and Languages, such as Spring Boot,
 
 ## Copyright
 
-Copyright (c) 2020 Simon Schneider and other authors.
+Copyright (c) 2021 Simon Schneider and other authors.
 
 See [contributors](https://github.com/raynigon/unit-api/graphs/contributors) for all contributors.
