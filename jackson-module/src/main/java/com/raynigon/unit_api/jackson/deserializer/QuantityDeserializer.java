@@ -68,12 +68,11 @@ public class QuantityDeserializer extends JsonDeserializer<Quantity<?>>
 
     @Override
     public Quantity<?> deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
-        Quantity<?> result = null;
         for (QuantitySubDeserializer deserializer : subDeserializers) {
-            if (!deserializer.canDeserialize(p, ctxt)) continue;
-            result = deserializer.deserialize(p, ctxt);
-            break;
+            if (deserializer.canDeserialize(p, ctxt)) {
+                return deserializer.deserialize(p, ctxt);
+            }
         }
-        return result;
+        return null;
     }
 }

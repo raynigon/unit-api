@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonTokenId;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.raynigon.unit_api.core.service.UnitsApiService;
-import com.raynigon.unit_api.jackson.config.UnitApiConfig;
 import com.raynigon.unit_api.jackson.exception.MissingUnitException;
 import org.apache.commons.lang3.StringUtils;
 
