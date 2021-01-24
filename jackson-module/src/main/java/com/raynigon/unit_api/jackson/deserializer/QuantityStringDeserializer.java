@@ -17,7 +17,7 @@ public class QuantityStringDeserializer implements QuantitySubDeserializer {
     private final Unit<?> unit;
     private final boolean forceUnit;
 
-    public QuantityStringDeserializer(Unit<?> unit, boolean forceUnit, UnitApiConfig config) {
+    public QuantityStringDeserializer(Unit<?> unit, boolean forceUnit) {
         this.unit = unit;
         this.forceUnit = forceUnit;
     }

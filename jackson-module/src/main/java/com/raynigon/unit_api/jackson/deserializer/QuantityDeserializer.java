@@ -31,7 +31,7 @@ public class QuantityDeserializer extends JsonDeserializer<Quantity<?>>
         this.config = Objects.requireNonNull(config);
         this.subDeserializers = new QuantitySubDeserializer[]{
                 new QuantityNumberDeserializer(unit),
-                new QuantityStringDeserializer(unit, forceUnit, config),
+                new QuantityStringDeserializer(unit, forceUnit),
                 new QuantityObjectDeserializer(unit, forceUnit)
         };
     }
@@ -68,10 +68,12 @@ public class QuantityDeserializer extends JsonDeserializer<Quantity<?>>
 
     @Override
     public Quantity<?> deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+        Quantity<?> result = null;
         for (QuantitySubDeserializer deserializer : subDeserializers) {
             if (!deserializer.canDeserialize(p, ctxt)) continue;
-            return deserializer.deserialize(p, ctxt);
+            result = deserializer.deserialize(p, ctxt);
+            break;
         }
-        return null;
+        return result;
     }
 }
