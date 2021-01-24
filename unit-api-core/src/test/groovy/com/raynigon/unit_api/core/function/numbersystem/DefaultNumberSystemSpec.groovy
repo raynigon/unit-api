@@ -1,5 +1,6 @@
 package com.raynigon.unit_api.core.function.numbersystem
 
+import com.raynigon.unit_api.core.function.NumberSystem
 import com.raynigon.unit_api.core.function.RationalNumber
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -88,7 +89,7 @@ class DefaultNumberSystemSpec extends Specification {
         4.0f | 2.0d | 2.0            | BigDecimal.class
         5.0d | 2.0d | 2.5            | BigDecimal.class
         0.0d | 1.0d | 0              | BigDecimal.class
-        4    | 2    | 2            | RationalNumber.class
+        4    | 2    | 2              | RationalNumber.class
     }
 
     def "division by zero throws exception"() {
@@ -384,5 +385,21 @@ class DefaultNumberSystemSpec extends Specification {
         new BigDecimal("-1.2") | false
         new BigDecimal(1.3)    | false
         -1.4                   | false
+    }
+
+    def "division result"() {
+        expect:
+        NumberSystem.DivisionResult.of(1, 2) == NumberSystem.DivisionResult.of(1, 2)
+    }
+
+    def "compare numbers"() {
+        expect:
+        new DefaultNumberSystem().equals(x, y) == expected
+        where:
+        x                  | y                  | expected
+        Integer.valueOf(1) | Integer.valueOf(1) | true
+        Integer.valueOf(1) | Integer.valueOf(2) | false
+        Integer.valueOf(1) | Long.valueOf(3)    | false
+
     }
 }
