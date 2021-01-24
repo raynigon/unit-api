@@ -388,8 +388,22 @@ class DefaultNumberSystemSpec extends Specification {
     }
 
     def "division result"() {
-        expect:
-        NumberSystem.DivisionResult.of(1, 2) == NumberSystem.DivisionResult.of(1, 2)
+
+        given:
+        def source = NumberSystem.DivisionResult.of(1, 2)
+        def other = NumberSystem.DivisionResult.of(1, 2)
+
+        when:
+        def result0 = (source == other)
+        def result1 = (source == source)
+        def result2 = source.equals("123")
+        def result3 = (source == null)
+
+        then:
+        result0
+        result1
+        !result2
+        !result3
     }
 
     def "compare numbers"() {
