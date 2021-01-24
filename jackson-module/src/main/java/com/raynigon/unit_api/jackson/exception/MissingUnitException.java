@@ -8,7 +8,7 @@ import java.io.Closeable;
 public class MissingUnitException extends JsonMappingException {
 
     public MissingUnitException(Closeable processor, String unitName) {
-        super(processor, "Unknown Unit: " + unitName);
+        super(processor, "Missing Unit: " + unitName);
     }
 
     @SuppressWarnings("rawtypes")
