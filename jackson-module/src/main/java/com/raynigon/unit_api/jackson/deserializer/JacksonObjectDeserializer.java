@@ -11,12 +11,12 @@ import javax.measure.Quantity;
 import javax.measure.Unit;
 import java.io.IOException;
 
-public class QuantityObjectDeserializer implements QuantitySubDeserializer {
+public class JacksonObjectDeserializer implements JacksonDeserializer {
 
     private final Unit<?> unit;
     private final boolean forceUnit;
 
-    public QuantityObjectDeserializer(Unit<?> unit, boolean forceUnit) {
+    public JacksonObjectDeserializer(Unit<?> unit, boolean forceUnit) {
         this.unit = unit;
         this.forceUnit = forceUnit;
     }

@@ -14,11 +14,11 @@ import com.fasterxml.jackson.databind.introspect.Annotated
 import com.raynigon.unit_api.jackson.exception.MissingUnitException
 import spock.lang.Specification
 
-class QuantityStringDeserializerSpec extends Specification {
+class QuantityStringSubDeserializerSpec extends Specification {
 
     def 'deserialize with missing unit'() {
         given:
-        QuantityStringDeserializer deserializer = new QuantityStringDeserializer(null, false)
+        JacksonStringDeserializer deserializer = new JacksonStringDeserializer(null, false)
 
         and:
         JsonParser parser = Mock()

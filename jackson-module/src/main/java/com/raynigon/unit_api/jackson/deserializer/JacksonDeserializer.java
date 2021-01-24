@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import javax.measure.Quantity;
 import java.io.IOException;
 
-public interface QuantitySubDeserializer {
+public interface JacksonDeserializer {
 
     boolean canDeserialize(JsonParser parser, DeserializationContext context);
 

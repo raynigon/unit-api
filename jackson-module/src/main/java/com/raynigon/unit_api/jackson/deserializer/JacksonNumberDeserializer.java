@@ -10,11 +10,11 @@ import javax.measure.Quantity;
 import javax.measure.Unit;
 import java.io.IOException;
 
-public class QuantityNumberDeserializer implements QuantitySubDeserializer {
+public class JacksonNumberDeserializer implements JacksonDeserializer {
 
     private final Unit<?> unit;
 
-    public QuantityNumberDeserializer(Unit<?> unit) {
+    public JacksonNumberDeserializer(Unit<?> unit) {
         this.unit = unit;
     }
 

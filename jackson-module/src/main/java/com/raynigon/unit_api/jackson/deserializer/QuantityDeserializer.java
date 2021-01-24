@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.deser.ContextualDeserializer;
 import com.fasterxml.jackson.databind.type.TypeBindings;
+import com.raynigon.unit_api.core.deserializer.DefaultQuantityStringDeserializer;
 import com.raynigon.unit_api.core.service.UnitsApiService;
 import com.raynigon.unit_api.jackson.annotation.JsonUnit;
 import com.raynigon.unit_api.jackson.annotation.JsonUnitHelper;
@@ -20,7 +21,7 @@ import static com.raynigon.unit_api.jackson.config.UnitApiFeature.SYSTEM_UNIT_ON
 public class QuantityDeserializer extends JsonDeserializer<Quantity<?>>
         implements ContextualDeserializer {
 
-    private final QuantitySubDeserializer[] subDeserializers;
+    private final JacksonDeserializer[] subDeserializers;
     private final UnitApiConfig config;
 
     public QuantityDeserializer(UnitApiConfig config) {
@@ -29,10 +30,10 @@ public class QuantityDeserializer extends JsonDeserializer<Quantity<?>>
 
     protected QuantityDeserializer(UnitApiConfig config, Unit<?> unit, boolean forceUnit) {
         this.config = Objects.requireNonNull(config);
-        this.subDeserializers = new QuantitySubDeserializer[]{
-                new QuantityNumberDeserializer(unit),
-                new QuantityStringDeserializer(unit, forceUnit),
-                new QuantityObjectDeserializer(unit, forceUnit)
+        this.subDeserializers = new JacksonDeserializer[]{
+                new JacksonNumberDeserializer(unit),
+                new JacksonStringDeserializer(unit, forceUnit, new DefaultQuantityStringDeserializer()),
+                new JacksonObjectDeserializer(unit, forceUnit)
         };
     }
 
@@ -68,7 +69,7 @@ public class QuantityDeserializer extends JsonDeserializer<Quantity<?>>
 
     @Override
     public Quantity<?> deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
-        for (QuantitySubDeserializer deserializer : subDeserializers) {
+        for (JacksonDeserializer deserializer : subDeserializers) {
             if (deserializer.canDeserialize(p, ctxt)) {
                 return deserializer.deserialize(p, ctxt);
             }

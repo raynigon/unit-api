@@ -3,11 +3,11 @@ package com.raynigon.unit_api.jackson.deserializer
 import com.raynigon.unit_api.jackson.exception.MissingUnitException
 import spock.lang.Specification
 
-class QuantityNumberDeserializerSpec extends Specification {
+class JacksonNumberDeserializerSpec extends Specification {
 
     def 'unit equals null'() {
         given:
-        QuantityNumberDeserializer deserializer = new QuantityNumberDeserializer(null)
+        JacksonNumberDeserializer deserializer = new JacksonNumberDeserializer(null)
 
         when:
         deserializer.deserialize(null, null)

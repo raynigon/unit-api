@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonTokenId;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.raynigon.unit_api.core.service.UnitsApiService;
+import com.raynigon.unit_api.core.deserializer.QuantityStringDeserializer;
 import com.raynigon.unit_api.jackson.exception.MissingUnitException;
 import org.apache.commons.lang3.StringUtils;
 
@@ -11,14 +12,16 @@ import javax.measure.Quantity;
 import javax.measure.Unit;
 import java.io.IOException;
 
-public class QuantityStringDeserializer implements QuantitySubDeserializer {
+public class JacksonStringDeserializer implements JacksonDeserializer {
 
     private final Unit<?> unit;
     private final boolean forceUnit;
+    private final QuantityStringDeserializer deserializer;
 
-    public QuantityStringDeserializer(Unit<?> unit, boolean forceUnit) {
+    public JacksonStringDeserializer(Unit<?> unit, boolean forceUnit, QuantityStringDeserializer deserializer) {
         this.unit = unit;
         this.forceUnit = forceUnit;
+        this.deserializer = deserializer;
     }
 
     @Override
