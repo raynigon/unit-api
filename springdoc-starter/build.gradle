@@ -1,13 +1,13 @@
 dependencies {
     compileOnly 'org.springframework.boot:spring-boot-starter'
-    compileOnly 'org.springdoc:springdoc-openapi-webmvc-core:1.4.3'
+    compileOnly 'org.springdoc:springdoc-openapi-webmvc-core:1.5.2'
     implementation project(":jackson-module")
     implementation project(":unit-api-core")
 
-    testImplementation 'org.springdoc:springdoc-openapi-webmvc-core:1.4.3'
+    testImplementation 'org.springdoc:springdoc-openapi-webmvc-core:1.5.2'
     testImplementation 'org.springframework.boot:spring-boot-starter'
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
-    testImplementation 'org.spockframework:spock-spring:1.2-groovy-2.4'
+    testImplementation 'org.spockframework:spock-spring:1.3-groovy-2.5'
 }
