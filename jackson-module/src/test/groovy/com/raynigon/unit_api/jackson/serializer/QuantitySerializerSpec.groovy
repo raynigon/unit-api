@@ -85,7 +85,7 @@ class QuantitySerializerSpec extends Specification {
 
         public String id;
 
-        @JsonUnit(unit = "km/h")
+        @JsonUnit(unit = KilometrePerHour)
         public Quantity<Speed> speed;
     }
 
@@ -93,7 +93,7 @@ class QuantitySerializerSpec extends Specification {
 
         public String id;
 
-        @JsonUnit(unit = "℃", shape = QuantityShape.STRING)
+        @JsonUnit(unit = Celsius, shape = QuantityShape.STRING)
         public Quantity<Temperature> temperature;
     }
 
@@ -101,7 +101,7 @@ class QuantitySerializerSpec extends Specification {
 
         public String id;
 
-        @JsonUnit(unit = "m", shape = QuantityShape.OBJECT)
+        @JsonUnit(unit = Metre, shape = QuantityShape.OBJECT)
         public Quantity<Length> distance;
     }
 }
