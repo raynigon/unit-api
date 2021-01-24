@@ -1,5 +1,6 @@
 package com.raynigon.unit_api.jackson.deserializer
 
+import com.fasterxml.jackson.databind.JsonMappingException
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.raynigon.unit_api.core.units.si.speed.KilometrePerHour
 import com.raynigon.unit_api.core.units.si.speed.MetrePerSecond
@@ -7,6 +8,7 @@ import com.raynigon.unit_api.jackson.UnitApiModule
 import com.raynigon.unit_api.jackson.annotation.JsonUnit
 import com.raynigon.unit_api.jackson.config.UnitApiFeature
 import spock.lang.Specification
+import spock.lang.Unroll
 
 import javax.measure.Quantity
 import javax.measure.quantity.Speed
@@ -78,6 +80,41 @@ class QuantityDeserializerSpec extends Specification {
         noExceptionThrown()
         result.speed.unit == new MetrePerSecond()
         result.speed.value.toInteger() == 100
+    }
+
+    def 'speed with object deserialization'() {
+
+        given:
+        def source = mapper.writeValueAsString(["speed": ["value": 100, "unit": "m/s"]])
+
+        when:
+        def result = mapper.readValue(source, SystemSpeedEntity.class)
+
+        then:
+        noExceptionThrown()
+        result.speed.unit == new MetrePerSecond()
+        result.speed.value.toInteger() == 100
+    }
+
+    @Unroll
+    def 'deserialization fails with wrong object data: #name'() {
+
+        given:
+        def source = mapper.writeValueAsString(input)
+
+        when:
+        mapper.readValue(source, SystemSpeedEntity.class)
+
+        then:
+        thrown(JsonMappingException)
+
+        where:
+        name | input
+        "1"  | ["speed": ["value": 100, "unit": "m/s", "tmp": "tmp"]]
+        "2"  | ["speed": ["value": 100, "units": "m/s"]]
+        "3"  | ["speed": ["value": "100", "unit": "m/s"]]
+        "4"  | ["speed": ["value": "100"]]
+        "5"  | ["speed": ["unit": "m/s"]]
     }
 
     def 'system unit speed with string deserialization'() {

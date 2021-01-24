@@ -22,9 +22,8 @@ import javax.measure.Unit;
 @SuppressWarnings("rawtypes")
 public class QuantitySerializer extends JsonSerializer<Quantity> implements ContextualSerializer {
 
-    private final UnitApiConfig config;
-    private Unit<?> unit;
-    private QuantityShape shape;
+    private final UnitApiConfig config;private Unit<?> unit;
+    private QuantityShape shape ;
 
     public QuantitySerializer(UnitApiConfig config) {
         this(config, null, QuantityShape.NUMBER);
@@ -46,7 +45,7 @@ public class QuantitySerializer extends JsonSerializer<Quantity> implements Cont
         unit = UnitsApiService.getInstance().getUnit(quantityType);
 
         JsonUnit unitWrapper = property.getAnnotation(JsonUnit.class);
-        if (unitWrapper == null) return new QuantitySerializer(config, unit, shape);
+        if (unitWrapper == null) return new QuantitySerializer(config,unit, shape);
         shape = JsonUnitHelper.getShape(unitWrapper);
         IUnit<?> unitInstance = JsonUnitHelper.getUnitInstance(unitWrapper);
 
@@ -75,8 +74,16 @@ public class QuantitySerializer extends JsonSerializer<Quantity> implements Cont
             case STRING:
                 gen.writeString(UnitsApiService.getInstance().format(convertedQuantity));
                 break;
+            case OBJECT:
+                gen.writeStartObject();
+                gen.writeFieldName("value");
+                gen.writeNumber(convertedQuantity.getValue().doubleValue());
+                gen.writeFieldName("unit");
+                gen.writeString(convertedQuantity.getUnit().getSymbol());
+                gen.writeEndObject();
+                break;
             default:
-                // TODO raise exception
+                throw new IllegalArgumentException("Unknown Shape: " + shape);
         }
     }
 }

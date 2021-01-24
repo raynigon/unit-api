@@ -15,6 +15,10 @@ Integration in various Frameworks, Libraries and Languages, such as Spring Boot,
 
 ## [Read the documentation here](http://unit-api.raynigon.com)
 
+## Unit API Core
+The code in the "unit-api-core" module was copied from [Unit of Measurement API](https://unitsofmeasurement.github.io/unit-api/)
+and adapted to be used in this project.
+
 ## License
 [Apache License 2.0](LICENSE)
 
