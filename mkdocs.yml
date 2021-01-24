@@ -1,7 +1,6 @@
 site_name: Unit API
 plugins:
   - search
-  - codeinclude
   - markdownextradata
 theme:
   name: 'material'
@@ -9,8 +8,8 @@ theme:
     primary: 'blue'
     accent: 'teal'
   font: false
-  logo: 'logo.svg'
-  favicon: 'logo.ico'
+  logo: 'assets/logo.svg'
+  favicon: 'assets/logo.ico'
 repo_name: 'unit-api'
 repo_url: 'https://github.com/raynigon/unit-api'
 markdown_extensions:
@@ -31,7 +30,8 @@ nav:
       - Jpa Starter: modules/jpa-starter.md
       - Springdoc Starter: modules/springdoc-starter.md
       - Kotlin Module: modules/kotlin-module.md
+  - Examples: examples.md
   - JavaDoc: javadoc-ref.md
   - Contribution: contribution.md
 extra:
-  latest_version: 1.0.1
+  latest_version: 1.1.0

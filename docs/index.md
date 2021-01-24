@@ -1,25 +1,20 @@
 # Unit API
 
-![](./logo.png)
+![](assets/logo.png)
 
 ## About
 
-The (Raynigon) Unit API provides the integration of the [Unit of Measurement API](https://github.com/unitsofmeasurement) into various frameworks and libraries.
-Supported frameworks/libraries are Jackson, Hibernate, Springdoc and Spring Boot.
+The (Raynigon) Unit API provides an Implementation of [JSR-385](https://www.jcp.org/en/jsr/detail?id=385) 
+with focus on the SI System redefinition, modularity and support for Java SE 8/9 and above.
+It integrates into various Frameworks, Libraries and Languages, such as Spring Boot, Hibernate, Jackson, Kotlin and more.  
 Spring Boot integrations are available as "-starter" modules. 
-This modules will allow you to use the unit-api directly in Spring Boot without configuration.
-You can also use the Jackson Module for non Spring boot Use cases.
+The Spring Boot Starter modules will allow you to use the unit-api directly in Spring Boot without configuration.
+You can also use the Jackson Module, Kotlin Module for non Spring boot Use cases.
 
 ## Unit of Measurement API
 
-The Unit of Measurement API is mostly unknown, but here is a quick introduction, for more information see [Unit of Measurement API](https://unitsofmeasurement.github.io/unit-api/).
-
-The Unit of Measurement API provides a Java API for handling units and quantities.
-Supported methods for unit operations:
-
-* Expression of a quantity in various units
-* Checking of unit compatibility
-* Arithmetic operations on units
+The majority of the code in this library originates from the [Unit of Measurement API](https://unitsofmeasurement.github.io/unit-api/).
+The new code enables better integration into Frameworks, Libraries and Languages.
 
 ## Maven dependencies
 

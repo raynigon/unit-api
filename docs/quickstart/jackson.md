@@ -25,7 +25,7 @@ public class BasicEntity {
 
     public String id;
 
-    @JsonUnit("km/h")
+    @JsonUnit(KilometrePerHour.class)
     public Quantity<Speed> speed;
 }
 ```

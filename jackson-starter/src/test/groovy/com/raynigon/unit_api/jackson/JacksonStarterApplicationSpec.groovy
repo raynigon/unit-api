@@ -8,12 +8,17 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
 import spock.lang.Specification
 
+import static com.raynigon.unit_api.core.units.si.SISystemUnitsConstants.MetrePerSecond
+
 @SpringBootTest(
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
         classes = [
                 BasicApplicationConfig,
                 BasicRestController,
                 BasicService
+        ],
+        properties = [
+                "spring.jackson.unit-api.features.SYSTEM_UNIT_ON_MISSING_ANNOTATION=true"
         ]
 )
 class JacksonStarterApplicationSpec extends Specification {
@@ -46,5 +51,6 @@ class JacksonStarterApplicationSpec extends Specification {
 
         and:
         service.getEntity("1") != null
+        service.getEntity("1").speed == MetrePerSecond(100)
     }
 }

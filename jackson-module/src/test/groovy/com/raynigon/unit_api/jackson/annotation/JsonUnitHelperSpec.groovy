@@ -1,6 +1,7 @@
 package com.raynigon.unit_api.jackson.annotation
 
 import com.raynigon.unit_api.core.annotation.QuantityShape
+import com.raynigon.unit_api.core.units.si.length.Metre
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -46,21 +47,21 @@ class JsonUnitHelperSpec extends Specification {
         jpaUnit.value() >> value
 
         when:
-        def result = JsonUnitHelper.getUnitName(jpaUnit)
+        def result = JsonUnitHelper.getUnitInstance(jpaUnit)
 
         then:
         expectedResult == result
 
         where:
-        value | unit | expectedResult
-        ""    | ""   | null
-        "m"   | ""   | "m"
-        ""    | "m"  | "m"
+        value             | unit              | expectedResult
+        JsonUnit.NoneUnit | JsonUnit.NoneUnit | null
+        Metre             | JsonUnit.NoneUnit | new Metre()
+        JsonUnit.NoneUnit | Metre             | new Metre()
     }
 
     def 'determine unit name with null parameter'() {
 
         expect:
-        JsonUnitHelper.getUnitName(null) == null
+        JsonUnitHelper.getUnitInstance(null) == null
     }
 }

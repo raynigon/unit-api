@@ -1,7 +1,11 @@
 package com.raynigon.unit_api.jpa.annotation;
 
 import com.raynigon.unit_api.core.annotation.QuantityShape;
+import com.raynigon.unit_api.core.units.general.IUnit;
+
 import javax.measure.Quantity;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 
 /** Support a simple usage of the @JpaUnit properties */
 public class JpaUnitHelper {
@@ -23,10 +27,10 @@ public class JpaUnitHelper {
    * @param jpaUnit the annotation which should be processed
    * @return the name of the specified unit or null if no unit was specified
    */
-  public static String getUnitName(JpaUnit jpaUnit) {
+  public static IUnit<?> getUnitInstance(JpaUnit jpaUnit) {
     if (jpaUnit == null) return null;
-    if (!jpaUnit.value().equals("")) return jpaUnit.value();
-    if (!jpaUnit.unit().equals("")) return jpaUnit.unit();
+    if (!jpaUnit.value().equals(JpaUnit.NoneUnit.class)) return createUnit(jpaUnit.value());
+    if (!jpaUnit.unit().equals(JpaUnit.NoneUnit.class)) return createUnit(jpaUnit.unit());
     return null;
   }
 
@@ -42,5 +46,15 @@ public class JpaUnitHelper {
     if (quantityType.equals(NoneQuantity.class)) return null;
     if (!Quantity.class.isAssignableFrom(quantityType)) return null;
     return quantityType;
+  }
+
+  private static IUnit<?> createUnit(Class<? extends IUnit<?>> unitType) {
+    try {
+      Constructor<? extends IUnit<?>> ctor = unitType.getConstructor();
+      return ctor.newInstance();
+    } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
+      // TODO log error("Unable to create Unit " + unitType, e);
+      return null;
+    }
   }
 }

@@ -40,7 +40,6 @@ import javax.measure.Unit;
  *
  * @author otaviojava
  * @author werner
- * @param <Q> QuantityType
  * @version 1.1, July 2, 2019
  * @since 1.0
  */
@@ -84,7 +83,7 @@ public interface ComparableQuantity<Q extends Quantity<Q>>
   <T extends Quantity<T>> ComparableQuantity<T> asType(Class<T> type) throws ClassCastException;
 
   /**
-   * Compares two instances of {@link Quantity <Q>}. Conversion of unit can happen if necessary
+   * Compares two instances of {@link Quantity}. Conversion of unit can happen if necessary
    *
    * @param that the {@code quantity<Q>} to be compared with this instance.
    * @return {@code true} if {@code that > this}.
@@ -93,7 +92,7 @@ public interface ComparableQuantity<Q extends Quantity<Q>>
   boolean isGreaterThan(Quantity<Q> that);
 
   /**
-   * Compares two instances of {@link Quantity <Q>}, doing the conversion of unit if necessary.
+   * Compares two instances of {@link Quantity}, doing the conversion of unit if necessary.
    *
    * @param that the {@code quantity<Q>} to be compared with this instance.
    * @return {@code true} if {@code that >= this}.
@@ -102,7 +101,7 @@ public interface ComparableQuantity<Q extends Quantity<Q>>
   boolean isGreaterThanOrEqualTo(Quantity<Q> that);
 
   /**
-   * Compares two instances of {@link Quantity <Q>}, doing the conversion of unit if necessary.
+   * Compares two instances of {@link Quantity}, doing the conversion of unit if necessary.
    *
    * @param that the {@code quantity<Q>} to be compared with this instance.
    * @return {@code true} if {@code that < this}.
@@ -111,7 +110,7 @@ public interface ComparableQuantity<Q extends Quantity<Q>>
   boolean isLessThan(Quantity<Q> that);
 
   /**
-   * Compares two instances of {@link Quantity <Q>}, doing the conversion of unit if necessary.
+   * Compares two instances of {@link Quantity}, doing the conversion of unit if necessary.
    *
    * @param that the {@code quantity<Q>} to be compared with this instance.
    * @return {@code true} if {@code that < this}.
@@ -120,7 +119,7 @@ public interface ComparableQuantity<Q extends Quantity<Q>>
   boolean isLessThanOrEqualTo(Quantity<Q> that);
 
   /**
-   * Compares two instances of {@code Quantity <Q>}, doing the conversion of unit if necessary.
+   * Compares two instances of {@code Quantity}, doing the conversion of unit if necessary.
    *
    * @param that the {@code quantity<Q>} to be compared with this instance.
    * @return {@code true} if {@code that < this}.

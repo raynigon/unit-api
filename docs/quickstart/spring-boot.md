@@ -33,7 +33,7 @@ public class BasicEntity {
 
     public String id;
 
-    @JsonUnit("km/h")
+    @JsonUnit(KilometrePerHour.class)
     public Quantity<Speed> speed;
 }
 ```
@@ -88,7 +88,7 @@ public class BasicEntity {
     @Column(name="id")
     public String id;
     
-    @JpaUnit("km/h")
+    @JpaUnit(KilometrePerHour.class)
     @Column(name="speed")
     public Quantity<Speed> speed;
 }
