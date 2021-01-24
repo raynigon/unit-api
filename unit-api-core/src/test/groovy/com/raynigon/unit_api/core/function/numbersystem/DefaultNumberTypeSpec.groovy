@@ -59,6 +59,26 @@ class DefaultNumberTypeSpec extends Specification {
         DefaultNumberType.RATIONAL       | false
     }
 
+    @Unroll
+    def 'number class from type: #value'() {
+        expect:
+        value.getType() == numberType
+
+        where:
+        value                            | numberType
+        DefaultNumberType.LONG_BOXED     | Long
+        DefaultNumberType.LONG_ATOMIC    | AtomicLong
+        DefaultNumberType.INTEGER_BOXED  | Integer
+        DefaultNumberType.INTEGER_ATOMIC | AtomicInteger
+        DefaultNumberType.DOUBLE_BOXED   | Double
+        DefaultNumberType.SHORT_BOXED    | Short
+        DefaultNumberType.BYTE_BOXED     | Byte
+        DefaultNumberType.FLOAT_BOXED    | Float
+        DefaultNumberType.BIG_DECIMAL    | BigDecimal
+        DefaultNumberType.BIG_INTEGER    | BigInteger
+        DefaultNumberType.RATIONAL       | RationalNumber
+    }
+
     class UnknownNumber extends Number {
 
         @Override

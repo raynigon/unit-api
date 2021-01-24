@@ -9,6 +9,7 @@ import com.raynigon.unit_api.jackson.annotation.JsonUnit
 import io.swagger.v3.core.converter.AnnotatedType
 import io.swagger.v3.oas.models.media.Schema
 import spock.lang.Specification
+import spock.lang.Unroll
 
 import javax.measure.Quantity
 import javax.measure.quantity.Speed
@@ -73,5 +74,46 @@ class UnitApiPropertyCustomizerSpec extends Specification {
         and:
         result.type == "number | string"
         result.description == "speed is given in Kilometre per Hour (km/h)"
+    }
+
+    @Unroll
+    def 'handle existing description - #input'() {
+
+        given:
+        def customizer = new UnitApiPropertyCustomizer()
+        def property = new Schema()
+        property.name = "speed"
+        property.description(input)
+        def annotatedType = new AnnotatedType()
+        annotatedType.type = new SimpleType(
+                Quantity.class,
+                TypeBindings.create(
+                        Quantity.class,
+                        [new SimpleType(Speed.class)] as JavaType[],
+                ),
+                null,
+                null
+        )
+        JsonUnit jsonUnit = Mock(JsonUnit)
+        annotatedType.ctxAnnotations([
+                jsonUnit
+        ] as Annotation[])
+        jsonUnit.value() >> JsonUnit.NoneUnit.class
+
+        when:
+        def result = customizer.customize(property, annotatedType)
+
+        then:
+        2 * jsonUnit.unit() >> KilometrePerHour.class
+
+        and:
+        result.type == "number | string"
+        result.description == expected
+
+        where:
+        input  | expected
+        null   | "speed is given in Kilometre per Hour (km/h)"
+        ""     | "speed is given in Kilometre per Hour (km/h)\n"
+        "test" | "speed is given in Kilometre per Hour (km/h)\ntest"
     }
 }

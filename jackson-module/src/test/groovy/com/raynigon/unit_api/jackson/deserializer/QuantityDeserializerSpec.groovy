@@ -115,6 +115,9 @@ class QuantityDeserializerSpec extends Specification {
         "3"  | ["speed": ["value": "100", "unit": "m/s"]]
         "4"  | ["speed": ["value": "100"]]
         "5"  | ["speed": ["unit": "m/s"]]
+        "6"  | ["speed": ["value": 100, "unit": "wurzelprumpf"]]
+        "7"  | ["speed": ["value": 100, "unit": [:]]]
+        "8"  | ["speed": ["value": 100, "unit": 100]]
     }
 
     def 'system unit speed with string deserialization'() {
