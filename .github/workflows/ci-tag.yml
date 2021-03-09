@@ -45,7 +45,7 @@ jobs:
         uses: peter-evans/create-pull-request@v3.8.2
         with:
           base: 'master'
-          branch: 'released'
+          branch: 'release/${{ steps.vars.outputs.tag }}'
           delete-branch: true
           title: '[Release] Version ${{ steps.vars.outputs.tag }}'
           body: |
