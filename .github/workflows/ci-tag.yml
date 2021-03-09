@@ -63,3 +63,14 @@ jobs:
         with:
           prerelease: true
           files: build/jars/*.jar
+          body: |
+            # What's Changed
+            ## 🚀 Features & Enhancements
+            * ???
+            ## 📖 Documentation
+            * ???
+            ## 🧹 Housekeeping
+            * ???
+            ## 📦 Dependency updates
+            * ???
+
