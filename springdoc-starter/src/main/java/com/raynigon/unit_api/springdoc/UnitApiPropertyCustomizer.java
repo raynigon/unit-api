@@ -18,7 +18,7 @@ public class UnitApiPropertyCustomizer implements PropertyCustomizer {
   public Schema<?> customize(Schema property, AnnotatedType type) {
     if (isApplicable(type.getType())) {
       Unit<?> unit = resolveUnit(type);
-      property.setType("number | string"); // could be configurable
+      property.setType("string"); // could be configurable
       property.setProperties(null);
       property.setDescription(
           buildDescription(property.getName(), unit, property.getDescription()));
