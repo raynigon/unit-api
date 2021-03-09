@@ -39,7 +39,7 @@ class UnitApiPropertyCustomizerSpec extends Specification {
         def result = customizer.customize(property, annotatedType)
 
         then:
-        result.type == "number | string"
+        result.type == "string"
         result.description == "speed is given in Metre per Second (m/s)"
     }
 
@@ -72,7 +72,7 @@ class UnitApiPropertyCustomizerSpec extends Specification {
         2 * jsonUnit.unit() >> KilometrePerHour.class
 
         and:
-        result.type == "number | string"
+        result.type == "string"
         result.description == "speed is given in Kilometre per Hour (km/h)"
     }
 
@@ -107,7 +107,7 @@ class UnitApiPropertyCustomizerSpec extends Specification {
         2 * jsonUnit.unit() >> KilometrePerHour.class
 
         and:
-        result.type == "number | string"
+        result.type == "string"
         result.description == expected
 
         where:
