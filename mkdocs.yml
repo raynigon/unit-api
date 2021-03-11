@@ -24,6 +24,7 @@ nav:
   - Quickstart:
       - Jackson: quickstart/jackson.md
       - Spring Boot: quickstart/spring-boot.md
+      - Custom Units: quickstart/custom-units.md
   - Modules:
       - Jackson Module: modules/jackson-module.md
       - Jackson Starter: modules/jackson-starter.md
