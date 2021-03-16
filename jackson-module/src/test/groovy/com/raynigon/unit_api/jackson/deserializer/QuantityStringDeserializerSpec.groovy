@@ -11,24 +11,24 @@ import com.fasterxml.jackson.databind.deser.DeserializerFactory
 import com.fasterxml.jackson.databind.deser.UnresolvedForwardReference
 import com.fasterxml.jackson.databind.deser.impl.ReadableObjectId
 import com.fasterxml.jackson.databind.introspect.Annotated
-import com.raynigon.unit_api.jackson.exception.MissingUnitException
+import com.raynigon.unit_api.jackson.deserializer.extractor.StringExtractor
 import spock.lang.Specification
 
 class QuantityStringDeserializerSpec extends Specification {
 
-    def 'deserialize with missing unit'() {
+    def 'deserialize numeric string'() {
         given:
-        QuantityStringDeserializer deserializer = new QuantityStringDeserializer(null, false)
+        StringExtractor extractor = new StringExtractor()
 
         and:
         JsonParser parser = Mock()
         DeserializationContext context = new DummyContext(Mock(DeserializerFactory))
 
         when:
-        deserializer.deserialize(parser, context)
+        def result = extractor.extract(parser, context)
 
         then:
-        thrown(MissingUnitException)
+        result == 123
 
         and:
         1 * parser.getValueAsString() >> "123"
