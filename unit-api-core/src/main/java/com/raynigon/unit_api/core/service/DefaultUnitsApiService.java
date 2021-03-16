@@ -1,5 +1,6 @@
 package com.raynigon.unit_api.core.service;
 
+import com.raynigon.unit_api.core.io.DefaultQuantityReader;
 import com.raynigon.unit_api.core.quantities.NumberQuantity;
 import com.raynigon.unit_api.core.units.si.SISystem;
 
@@ -93,12 +94,7 @@ public class DefaultUnitsApiService implements UnitsApiService {
 
     @Override
     public Quantity<?> parseQuantity(String quantity) {
-        String[] parts = quantity.split(" ");
-        Double value = Double.parseDouble(parts[0]);
-        String symbol = parts[1];
-        Unit<?> unit = getUnit(symbol);
-        if (unit == null) return null;
-        return new NumberQuantity<>(value, unit);
+        return (new DefaultQuantityReader()).read(quantity);
     }
 
     @Override

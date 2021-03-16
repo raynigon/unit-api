@@ -12,7 +12,10 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.transaction.annotation.Transactional
 import spock.lang.Specification
 
-import static com.raynigon.unit_api.core.service.UnitsApiService.quantity
+import static com.raynigon.unit_api.core.units.si.SISystemUnitsConstants.Celsius
+import static com.raynigon.unit_api.core.units.si.SISystemUnitsConstants.Kilometre
+import static com.raynigon.unit_api.core.units.si.SISystemUnitsConstants.KilometrePerHour
+import static com.raynigon.unit_api.core.units.si.SISystemUnitsConstants.Metre
 
 @Transactional
 @SpringBootTest(
@@ -42,9 +45,9 @@ class JpaStarterApplicationSpec extends Specification {
         given:
         def entity = new BasicEntity()
         entity.id = "1"
-        entity.speed = quantity(10, new KilometrePerHour())
-        entity.distance = quantity(10, new Metre())
-        entity.temperature = quantity(10, new Celsius())
+        entity.speed = KilometrePerHour(10)
+        entity.distance = Metre(10)
+        entity.temperature = Celsius(10)
 
         when:
         repository.save(entity)
@@ -62,14 +65,15 @@ class JpaStarterApplicationSpec extends Specification {
     def 'simple load'() {
         given:
         // testdata is given in `import.sql`
+        true
 
         when:
         def result = repository.findById("99").orElseThrow()
 
         then:
         result.id == "99"
-        result.speed == quantity(12, new KilometrePerHour())
-        result.distance == quantity(100, new Kilometre())
-        result.temperature == quantity(30, new Celsius())
+        result.speed == KilometrePerHour(12)
+        result.distance == Kilometre(100)
+        result.temperature == Celsius(30)
     }
 }

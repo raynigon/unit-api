@@ -51,7 +51,7 @@ public class QuantityDeserializer extends JsonDeserializer<Quantity<?>>
         TypeBindings bindings = property.getType().getBindings();
         JavaType boundType = bindings.getBoundType(0);
         Class<Quantity> quantityType = (Class<Quantity>) boundType.getRawClass();
-        QuantityReader reader = new DefaultQuantityReader();
+        QuantityReader reader = UnitsApiService.reader();
 
         JsonQuantityReader readerWrapper = property.getAnnotation(JsonQuantityReader.class);
         if (readerWrapper != null) {

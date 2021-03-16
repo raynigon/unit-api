@@ -1,6 +1,7 @@
 package com.raynigon.unit_api.jackson.annotation;
 
 import com.raynigon.unit_api.core.io.QuantityReader;
+import com.raynigon.unit_api.core.io.QuantityWriter;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -9,15 +10,20 @@ public class JsonQuantityHelper {
 
     public static QuantityReader getReaderInstance(JsonQuantityReader readerWrapper) {
         if (readerWrapper == null) return null;
-        return createReader(readerWrapper.value());
+        return createInstace(readerWrapper.value(), "Reader");
     }
 
-    private static QuantityReader createReader(Class<? extends QuantityReader> readerType) {
+    public static QuantityWriter getWriterInstance(JsonQuantityWriter writerWrapper) {
+        if (writerWrapper == null) return null;
+        return createInstace(writerWrapper.value(), "Reader");
+    }
+
+    private static <T> T createInstace(Class<? extends T> readerType, String type) {
         try {
-            Constructor<? extends QuantityReader> ctor = readerType.getConstructor();
+            Constructor<? extends T> ctor = readerType.getConstructor();
             return ctor.newInstance();
         } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
-            throw new RuntimeException("Unable to create Quantity Reader " + readerType, e);
+            throw new RuntimeException("Unable to create Quantity " + type + ":" + readerType, e);
         }
     }
 }

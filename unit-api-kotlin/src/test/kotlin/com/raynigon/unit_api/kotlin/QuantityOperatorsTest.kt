@@ -1,9 +1,10 @@
 package com.raynigon.unit_api.kotlin
 
 import com.raynigon.unit_api.core.service.UnitsApiService.quantity
+import com.raynigon.unit_api.core.units.si.SISystemUnitsConstants.Metre
+import com.raynigon.unit_api.core.units.si.SISystemUnitsConstants.Watt
 import com.raynigon.unit_api.core.units.si.dimensionless.One
-import com.raynigon.unit_api.core.units.si.length.Metre
-import com.raynigon.unit_api.core.units.si.power.Watt
+import com.raynigon.unit_api.core.units.si.length.Metre as MetreUnit
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertThrows
@@ -17,10 +18,10 @@ internal class QuantityOperatorsTest {
 
     @Test
     fun `comparison operator`() {
-        val a = quantity(3, Metre())
-        val b = quantity(4, Metre())
-        val c = quantity(5, Metre())
-        val d = quantity(4, Metre())
+        val a = Metre(3)
+        val b = Metre(4)
+        val c = Metre(5)
+        val d = Metre(4)
         assertTrue(a < b)
         assertFalse(a > b)
         assertTrue(c > b)
@@ -54,8 +55,8 @@ internal class QuantityOperatorsTest {
 
     @Test
     fun `invalid comparison fails`() {
-        val a = quantity(3, Metre()) as Quantity<*>
-        val b = quantity(4, Watt()) as Quantity<*>
+        val a = Metre(3) as Quantity<*>
+        val b = Watt(4) as Quantity<*>
         val c = a as Quantity<Speed>
         val d = b as Quantity<Speed>
 
@@ -64,15 +65,15 @@ internal class QuantityOperatorsTest {
 
     @Test
     fun `math operators`() {
-        val a = quantity(2, Metre())
-        val b = quantity(4, Metre())
-        val c = quantity(3, Metre())
+        val a = Metre(2)
+        val b = Metre(4)
+        val c = Metre(3)
 
-        assertEquals(quantity(6, Metre()), a + b)
-        assertEquals(quantity(2, Metre()), b - a)
+        assertEquals(Metre(6), a + b)
+        assertEquals(Metre(2), b - a)
         val result = b * c
-        assertEquals(12, result.getValue().toInt())
-        assertEquals(Metre().pow(2), result.getUnit())
+        assertEquals(12, result.value.toInt())
+        assertEquals(MetreUnit().pow(2), result.unit)
         assertEquals(quantity(2, One()), b / a)
     }
 }
