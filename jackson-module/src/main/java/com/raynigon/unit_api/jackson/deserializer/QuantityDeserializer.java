@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.deser.ContextualDeserializer;
 import com.fasterxml.jackson.databind.type.TypeBindings;
-import com.raynigon.unit_api.core.io.DefaultQuantityReader;
 import com.raynigon.unit_api.core.io.QuantityReader;
 import com.raynigon.unit_api.core.service.UnitsApiService;
 import com.raynigon.unit_api.jackson.annotation.JsonQuantityHelper;
