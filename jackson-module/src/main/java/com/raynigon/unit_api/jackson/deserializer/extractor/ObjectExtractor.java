@@ -1,39 +1,25 @@
-package com.raynigon.unit_api.jackson.deserializer;
+package com.raynigon.unit_api.jackson.deserializer.extractor;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonTokenId;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.raynigon.unit_api.core.service.UnitsApiService;
 import com.raynigon.unit_api.jackson.exception.UnknownUnitException;
 
-import javax.measure.Quantity;
-import javax.measure.Unit;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
 
-public class QuantityObjectDeserializer implements QuantitySubDeserializer {
+public class ObjectExtractor {
 
-    private final Unit<?> unit;
-    private final boolean forceUnit;
+    public final static List<Integer> HANDLED_TOKENS = Collections.singletonList(JsonTokenId.ID_START_OBJECT);
 
-    public QuantityObjectDeserializer(Unit<?> unit, boolean forceUnit) {
-        this.unit = unit;
-        this.forceUnit = forceUnit;
-    }
-
-    @Override
-    public boolean canDeserialize(JsonParser parser, DeserializationContext context) {
-        return (parser.getCurrentTokenId() == JsonTokenId.ID_START_OBJECT);
-    }
-
-    @Override
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    public Quantity<?> deserialize(JsonParser parser, DeserializationContext context) throws IOException {
+    public static String extract(JsonParser parser, DeserializationContext context) throws IOException {
         int tokenId = parser.nextToken().id();
         DeserializationState state = DeserializationState.UNKNOWN;
 
         double valueField = 0.0;
-        Unit<?> unitField = null;
+        String unitField = null;
         boolean valueParsed = false;
 
         while (tokenId != JsonTokenId.ID_END_OBJECT) {
@@ -59,7 +45,7 @@ public class QuantityObjectDeserializer implements QuantitySubDeserializer {
                     break;
                 case JsonTokenId.ID_STRING:
                     if (state == DeserializationState.UNIT_FIELD) {
-                        unitField = parseUnit(parser.getValueAsString());
+                        unitField = parser.getValueAsString();
                         if (unitField == null) {
                             throw new UnknownUnitException(parser, parser.getValueAsString());
                         }
@@ -74,12 +60,8 @@ public class QuantityObjectDeserializer implements QuantitySubDeserializer {
             tokenId = parser.nextToken().id();
         }
         if (!valueParsed) throw new JsonMappingException(parser, "Missing Value Field");
-        Quantity<?> result = UnitsApiService.getInstance().createQuantity(valueField, unitField);
-        return forceUnit ? result.to((Unit) this.unit) : result;
-    }
-
-    private Unit<?> parseUnit(String unitSymbol) {
-        return UnitsApiService.getInstance().getUnit(unitSymbol);
+        if (unitField == null) throw new JsonMappingException(parser, "Missing Unit Field");
+        return valueField + " " + unitField;
     }
 
     private enum DeserializationState {

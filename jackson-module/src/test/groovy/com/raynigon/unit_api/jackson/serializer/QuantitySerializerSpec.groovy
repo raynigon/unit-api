@@ -20,18 +20,11 @@ import javax.measure.quantity.Length
 import javax.measure.quantity.Speed
 import javax.measure.quantity.Temperature
 
-import static com.raynigon.unit_api.core.service.UnitsApiService.quantity
+import static com.raynigon.unit_api.core.units.si.SISystemUnitsConstants.Celsius
+import static com.raynigon.unit_api.core.units.si.SISystemUnitsConstants.KilometrePerHour
+import static com.raynigon.unit_api.core.units.si.SISystemUnitsConstants.Metre
 
 class QuantitySerializerSpec extends Specification {
-
-    interface DummyQuantity extends Quantity<DummyQuantity> {}
-
-    abstract class DummyType extends JavaType {
-
-        public DummyType() {
-            super(DummyQuantity.class, 0, null, null, false)
-        }
-    }
 
     def 'quantity deserialization with null unit'() {
 
@@ -74,7 +67,7 @@ class QuantitySerializerSpec extends Specification {
         and:
         def source = new BasicNumberEntity()
         source.id = "1"
-        source.speed = quantity(100, new KilometrePerHour())
+        source.speed = KilometrePerHour(100)
 
         when:
         def result = mapper.writeValueAsString(source)
@@ -86,6 +79,27 @@ class QuantitySerializerSpec extends Specification {
         result == '{"id":"1","speed":100.0}'
     }
 
+    def 'numeric string deserialization'() {
+
+        given:
+        def mapper = new ObjectMapper()
+        mapper.registerModule(new UnitApiModule())
+
+        and:
+        def source = new BasicNumericEntity()
+        source.id = "1"
+        source.speed = KilometrePerHour(100)
+
+        when:
+        def result = mapper.writeValueAsString(source)
+
+        then:
+        noExceptionThrown()
+
+        and:
+        result == '{"id":"1","speed":"100.0"}'
+    }
+
     def 'string deserialization'() {
 
         given:
@@ -95,7 +109,7 @@ class QuantitySerializerSpec extends Specification {
         and:
         def source = new BasicStringEntity()
         source.id = "1"
-        source.temperature = quantity(30, new Celsius())
+        source.temperature = Celsius(30)
 
         when:
         def result = mapper.writeValueAsString(source)
@@ -116,7 +130,7 @@ class QuantitySerializerSpec extends Specification {
         and:
         def source = new BasicObjectEntity()
         source.id = "1"
-        source.distance = quantity(100, new Metre())
+        source.distance = Metre(100)
 
         when:
         def result = mapper.writeValueAsString(source)
@@ -128,6 +142,14 @@ class QuantitySerializerSpec extends Specification {
         result == '{"id":"1","distance":{"value":100.0,"unit":"m"}}'
     }
 
+    interface DummyQuantity extends Quantity<DummyQuantity> {}
+
+    abstract class DummyType extends JavaType {
+
+        public DummyType() {
+            super(DummyQuantity.class, 0, null, null, false)
+        }
+    }
 
     class BasicNumberEntity {
 
@@ -136,6 +158,15 @@ class QuantitySerializerSpec extends Specification {
         @JsonUnit(unit = KilometrePerHour)
         public Quantity<Speed> speed;
     }
+
+    class BasicNumericEntity {
+
+        public String id;
+
+        @JsonUnit(unit = KilometrePerHour, shape = QuantityShape.NUMERIC_STRING)
+        public Quantity<Speed> speed;
+    }
+
 
     class BasicStringEntity {
 
