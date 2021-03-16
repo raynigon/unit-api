@@ -1,9 +1,9 @@
 package com.raynigon.unit_api.kotlin
 
-import com.raynigon.unit_api.core.units.si.length.Metre as MetreUnit
 import com.raynigon.unit_api.core.units.si.SISystemUnitsConstants.Metre
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import com.raynigon.unit_api.core.units.si.length.Metre as MetreUnit
 
 internal class GeometryTest {
 
