@@ -21,6 +21,10 @@ jobs:
           CURRENT_VERSION=${VERSION_LINE//version=/}
           TAG_VERSION=${CURRENT_VERSION//-SNAPSHOT/}
           echo ::set-output name=tag::$TAG_VERSION
+      - name: "Update User Details"
+        run: |
+          git config --global user.email "84719472+raynigon-bot@users.noreply.github.com"
+          git config --global user.name "raynigon[bot]"
       - name: "Publish Artifacts"
         uses: eskatos/gradle-command-action@90ccf054e6b9905f30f98c938bce4c6acd323b6b #v1.3.3
         with:
