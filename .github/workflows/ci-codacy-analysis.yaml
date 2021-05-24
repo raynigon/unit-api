@@ -20,6 +20,11 @@ jobs:
           output: results.sarif
           format: sarif
 
+      - name: The job has failed
+        if: ${{ failure() }}
+        run: |
+          git status
+
       - name: Upload SARIF results file
         uses: github/codeql-action/upload-sarif@main
         with:
