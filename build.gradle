@@ -8,6 +8,7 @@ buildscript {
 plugins {
     id 'java-library'
     id 'signing'
+    id 'maven-publish'
     id 'org.springframework.boot' version '2.4.3'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 
@@ -45,9 +46,11 @@ subprojects {
     compileJava.options.encoding = 'UTF-8'
     compileTestJava.options.encoding = 'UTF-8'
 
-    apply from: "$rootDir/gradle/scripts/publishing.gradle"
+
     apply from: "$rootDir/gradle/scripts/versionClass.gradle"
-    apply from: "$rootDir/gradle/scripts/release.gradle"
+    apply from: "$rootDir/gradle/scripts/javadoc.gradle"
+    apply from: "$rootDir/gradle/scripts/test.gradle"
+    apply from: "$rootDir/gradle/scripts/publishing.gradle"
 
     bootJar {
         enabled = false
@@ -79,6 +82,5 @@ bootJar {
 }
 
 apply from: "$rootDir/gradle/scripts/updateMkdocsConfig.gradle"
-tasks.getByName("afterReleaseBuild").dependsOn(
-        tasks.getByName("updateMkdocsConfig")
-)
+apply from: "$rootDir/gradle/scripts/release.gradle"
+

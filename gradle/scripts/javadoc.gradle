@@ -1,0 +1,25 @@
+import org.gradle.internal.jvm.Jvm
+
+javadoc {
+    if (!Jvm.current().javaVersion.isJava8()) {
+        options.addBooleanOption('html5', true)
+    }
+}
+
+task sourcesJar(type: Jar) {
+    from sourceSets.main.allJava
+    archiveClassifier.set('sources')
+}
+
+task javadocJar(type: Jar) {
+    from javadoc
+    archiveClassifier.set('javadoc')
+}
+
+task globalJavadoc(type: Copy) {
+    dependsOn javadoc
+    group = 'documentation'
+    String branchName = (System.getenv("GITHUB_REF") ?: "refs/heads/master").split("/")[2]
+    from(buildDir.toString() + "/docs/javadoc/")
+    into(parent.buildDir.toString() + "/javadoc/$branchName/" + project.name + "/")
+}
