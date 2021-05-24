@@ -1,0 +1,14 @@
+release {
+
+    preTagCommitMessage = "[Release] Version:"
+    tagCommitMessage = "[Release] Version:"
+    newVersionCommitMessage = "[Release] Update Version:"
+
+    git {
+        requireBranch = "master"
+    }
+}
+
+tasks.getByName("afterReleaseBuild").dependsOn(
+        tasks.getByName("publish")
+)
