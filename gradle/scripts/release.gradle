@@ -10,5 +10,6 @@ release {
 }
 
 tasks.getByName("afterReleaseBuild").dependsOn(
-        tasks.getByName("publish")
+        subprojects.collect { it.tasks.getByName("publish") },
+        tasks.getByName("updateMkdocsConfig")
 )
