@@ -4,6 +4,7 @@ on: [ "push" ]
 
 jobs:
   codacy-analysis-cli:
+    if: github.actor != 'dependabot[bot]'
     name: Codacy Analysis CLI
     runs-on: ubuntu-latest
     steps:
@@ -16,3 +17,10 @@ jobs:
           project-token: ${{ secrets.CODACY_TOKEN }}
           upload: true
           max-allowed-issues: 2147483647
+          output: results.sarif
+          format: sarif
+
+      - name: Upload SARIF results file
+        uses: github/codeql-action/upload-sarif@main
+        with:
+          sarif_file: results.sarif

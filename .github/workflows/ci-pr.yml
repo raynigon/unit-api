@@ -20,6 +20,7 @@ jobs:
           arguments: test
       - name: Codacy Publish
         uses: codacy/codacy-coverage-reporter-action@master
+        if: github.actor != 'dependabot[bot]'
         with:
           project-token: ${{ secrets.CODACY_TOKEN }}
 
