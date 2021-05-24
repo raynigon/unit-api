@@ -50,3 +50,48 @@ jobs:
         with:
           name: "Website"
           path: "build/site/"
+
+  test_release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - id: content
+        name: Create Release Content
+        uses: raynigon/release-documentation@main
+        with:
+          token: "${{ secrets.GITHUB_TOKEN }}"
+          latest: "v1.1.3"
+          template: |
+            # What's Changed
+            <!-- Features & Enhancements -->
+            {{#pull_requests.feature.length}}
+            ## 🚀 Features & Enhancements
+            {{#pull_requests.feature}}
+            * {{ title }} PR: #{{ number }}
+            {{/pull_requests.feature}}
+            {{/pull_requests.feature.length}}
+            <!-- Documentation -->
+            {{#pull_requests.documentation.length}}
+            ## 📖 Documentation
+            {{#pull_requests.documentation}}
+            * {{ title }} PR: #{{ number }}
+            {{/pull_requests.documentation}}
+            {{/pull_requests.documentation.length}}
+            <!-- Housekeeping -->
+            {{#pull_requests.housekeeping.length}}
+            ## 🧹 Housekeeping
+            {{#pull_requests.housekeeping}}
+            * {{ title }} PR: #{{ number }}
+            {{/pull_requests.housekeeping}}
+            {{/pull_requests.housekeeping.length}}
+            <!-- Dependency updates -->
+            {{#pull_requests.dependencies.length}}
+            ## 📦 Dependency updates
+            {{#pull_requests.dependencies}}
+            * {{ title }} PR: #{{ number }}
+            {{/pull_requests.dependencies}}
+            {{/pull_requests.dependencies.length}}
+      - name: "debug"
+        run: echo "$content"
+        env:
+          content: "${{ steps.content.outputs.content }}"
