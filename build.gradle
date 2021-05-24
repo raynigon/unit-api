@@ -38,6 +38,7 @@ subprojects {
     apply plugin: 'maven-publish'
     apply plugin: 'jacoco'
     apply plugin: 'signing'
+    apply plugin: 'net.researchgate.release'
 
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
@@ -46,6 +47,7 @@ subprojects {
 
     apply from: "$rootDir/gradle/scripts/publishing.gradle"
     apply from: "$rootDir/gradle/scripts/versionClass.gradle"
+    apply from: "$rootDir/gradle/scripts/release.gradle"
 
     bootJar {
         enabled = false
@@ -76,4 +78,6 @@ bootJar {
 }
 
 apply from: "$rootDir/gradle/scripts/updateMkdocsConfig.gradle"
-apply from: "$rootDir/gradle/scripts/release.gradle"
+tasks.getByName("afterReleaseBuild").dependsOn(
+        tasks.getByName("updateMkdocsConfig")
+)

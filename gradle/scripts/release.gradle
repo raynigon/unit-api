@@ -10,6 +10,5 @@ release {
 }
 
 tasks.getByName("afterReleaseBuild").dependsOn(
-        tasks.getByName("publish"),
-        tasks.getByName("updateMkdocsConfig")
+        tasks.getByName("publish")
 )
