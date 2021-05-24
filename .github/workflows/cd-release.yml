@@ -48,7 +48,7 @@ jobs:
         uses: raynigon/release-documentation@main
         with:
           token: "${{ secrets.REPO_READ_TOKEN }}"
-          latest: "${{ step.vars.outputs.tag }}"
+          latest: "${{ steps.vars.outputs.tag }}"
           template: |
             # What's Changed
             {{#pull_requests.features.length}}
@@ -83,7 +83,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.REPO_READ_TOKEN }}
         with:
-          tag_name: "${{ step.vars.outputs.tag }}"
-          name: "${{ step.vars.outputs.tag }}"
+          tag_name: "${{ steps.vars.outputs.tag }}"
+          name: "${{ steps.vars.outputs.tag }}"
           files: build/libs/*.jar
           body: ${{ steps.content.outputs.content }}
