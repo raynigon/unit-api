@@ -1,0 +1,89 @@
+name: CD - Release
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: "Build Release"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: "Setup Java JDK"
+        uses: actions/setup-java@v1.4.3
+        with:
+          java-version: 11
+      - id: vars
+        name: "Determine Tag Name"
+        run: |
+          VERSION_LINE=$(cat gradle.properties | grep "version=")
+          CURRENT_VERSION=${VERSION_LINE//version=/}
+          TAG_VERSION=${CURRENT_VERSION//-SNAPSHOT/}
+          echo ::set-output name=tag::$TAG_VERSION
+      - name: "Publish Artifacts"
+        uses: eskatos/gradle-command-action@90ccf054e6b9905f30f98c938bce4c6acd323b6b #v1.3.3
+        with:
+          arguments: release -Prelease.useAutomaticVersion=true -x test
+          wrapper-cache-enabled: true
+          dependencies-cache-enabled: true
+        env:
+          GITHUB_USERNAME: raynigon
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+          ORG_GRADLE_PROJECT_signingKey: ${{ secrets.SIGNING_PRIVATE_KEY }}
+          ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.SIGNING_KEY_PASSPHRASE }}
+      - name: Copy Assets
+        run: |
+          mkdir -p build/jars/
+          cp jackson-module/build/libs/*.jar build/jars/
+          cp jackson-starter/build/libs/*.jar build/jars/
+          cp jpa-starter/build/libs/*.jar build/jars/
+          cp springdoc-starter/build/libs/*.jar build/jars/
+          cp unit-api-core/build/libs/*.jar build/jars/
+          cp unit-api-kotlin/build/libs/*.jar build/jars/
+      - id: content
+        name: Create Release Content
+        uses: raynigon/release-documentation@main
+        with:
+          token: "${{ secrets.REPO_READ_TOKEN }}"
+          latest: "${{ step.vars.outputs.tag }}"
+          template: |
+            # What's Changed
+            {{#pull_requests.features.length}}
+            ## 🚀 Features & Enhancements
+            {{#pull_requests.features}}
+            * {{ title }} PR: #{{ number }}
+            {{/pull_requests.features}}
+            {{/pull_requests.features.length}}
+            <!----->
+            {{#pull_requests.documentation.length}}
+            ## 📖 Documentation
+            {{#pull_requests.documentation}}
+            * {{ title }} PR: #{{ number }}
+            {{/pull_requests.documentation}}
+            {{/pull_requests.documentation.length}}
+            <!----->
+            {{#pull_requests.housekeeping.length}}
+            ## 🧹 Housekeeping
+            {{#pull_requests.housekeeping}}
+            * {{ title }} PR: #{{ number }}
+            {{/pull_requests.housekeeping}}
+            {{/pull_requests.housekeeping.length}}
+            <!----->
+            {{#pull_requests.dependencies.length}}
+            ## 📦 Dependency updates
+            {{#pull_requests.dependencies}}
+            * {{ title }} PR: #{{ number }}
+            {{/pull_requests.dependencies}}
+            {{/pull_requests.dependencies.length}}
+      - name: "Github Release"
+        uses: softprops/action-gh-release@91409e712cf565ce9eff10c87a8d1b11b81757ae #v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.REPO_READ_TOKEN }}
+        with:
+          tag_name: "${{ step.vars.outputs.tag }}"
+          name: "${{ step.vars.outputs.tag }}"
+          files: build/libs/*.jar
+          body: ${{ steps.content.outputs.content }}

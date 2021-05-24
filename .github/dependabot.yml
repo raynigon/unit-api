@@ -1,0 +1,8 @@
+# Basic set up for gradle package manager
+version: 2
+updates:
+  - package-ecosystem: "gradle"
+    directory: "/"
+    schedule:
+      interval: "daily"
+
