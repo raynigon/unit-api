@@ -1,7 +1,5 @@
 release {
 
-    failOnCommitNeeded = false
-
     preTagCommitMessage = "[Release] Version:"
     tagCommitMessage = "[Release] Version:"
     newVersionCommitMessage = "[Release] Update Version:"
