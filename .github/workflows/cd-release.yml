@@ -19,7 +19,7 @@ jobs:
         run: |
           VERSION_LINE=$(cat gradle.properties | grep "version=")
           CURRENT_VERSION=${VERSION_LINE//version=/}
-          TAG_VERSION=${CURRENT_VERSION//-SNAPSHOT/}
+          TAG_VERSION=v${CURRENT_VERSION//-SNAPSHOT/}
           echo ::set-output name=tag::$TAG_VERSION
       - name: "Prepare Git"
         run: |
@@ -52,7 +52,7 @@ jobs:
         name: Create Release Content
         uses: raynigon/release-documentation@main
         with:
-          token: "${{ secrets.REPO_READ_TOKEN }}"
+          token: "${{ secrets.GITHUB_TOKEN }}"
           latest: "${{ steps.vars.outputs.tag }}"
           template: |
             # What's Changed
