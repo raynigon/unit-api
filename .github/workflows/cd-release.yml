@@ -56,27 +56,28 @@ jobs:
           latest: "${{ steps.vars.outputs.tag }}"
           template: |
             # What's Changed
-            {{#pull_requests.features.length}}
+            <!-- Features & Enhancements -->
+            {{#pull_requests.feature.length}}
             ## 🚀 Features & Enhancements
-            {{#pull_requests.features}}
+            {{#pull_requests.feature}}
             * {{ title }} PR: #{{ number }}
-            {{/pull_requests.features}}
-            {{/pull_requests.features.length}}
-            <!----->
+            {{/pull_requests.feature}}
+            {{/pull_requests.feature.length}}
+            <!-- Documentation -->
             {{#pull_requests.documentation.length}}
             ## 📖 Documentation
             {{#pull_requests.documentation}}
             * {{ title }} PR: #{{ number }}
             {{/pull_requests.documentation}}
             {{/pull_requests.documentation.length}}
-            <!----->
+            <!-- Housekeeping -->
             {{#pull_requests.housekeeping.length}}
             ## 🧹 Housekeeping
             {{#pull_requests.housekeeping}}
             * {{ title }} PR: #{{ number }}
             {{/pull_requests.housekeeping}}
             {{/pull_requests.housekeeping.length}}
-            <!----->
+            <!-- Dependency updates -->
             {{#pull_requests.dependencies.length}}
             ## 📦 Dependency updates
             {{#pull_requests.dependencies}}
@@ -86,7 +87,7 @@ jobs:
       - name: "Github Release"
         uses: softprops/action-gh-release@91409e712cf565ce9eff10c87a8d1b11b81757ae #v1
         env:
-          GITHUB_TOKEN: ${{ secrets.REPO_READ_TOKEN }}
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
         with:
           tag_name: "${{ steps.vars.outputs.tag }}"
           name: "${{ steps.vars.outputs.tag }}"
