@@ -29,7 +29,7 @@ jobs:
       - name: "Publish Artifacts"
         uses: eskatos/gradle-command-action@90ccf054e6b9905f30f98c938bce4c6acd323b6b #v1.3.3
         with:
-          arguments: release -Prelease.useAutomaticVersion=true -x test
+          arguments: ":release -Prelease.useAutomaticVersion=true -x test"
           wrapper-cache-enabled: true
           dependencies-cache-enabled: true
         env:

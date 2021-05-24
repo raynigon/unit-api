@@ -4,12 +4,14 @@ release {
     tagCommitMessage = "[Release] Version:"
     newVersionCommitMessage = "[Release] Update Version:"
 
+    buildTasks = ['publish']
+
     git {
         requireBranch = "release"
     }
 }
 
 tasks.getByName("afterReleaseBuild").dependsOn(
-        subprojects.collect { it.tasks.getByName("publish") },
+        subprojects.collect {it.tasks.getByName("publish")},
         tasks.getByName("updateMkdocsConfig")
 )

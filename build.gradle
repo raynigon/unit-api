@@ -83,4 +83,3 @@ bootJar {
 
 apply from: "$rootDir/gradle/scripts/updateMkdocsConfig.gradle"
 apply from: "$rootDir/gradle/scripts/release.gradle"
-
