@@ -67,8 +67,9 @@ subprojects {
         implementation 'javax.measure:unit-api:2.1.2'
         implementation 'org.apache.commons:commons-lang3:3.11'
 
-        testImplementation 'org.codehaus.groovy:groovy-all:3.0.8'
-        testImplementation 'org.spockframework:spock-core:2.0-groovy-3.0'
+        testImplementation 'org.codehaus.groovy:groovy:3.0.8'
+        testImplementation platform("org.spockframework:spock-bom:2.0-groovy-3.0")
+        testImplementation 'org.spockframework:spock-core'
         testRuntime "net.bytebuddy:byte-buddy:1.10.21"
     }
 }

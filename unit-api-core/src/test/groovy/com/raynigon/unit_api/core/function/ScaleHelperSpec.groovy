@@ -80,7 +80,7 @@ class ScaleHelperSpec extends Specification {
 
     def "ScalarMultiplication"() {
         given:
-        def operator = { a -> a * scalar }
+        def operator = { double a -> a * (scalar as double) }
 
         when:
         def result = ScaleHelper.scalarMultiplication(quantity, operator)
