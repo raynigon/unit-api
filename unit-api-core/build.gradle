@@ -1,4 +1,4 @@
 dependencies {
     implementation("org.reflections:reflections:0.9.12")
-    implementation("si.uom:si-quantity:2.0.1")
+    implementation("si.uom:si-quantity:2.1")
 }
