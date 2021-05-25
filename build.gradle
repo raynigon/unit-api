@@ -13,7 +13,7 @@ plugins {
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 
     // Auto Update Versions
-    id 'se.patrikerdes.use-latest-versions' version '0.2.15'
+    id 'se.patrikerdes.use-latest-versions' version '0.2.16'
     id 'com.github.ben-manes.versions' version '0.38.0'
 
     // Auto Release
