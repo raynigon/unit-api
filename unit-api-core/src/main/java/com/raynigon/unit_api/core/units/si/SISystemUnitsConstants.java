@@ -3,6 +3,7 @@ package com.raynigon.unit_api.core.units.si;
 import static com.raynigon.unit_api.core.service.UnitsApiService.quantity;
 
 import com.raynigon.unit_api.core.units.si.acceleration.MetrePerSquaredSecond;
+import com.raynigon.unit_api.core.units.si.area.SquareMetre;
 import com.raynigon.unit_api.core.units.si.dimensionless.One;
 import com.raynigon.unit_api.core.units.si.dimensionless.Percent;
 import com.raynigon.unit_api.core.units.si.electrical.charge.AmpereHour;
@@ -33,9 +34,12 @@ import com.raynigon.unit_api.core.units.si.time.MicroSecond;
 import com.raynigon.unit_api.core.units.si.time.MilliSecond;
 import com.raynigon.unit_api.core.units.si.time.Minute;
 import com.raynigon.unit_api.core.units.si.time.Second;
+import com.raynigon.unit_api.core.units.si.volume.CubicMetre;
+import com.raynigon.unit_api.core.units.si.volume.Litre;
 
 import javax.measure.Quantity;
 import javax.measure.quantity.Acceleration;
+import javax.measure.quantity.Area;
 import javax.measure.quantity.Dimensionless;
 import javax.measure.quantity.ElectricCharge;
 import javax.measure.quantity.ElectricCurrent;
@@ -49,70 +53,44 @@ import javax.measure.quantity.Power;
 import javax.measure.quantity.Speed;
 import javax.measure.quantity.Temperature;
 import javax.measure.quantity.Time;
+import javax.measure.quantity.Volume;
 
 public class SISystemUnitsConstants {
 
-    public static final MetrePerSquaredSecond MetrePerSquaredSecond = new MetrePerSquaredSecond();
-
-    public static final One One = new One();
-
-    public static final Percent Percent = new Percent();
-
-    public static final MilliAmpere MilliAmpere = new MilliAmpere();
-
     public static final Ampere Ampere = new Ampere();
-
-    public static final MilliVolt MilliVolt = new MilliVolt();
-
-    public static final Volt Volt = new Volt();
-
     public static final AmpereHour AmpereHour = new AmpereHour();
-
-    public static final Coulomb Coulomb = new Coulomb();
-
-    public static final Joule Joule = new Joule();
-
-    public static final KiloWattHour KiloWattHour = new KiloWattHour();
-
-    public static final WattHour WattHour = new WattHour();
-
-    public static final MilliWattHour MilliWattHour = new MilliWattHour();
-
-    public static final Newton Newton = new Newton();
-
-    public static final Hertz Hertz = new Hertz();
-
-    public static final Millimetre Millimetre = new Millimetre();
-
-    public static final Centimetre Centimetre = new Centimetre();
-
-    public static final Metre Metre = new Metre();
-
-    public static final Kilometre Kilometre = new Kilometre();
-
-    public static final Kilogram Kilogram = new Kilogram();
-
-    public static final MilliWatt MilliWatt = new MilliWatt();
-
-    public static final Watt Watt = new Watt();
-
-    public static final KilometrePerHour KilometrePerHour = new KilometrePerHour();
-
-    public static final MetrePerSecond MetrePerSecond = new MetrePerSecond();
-
     public static final Celsius Celsius = new Celsius();
-
-    public static final Kelvin Kelvin = new Kelvin();
-
+    public static final Centimetre Centimetre = new Centimetre();
+    public static final Coulomb Coulomb = new Coulomb();
+    public static final CubicMetre CubicMetre = new CubicMetre();
+    public static final Hertz Hertz = new Hertz();
     public static final Hour Hour = new Hour();
-
-    public static final Minute Minute = new Minute();
-
-    public static final Second Second = new Second();
-
-    public static final MilliSecond MilliSecond = new MilliSecond();
-
+    public static final Joule Joule = new Joule();
+    public static final Kelvin Kelvin = new Kelvin();
+    public static final KiloWattHour KiloWattHour = new KiloWattHour();
+    public static final Kilogram Kilogram = new Kilogram();
+    public static final Kilometre Kilometre = new Kilometre();
+    public static final KilometrePerHour KilometrePerHour = new KilometrePerHour();
+    public static final Litre Litre = new Litre();
+    public static final Metre Metre = new Metre();
+    public static final MetrePerSecond MetrePerSecond = new MetrePerSecond();
+    public static final MetrePerSquaredSecond MetrePerSquaredSecond = new MetrePerSquaredSecond();
     public static final MicroSecond MicroSecond = new MicroSecond();
+    public static final MilliAmpere MilliAmpere = new MilliAmpere();
+    public static final MilliSecond MilliSecond = new MilliSecond();
+    public static final MilliVolt MilliVolt = new MilliVolt();
+    public static final MilliWatt MilliWatt = new MilliWatt();
+    public static final MilliWattHour MilliWattHour = new MilliWattHour();
+    public static final Millimetre Millimetre = new Millimetre();
+    public static final Minute Minute = new Minute();
+    public static final Newton Newton = new Newton();
+    public static final One One = new One();
+    public static final Percent Percent = new Percent();
+    public static final Second Second = new Second();
+    public static final SquareMetre SquareMetre = new SquareMetre();
+    public static final Volt Volt = new Volt();
+    public static final Watt Watt = new Watt();
+    public static final WattHour WattHour = new WattHour();
 
     /*
      * Quantity Factory Methods
@@ -241,4 +219,17 @@ public class SISystemUnitsConstants {
     public static Quantity<Time> MicroSecond(Number value) {
         return quantity(value, MicroSecond);
     }
+
+    public static Quantity<Area> SquareMetre(Number value) {
+        return quantity(value, SquareMetre);
+    }
+
+    public static Quantity<Volume> CubicMetre(Number value) {
+        return quantity(value, CubicMetre);
+    }
+
+    public static Quantity<Volume> Litre(Number value) {
+        return quantity(value, Litre);
+    }
+
 }
