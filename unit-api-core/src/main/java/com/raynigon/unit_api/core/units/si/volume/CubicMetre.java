@@ -2,7 +2,6 @@ package com.raynigon.unit_api.core.units.si.volume;
 
 import com.raynigon.unit_api.core.units.general.AlternateUnit;
 import com.raynigon.unit_api.core.units.si.SISystem;
-import com.raynigon.unit_api.core.units.si.area.SquareMetre;
 import com.raynigon.unit_api.core.units.si.length.Metre;
 
 import javax.measure.Unit;
