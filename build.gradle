@@ -9,7 +9,7 @@ plugins {
     id 'java-library'
     id 'signing'
     id 'maven-publish'
-    id 'org.springframework.boot' version '2.4.3'
+    id 'org.springframework.boot' version '2.5.0'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 
     // Auto Update Versions
@@ -73,7 +73,7 @@ subprojects {
         testImplementation 'org.codehaus.groovy:groovy:3.0.8'
         testImplementation platform("org.spockframework:spock-bom:2.0-groovy-3.0")
         testImplementation 'org.spockframework:spock-core'
-        testRuntime "net.bytebuddy:byte-buddy:1.11.0"
+        testRuntimeOnly "net.bytebuddy:byte-buddy:1.11.0"
     }
 }
 
