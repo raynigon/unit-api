@@ -103,7 +103,8 @@ class DefaultNumberSystemSpec extends Specification {
         thrown(IllegalArgumentException)
     }
 
-    def "divide numbers with remainder - result of type #expectedType"() {
+    @Unroll
+    def "divide numbers with remainder - x=#x, y=#y"() {
         given:
         def numberSystem = new DefaultNumberSystem()
 
