@@ -1,25 +1,47 @@
 package com.raynigon.unit_api.springdoc;
 
 import com.fasterxml.jackson.databind.type.SimpleType;
+import com.raynigon.unit_api.core.annotation.QuantityShape;
 import com.raynigon.unit_api.core.service.UnitsApiService;
 import com.raynigon.unit_api.jackson.annotation.JsonUnit;
 import com.raynigon.unit_api.jackson.annotation.JsonUnitHelper;
 import io.swagger.v3.core.converter.AnnotatedType;
+import io.swagger.v3.oas.models.media.NumberSchema;
 import io.swagger.v3.oas.models.media.Schema;
 import java.lang.reflect.Type;
+import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Stream;
 import javax.measure.Quantity;
 import javax.measure.Unit;
+
+import io.swagger.v3.oas.models.media.StringSchema;
 import org.springdoc.core.customizers.PropertyCustomizer;
 
 public class UnitApiPropertyCustomizer implements PropertyCustomizer {
 
   @Override
+  @SuppressWarnings("unchecked")
   public Schema<?> customize(Schema property, AnnotatedType type) {
     if (isApplicable(type.getType())) {
       Unit<?> unit = resolveUnit(type);
-      property.setType("string"); // could be configurable
-      property.setProperties(null);
+      QuantityShape shape = resolveShape(type);
+      switch(shape){
+        case OBJECT:
+          property.setType("quantity");
+          property.setProperties(buildQuantityObjectProperties());
+          break;
+        case NUMBER:
+          property.setType("number");
+          property.setProperties(null);
+          break;
+        case NUMERIC_STRING:
+        case STRING:
+        default:
+          property.setType("string");
+          property.setProperties(null);
+      }
       property.setDescription(
           buildDescription(property.getName(), unit, property.getDescription()));
       property.setExample("1" + (unit.getSymbol() != null ? " " + unit.getSymbol() : ""));
@@ -27,20 +49,32 @@ public class UnitApiPropertyCustomizer implements PropertyCustomizer {
     return property;
   }
 
+  private QuantityShape resolveShape(AnnotatedType type) {
+    JsonUnit jsonUnit = resolveJsonUnit(type);
+    if (jsonUnit == null) return QuantityShape.NUMBER;
+    return JsonUnitHelper.getShape(jsonUnit);
+  }
+
+
   @SuppressWarnings({"rawtypes", "unchecked"})
   private Unit<?> resolveUnit(AnnotatedType type) {
     SimpleType quantityType = (SimpleType) type.getType();
     Class<?> quantityBoundType = (quantityType.getBindings().getBoundType(0).getRawClass());
     Unit<?> unit = UnitsApiService.getInstance().getUnit((Class) quantityBoundType);
-    JsonUnit jsonUnit =
-        Stream.of(type.getCtxAnnotations())
-            .filter((it) -> it instanceof JsonUnit)
-            .map((it) -> (JsonUnit) it)
-            .findFirst()
-            .orElse(null);
+    JsonUnit jsonUnit = resolveJsonUnit(type);
     if (jsonUnit == null) return unit;
     Unit<?> resolvedUnit = JsonUnitHelper.getUnitInstance(jsonUnit);
     return resolvedUnit != null ? resolvedUnit : unit;
+  }
+
+  private JsonUnit resolveJsonUnit(AnnotatedType type) {
+    JsonUnit jsonUnit =
+            Stream.of(type.getCtxAnnotations())
+                    .filter((it) -> it instanceof JsonUnit)
+                    .map((it) -> (JsonUnit) it)
+                    .findFirst()
+                    .orElse(null);
+    return jsonUnit;
   }
 
   private boolean isApplicable(Type type) {
@@ -67,5 +101,16 @@ public class UnitApiPropertyCustomizer implements PropertyCustomizer {
       result += description;
     }
     return result;
+  }
+
+  private Map<String, Schema<?>> buildQuantityObjectProperties(){
+    Map<String, Schema<?>> properties = new HashMap<>();
+    NumberSchema value = new NumberSchema();
+    properties.put("value", value);
+
+    StringSchema unit = new StringSchema();
+    properties.put("unit", unit);
+
+    return properties;
   }
 }
