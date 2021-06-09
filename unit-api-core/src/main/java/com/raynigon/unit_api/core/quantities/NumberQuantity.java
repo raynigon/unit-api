@@ -124,6 +124,12 @@ public class NumberQuantity<Q extends Quantity<Q>> extends AbstractQuantity<Q> {
   }
 
   @Override
+  public ComparableQuantity<Q> abs() {
+    final Number resultValueInThisUnit = Calculator.of(getValue()).abs().peek();
+    return new NumberQuantity<>(resultValueInThisUnit, getUnit(), getScale());
+  }
+
+  @Override
   public Number getValue() {
     return value;
   }

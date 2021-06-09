@@ -1,28 +1,21 @@
 package com.raynigon.unit_api.kotlin
 
+import com.raynigon.unit_api.core.quantities.ComparableQuantity
 import org.jetbrains.annotations.Contract
 import javax.measure.Quantity
 
 /**
- * Compares this quantity with the specified quantity for order.  Returns a
- * negative integer, zero, or a positive integer as this quantity is less
- * than, equal to, or greater than the specified quantity.
+ * Compares two instances of {@link Quantity}, doing the conversion of unit if necessary.
+ * Returns zero if this value is equal to the specified other value, a negative number if it's less than other,
+ * or a positive number if it's greater than other.
  *
- * @param value   the quantity to be compared.
- * @return a negative integer, zero, or a positive integer as this quantity
- *          is less than, equal to, or greater than the specified quantity.
- *
- * @throws ClassCastException  the unit of this quantity cannot be compared
- * with the unit of the specified quantity
+ * @param that the {@code quantity<Q>} to be compared with this instance.
+ * @return {@code < 0} if {@code that < this}, {@code 0} if {@code that == this}, {@code > 0} if {@code that > this}.
+ * @throws NullPointerException if the quantity is null
  */
 @Contract(pure = true)
-operator fun <T : Quantity<T>> Quantity<T>.compareTo(value: Quantity<T>): Int {
-    val systemUnitSelf = this.toSystemUnit()
-    val systemUnitOther = value.toSystemUnit()
-    if (systemUnitSelf.unit != systemUnitOther.unit) {
-        throw ClassCastException("Cannot cast from ${systemUnitSelf.unit} to ${systemUnitOther.unit}")
-    }
-    return systemUnitSelf.value.toDouble().compareTo(systemUnitOther.value.toDouble())
+operator fun <T : Quantity<T>> Quantity<T>.compareTo(that: Quantity<T>): Int {
+    return (this as ComparableQuantity<T>).compareTo(that)
 }
 
 /**
@@ -65,7 +58,8 @@ operator fun <T : Quantity<T>> Quantity<T>.minus(value: Quantity<T>): Quantity<T
  * @return <code>this * value</code>.
  */
 @Contract(pure = true)
-operator fun <T : Quantity<T>, U : Quantity<U>> Quantity<T>.times(value: Quantity<U>): Quantity<*> = this.multiply(value)
+operator fun <T : Quantity<T>, U : Quantity<U>> Quantity<T>.times(value: Quantity<U>): Quantity<*> =
+    this.multiply(value)
 
 /**
  * Returns the quotient of this {@code Quantity} divided by the {@code Quantity}
