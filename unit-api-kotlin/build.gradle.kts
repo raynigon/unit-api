@@ -2,8 +2,8 @@ import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.4.30"
-    id("org.jlleitschuh.gradle.ktlint") version "10.0.0"
+    kotlin("jvm") version "1.5.10"
+    id("org.jlleitschuh.gradle.ktlint") version "10.1.0"
 
     // Auto Update Versions
     id("se.patrikerdes.use-latest-versions")
@@ -13,7 +13,7 @@ plugins {
 dependencies {
     implementation(project(":unit-api-core"))
     implementation(kotlin("stdlib-jdk8"))
-    testImplementation("org.junit.jupiter:junit-jupiter:5.7.1")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.7.2")
 }
 
 tasks.test {
