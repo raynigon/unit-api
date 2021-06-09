@@ -1,7 +1,7 @@
-name: CI - Master
+name: CI - Main
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
 
 jobs:
   build:
@@ -26,7 +26,7 @@ jobs:
 
   javadoc:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/master' || contains(github.ref, 'refs/tags/')
+    if: github.ref == 'refs/heads/main' || contains(github.ref, 'refs/tags/')
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-java@v1
@@ -46,7 +46,7 @@ jobs:
           remoteDir: "javadoc/"
   documentation:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/master' || contains(github.ref, 'refs/tags/')
+    if: github.ref == 'refs/heads/main' || contains(github.ref, 'refs/tags/')
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
