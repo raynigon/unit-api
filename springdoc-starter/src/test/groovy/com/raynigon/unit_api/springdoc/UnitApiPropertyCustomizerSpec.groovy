@@ -4,10 +4,13 @@ import com.fasterxml.jackson.databind.JavaType
 import com.fasterxml.jackson.databind.type.SimpleType
 import com.fasterxml.jackson.databind.type.TypeBindings
 import com.fasterxml.jackson.databind.type.TypeFactory
+import com.raynigon.unit_api.core.annotation.QuantityShape
 import com.raynigon.unit_api.core.units.si.speed.KilometrePerHour
 import com.raynigon.unit_api.jackson.annotation.JsonUnit
 import io.swagger.v3.core.converter.AnnotatedType
+import io.swagger.v3.oas.models.media.NumberSchema
 import io.swagger.v3.oas.models.media.Schema
+import io.swagger.v3.oas.models.media.StringSchema
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -39,7 +42,7 @@ class UnitApiPropertyCustomizerSpec extends Specification {
         def result = customizer.customize(property, annotatedType)
 
         then:
-        result.type == "string"
+        result.type == "number"
         result.description == "speed is given in Metre per Second (m/s)"
     }
 
@@ -64,6 +67,7 @@ class UnitApiPropertyCustomizerSpec extends Specification {
                 jsonUnit
         ] as Annotation[])
         jsonUnit.value() >> JsonUnit.NoneUnit.class
+        jsonUnit.shape() >> QuantityShape.STRING
 
         when:
         def result = customizer.customize(property, annotatedType)
@@ -73,6 +77,41 @@ class UnitApiPropertyCustomizerSpec extends Specification {
 
         and:
         result.type == "string"
+        result.description == "speed is given in Kilometre per Hour (km/h)"
+    }
+
+    def 'convert quantity with annotation as object'() {
+
+        given:
+        def customizer = new UnitApiPropertyCustomizer()
+        def property = new Schema()
+        property.name = "speed"
+        def annotatedType = new AnnotatedType()
+        annotatedType.type = new SimpleType(
+                Quantity.class,
+                TypeBindings.create(
+                        Quantity.class,
+                        [new SimpleType(Speed.class)] as JavaType[],
+                ),
+                null,
+                null
+        )
+        JsonUnit jsonUnit = Mock(JsonUnit)
+        annotatedType.ctxAnnotations([
+                jsonUnit
+        ] as Annotation[])
+        jsonUnit.value() >> JsonUnit.NoneUnit.class
+        jsonUnit.shape() >> QuantityShape.OBJECT
+
+        when:
+        def result = customizer.customize(property, annotatedType)
+
+        then:
+        2 * jsonUnit.unit() >> KilometrePerHour.class
+
+        and:
+        result.type == "quantity"
+        result.properties == ["value": new NumberSchema(), "unit": new StringSchema()]
         result.description == "speed is given in Kilometre per Hour (km/h)"
     }
 
@@ -99,6 +138,7 @@ class UnitApiPropertyCustomizerSpec extends Specification {
                 jsonUnit
         ] as Annotation[])
         jsonUnit.value() >> JsonUnit.NoneUnit.class
+        jsonUnit.shape() >> QuantityShape.STRING
 
         when:
         def result = customizer.customize(property, annotatedType)
