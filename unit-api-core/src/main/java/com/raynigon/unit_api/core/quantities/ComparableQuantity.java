@@ -30,6 +30,7 @@
 package com.raynigon.unit_api.core.quantities;
 
 import com.raynigon.unit_api.core.function.QuantityConverter;
+
 import java.io.Serializable;
 import javax.measure.Quantity;
 import javax.measure.Unit;
@@ -44,115 +45,154 @@ import javax.measure.Unit;
  * @since 1.0
  */
 public interface ComparableQuantity<Q extends Quantity<Q>>
-    extends Quantity<Q>, Comparable<Quantity<Q>>, QuantityConverter<Q>, Serializable {
+        extends Quantity<Q>, Comparable<Quantity<Q>>, QuantityConverter<Q>, Serializable {
 
-  /** @see Quantity#add(Quantity) */
-  ComparableQuantity<Q> add(Quantity<Q> that);
+    /**
+     * @see Quantity#add(Quantity)
+     */
+    ComparableQuantity<Q> add(Quantity<Q> that);
 
-  /** @see Quantity#subtract(Quantity) */
-  ComparableQuantity<Q> subtract(Quantity<Q> that);
+    /**
+     * @see Quantity#subtract(Quantity)
+     */
+    ComparableQuantity<Q> subtract(Quantity<Q> that);
 
-  /** @see Quantity#divide(Quantity) */
-  ComparableQuantity<?> divide(Quantity<?> that);
+    /**
+     * @see Quantity#divide(Quantity)
+     */
+    ComparableQuantity<?> divide(Quantity<?> that);
 
-  /** @see Quantity#divide(Number) */
-  ComparableQuantity<Q> divide(Number that);
+    /**
+     * @see Quantity#divide(Number)
+     */
+    ComparableQuantity<Q> divide(Number that);
 
-  /** @see Quantity#multiply(Quantity) */
-  ComparableQuantity<?> multiply(Quantity<?> multiplier);
+    /**
+     * @see Quantity#multiply(Quantity)
+     */
+    ComparableQuantity<?> multiply(Quantity<?> multiplier);
 
-  /** @see Quantity#multiply(Number) */
-  ComparableQuantity<Q> multiply(Number multiplier);
+    /**
+     * @see Quantity#multiply(Number)
+     */
+    ComparableQuantity<Q> multiply(Number multiplier);
 
-  /** @see Quantity#inverse() */
-  ComparableQuantity<?> inverse();
+    /**
+     * @see Quantity#inverse()
+     */
+    ComparableQuantity<?> inverse();
 
-  /**
-   * invert and already cast to defined quantityClass
-   *
-   * @param quantityClass Quantity to be converted
-   * @see Quantity#inverse()
-   * @see Quantity#asType(Class)
-   */
-  <T extends Quantity<T>> ComparableQuantity<T> inverse(Class<T> quantityClass);
+    /**
+     * invert and already cast to defined quantityClass
+     *
+     * @param quantityClass Quantity to be converted
+     * @see Quantity#inverse()
+     * @see Quantity#asType(Class)
+     */
+    <T extends Quantity<T>> ComparableQuantity<T> inverse(Class<T> quantityClass);
 
-  /** @see Quantity#to(Unit) */
-  ComparableQuantity<Q> to(Unit<Q> unit);
+    /**
+     * @see Quantity#to(Unit)
+     */
+    ComparableQuantity<Q> to(Unit<Q> unit);
 
-  /** @see Quantity#asType(Class) */
-  <T extends Quantity<T>> ComparableQuantity<T> asType(Class<T> type) throws ClassCastException;
+    /**
+     * @see Quantity#asType(Class)
+     */
+    <T extends Quantity<T>> ComparableQuantity<T> asType(Class<T> type) throws ClassCastException;
 
-  /**
-   * Compares two instances of {@link Quantity}. Conversion of unit can happen if necessary
-   *
-   * @param that the {@code quantity<Q>} to be compared with this instance.
-   * @return {@code true} if {@code that > this}.
-   * @throws NullPointerException if the that is null
-   */
-  boolean isGreaterThan(Quantity<Q> that);
+    /**
+     * Compares two instances of {@link Quantity}. Conversion of unit can happen if necessary
+     *
+     * @param that the {@code quantity<Q>} to be compared with this instance.
+     * @return {@code true} if {@code that > this}.
+     * @throws NullPointerException if the that is null
+     */
+    boolean isGreaterThan(Quantity<Q> that);
 
-  /**
-   * Compares two instances of {@link Quantity}, doing the conversion of unit if necessary.
-   *
-   * @param that the {@code quantity<Q>} to be compared with this instance.
-   * @return {@code true} if {@code that >= this}.
-   * @throws NullPointerException if the that is null
-   */
-  boolean isGreaterThanOrEqualTo(Quantity<Q> that);
+    /**
+     * Compares two instances of {@link Quantity}, doing the conversion of unit if necessary.
+     *
+     * @param that the {@code quantity<Q>} to be compared with this instance.
+     * @return {@code true} if {@code that >= this}.
+     * @throws NullPointerException if the that is null
+     */
+    boolean isGreaterThanOrEqualTo(Quantity<Q> that);
 
-  /**
-   * Compares two instances of {@link Quantity}, doing the conversion of unit if necessary.
-   *
-   * @param that the {@code quantity<Q>} to be compared with this instance.
-   * @return {@code true} if {@code that < this}.
-   * @throws NullPointerException if the quantity is null
-   */
-  boolean isLessThan(Quantity<Q> that);
+    /**
+     * Compares two instances of {@link Quantity}, doing the conversion of unit if necessary.
+     *
+     * @param that the {@code quantity<Q>} to be compared with this instance.
+     * @return {@code true} if {@code that < this}.
+     * @throws NullPointerException if the quantity is null
+     */
+    boolean isLessThan(Quantity<Q> that);
 
-  /**
-   * Compares two instances of {@link Quantity}, doing the conversion of unit if necessary.
-   *
-   * @param that the {@code quantity<Q>} to be compared with this instance.
-   * @return {@code true} if {@code that < this}.
-   * @throws NullPointerException if the quantity is null
-   */
-  boolean isLessThanOrEqualTo(Quantity<Q> that);
+    /**
+     * Compares two instances of {@link Quantity}, doing the conversion of unit if necessary.
+     *
+     * @param that the {@code quantity<Q>} to be compared with this instance.
+     * @return {@code true} if {@code that < this}.
+     * @throws NullPointerException if the quantity is null
+     */
+    boolean isLessThanOrEqualTo(Quantity<Q> that);
 
-  /**
-   * Compares two instances of {@code Quantity}, doing the conversion of unit if necessary.
-   *
-   * @param that the {@code quantity<Q>} to be compared with this instance.
-   * @return {@code true} if {@code that < this}.
-   * @throws NullPointerException if the quantity is null
-   * @see <a href= "https://dictionary.cambridge.org/dictionary/english/equivalent">Cambridge
-   *     Dictionary: equivalent</a>
-   * @see <a href= "https://www.lexico.com/en/definition/equivalent">LEXICO: equivalent</a>
-   */
-  boolean isEquivalentTo(Quantity<Q> that);
+    /**
+     * Compares two instances of {@code Quantity}, doing the conversion of unit if necessary.
+     *
+     * @param that the {@code quantity<Q>} to be compared with this instance.
+     * @return {@code true} if {@code that < this}.
+     * @throws NullPointerException if the quantity is null
+     * @see <a href= "https://dictionary.cambridge.org/dictionary/english/equivalent">Cambridge
+     * Dictionary: equivalent</a>
+     * @see <a href= "https://www.lexico.com/en/definition/equivalent">LEXICO: equivalent</a>
+     */
+    boolean isEquivalentTo(Quantity<Q> that);
 
-  /**
-   * Multiply and cast the {@link ComparableQuantity}
-   *
-   * @param that quantity to be multiplied
-   * @param asTypeQuantity quantity to be converted
-   * @return the QuantityOperations multiplied and converted
-   * @see Quantity#divide(Quantity)
-   * @see Quantity#asType(Class)
-   * @exception NullPointerException
-   */
-  <T extends Quantity<T>, E extends Quantity<E>> ComparableQuantity<E> divide(
-      Quantity<T> that, Class<E> asTypeQuantity);
+    /**
+     * Multiply and cast the {@link ComparableQuantity}
+     *
+     * @param that           quantity to be multiplied
+     * @param asTypeQuantity quantity to be converted
+     * @return the QuantityOperations multiplied and converted
+     * @throws NullPointerException if the quantity is null
+     * @see Quantity#divide(Quantity)
+     * @see Quantity#asType(Class)
+     */
+    <T extends Quantity<T>, E extends Quantity<E>> ComparableQuantity<E> divide(
+            Quantity<T> that, Class<E> asTypeQuantity);
 
-  /**
-   * Divide and cast the {@link ComparableQuantity}
-   *
-   * @param that quantity to be divided
-   * @param asTypeQuantity quantity to be converted
-   * @return the QuantityOperations multiplied and converted
-   * @see Quantity#asType(Class)
-   * @see Quantity#multiply(Quantity)
-   * @exception NullPointerException
-   */
-  <T extends Quantity<T>, E extends Quantity<E>> ComparableQuantity<E> multiply(
-      Quantity<T> that, Class<E> asTypeQuantity);
+    /**
+     * Divide and cast the {@link ComparableQuantity}
+     *
+     * @param that           quantity to be divided
+     * @param asTypeQuantity quantity to be converted
+     * @return the QuantityOperations multiplied and converted
+     * @throws NullPointerException if the quantity is null
+     * @see Quantity#asType(Class)
+     * @see Quantity#multiply(Quantity)
+     */
+    <T extends Quantity<T>, E extends Quantity<E>> ComparableQuantity<E> multiply(
+            Quantity<T> that, Class<E> asTypeQuantity);
+
+
+    /**
+     * Uses the absolute value of the Quantity in the current Unit
+     *
+     * @return if {@code this.value < 0} return {@code this * -1} else {@code this}.
+     * @throws NullPointerException if the quantity is null
+     */
+    ComparableQuantity<Q> abs();
+
+    /**
+     * Compares two instances of {@link Quantity}, doing the conversion of unit if necessary.
+     * Returns zero if this value is equal to the specified other value, a negative number if it's less than other,
+     * or a positive number if it's greater than other.
+     *
+     * @param that the {@code quantity<Q>} to be compared with this instance.
+     * @return {@code < 0} if {@code that < this}, {@code 0} if {@code that == this}, {@code > 0} if {@code that > this}.
+     * @throws NullPointerException if the quantity is null
+     */
+    @Override
+    int compareTo(Quantity<Q> that);
 }
