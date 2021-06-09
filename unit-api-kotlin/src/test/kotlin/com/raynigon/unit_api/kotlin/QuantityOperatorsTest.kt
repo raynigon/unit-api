@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import javax.measure.Quantity
+import javax.measure.UnconvertibleException
 import javax.measure.quantity.Speed
 import kotlin.math.sign
 import com.raynigon.unit_api.core.units.si.length.Metre as MetreUnit
@@ -60,7 +61,7 @@ internal class QuantityOperatorsTest {
         val c = a as Quantity<Speed>
         val d = b as Quantity<Speed>
 
-        assertThrows(ClassCastException::class.java) { c < d }
+        assertThrows(UnconvertibleException::class.java) { c < d }
     }
 
     @Test
