@@ -10,8 +10,6 @@ on Github.
 ## System of Units
 If you want full support for your Units, you have to create a new `SystemOfUnits`.
 
-=== "Java"
-    `Only a Kotlin example is available right now`
 === "Kotlin"
     ```kotlin
 
@@ -47,6 +45,8 @@ If you want full support for your Units, you have to create a new `SystemOfUnits
         }
     }
     ```
+=== "Java"
+    `Only a Kotlin example is available right now`
 
 As you might have already noticed this SystemOfUnits provides 
 a Unit called `KilometrePer100Hour`.
@@ -62,8 +62,6 @@ com.company.product.units.CustomSystemOfUnits
 
 Since we have the System of units already registered, we can start developing our custom Unit:
 
-=== "Java"
-    `Only a Kotlin example is available right now`
 === "Kotlin"
     ```kotlin
     
@@ -93,6 +91,8 @@ Since we have the System of units already registered, we can start developing ou
     @Suppress("FunctionName")
     fun KilometrePer100Hour(value: Number): Quantity<Speed> = quantity(value, KilometrePer100Hour())
     ```
+=== "Java"
+    `Only a Kotlin example is available right now`
 
 As you can see, this Unit is an expansion of the KilometrePerHour Unit, which is divided by 100.
 

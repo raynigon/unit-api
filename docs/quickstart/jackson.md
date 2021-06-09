@@ -47,6 +47,16 @@ The following examples will be accepted by Jackson:
       "speed": "80"
     }
     ```
+=== "Object"
+    ```json
+    {
+      "id": "65bf1872-d197-4d72-9950-2b7b4d74a674",
+      "speed": {
+        "value:" 80,
+        "unit": "km/h"
+      }
+    }
+    ```
 === "String in km/h"
     ```json
     {

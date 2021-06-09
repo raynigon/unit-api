@@ -70,33 +70,43 @@ Jackson will now accept any quantity and convert it to the given unit.
 The following examples will be accepted by Jackson:
 
 === "Number"
-```json
-{
-"id": "65bf1872-d197-4d72-9950-2b7b4d74a674",
-"speed": 80
-}
-```
+    ```json
+    {
+        "id": "65bf1872-d197-4d72-9950-2b7b4d74a674",
+        "speed": 80
+    }
+    ```
 === "String"
-```json
-{
-"id": "65bf1872-d197-4d72-9950-2b7b4d74a674",
-"speed": "80"
-}
-```
+    ```json
+    {
+        "id": "65bf1872-d197-4d72-9950-2b7b4d74a674",
+        "speed": "80"
+    }
+    ```
+=== "Object"
+    ```json
+    {
+        "id": "65bf1872-d197-4d72-9950-2b7b4d74a674",
+        "speed": {
+            "value:" 80,
+            "unit": "km/h"
+        }
+    }
+    ```
 === "String in km/h"
-```json
-{
-"id": "65bf1872-d197-4d72-9950-2b7b4d74a674",
-"speed": "80 km/h"
-}
-```
+    ```json
+    {
+        "id": "65bf1872-d197-4d72-9950-2b7b4d74a674",
+        "speed": "80 km/h"
+    }
+    ```
 === "String in m/s"
-```json
-{
-"id": "65bf1872-d197-4d72-9950-2b7b4d74a674",
-"speed": "22.2222 m/s"
-}
-```
+    ```json
+    {
+        "id": "65bf1872-d197-4d72-9950-2b7b4d74a674",
+        "speed": "22.2222 m/s"
+    }
+    ```
 Every example will result in having the speed property with a value of 80 and the unit "km/h".
 
 If you don't want to annotate the Attributes in your class, you can enable the `SYSTEM_UNIT_ON_MISSING_ANNOTATION` Feature.
