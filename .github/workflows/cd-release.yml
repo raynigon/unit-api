@@ -63,6 +63,13 @@ jobs:
             * {{ title }} PR: #{{ number }}
             {{/pull_requests.feature}}
             {{/pull_requests.feature.length}}
+            <!-- Bug Fixes -->
+            {{#pull_requests.bugs.length}}
+            ## 🐛 Bug Fixes
+            {{#pull_requests.bugs}}
+            * {{ title }} PR: #{{ number }}
+            {{/pull_requests.bugs}}
+            {{/pull_requests.bugs.length}}
             <!-- Documentation -->
             {{#pull_requests.documentation.length}}
             ## 📖 Documentation
