@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 
 public class DefaultQuantityReader implements QuantityReader {
 
-    private static final Pattern PATTERN = Pattern.compile("^(-?[.0-9]+\\.?[0-9]*)\\s*([A-z²³\\/\\\\%]+)$");
+    private static final Pattern PATTERN = Pattern.compile("^(-?[.0-9]+\\.?[0-9]*)\\s*(.+)$");
 
     @Override
     public Quantity<?> read(String input) {
