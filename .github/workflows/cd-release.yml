@@ -64,12 +64,12 @@ jobs:
             {{/pull_requests.feature}}
             {{/pull_requests.feature.length}}
             <!-- Bug Fixes -->
-            {{#pull_requests.bugs.length}}
+            {{#pull_requests.bug.length}}
             ## 🐛 Bug Fixes
-            {{#pull_requests.bugs}}
+            {{#pull_requests.bug}}
             * {{ title }} PR: #{{ number }}
-            {{/pull_requests.bugs}}
-            {{/pull_requests.bugs.length}}
+            {{/pull_requests.bug}}
+            {{/pull_requests.bug.length}}
             <!-- Documentation -->
             {{#pull_requests.documentation.length}}
             ## 📖 Documentation
