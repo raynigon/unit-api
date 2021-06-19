@@ -50,11 +50,6 @@ public class QuantitySerializer extends JsonSerializer<Quantity> implements Cont
                 (Class<Quantity>) property.getType().getBindings().getBoundType(0).getRawClass();
         unit = UnitsApiService.getInstance().getUnit(quantityType);
 
-        JsonQuantityWriter writerWrapper = property.getAnnotation(JsonQuantityWriter.class);
-        if (writerWrapper != null) {
-            writer = JsonQuantityHelper.getWriterInstance(writerWrapper);
-        }
-
         JsonUnit unitWrapper = property.getAnnotation(JsonUnit.class);
         if (unitWrapper == null) return new QuantitySerializer(config, unit, shape, writer);
         shape = JsonUnitHelper.getShape(unitWrapper);
@@ -65,6 +60,12 @@ public class QuantitySerializer extends JsonSerializer<Quantity> implements Cont
         }
         if (unit == null) {
             throw new UnknownUnitException(prov.getGenerator(), quantityType);
+        }
+
+        JsonQuantityWriter writerWrapper = property.getAnnotation(JsonQuantityWriter.class);
+        if (writerWrapper != null) {
+            writer = JsonQuantityHelper.getWriterInstance(writerWrapper);
+            shape = QuantityShape.STRING;
         }
 
         return new QuantitySerializer(config, unit, shape, writer);

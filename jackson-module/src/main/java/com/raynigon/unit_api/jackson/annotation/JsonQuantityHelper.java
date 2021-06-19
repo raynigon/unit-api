@@ -15,7 +15,7 @@ public class JsonQuantityHelper {
 
     public static QuantityWriter getWriterInstance(JsonQuantityWriter writerWrapper) {
         if (writerWrapper == null) return null;
-        return createInstace(writerWrapper.value(), "Reader");
+        return createInstace(writerWrapper.value(), "Writer");
     }
 
     private static <T> T createInstace(Class<? extends T> readerType, String type) {
