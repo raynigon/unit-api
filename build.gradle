@@ -72,7 +72,7 @@ subprojects {
         testImplementation 'org.codehaus.groovy:groovy:3.0.8'
         testImplementation platform("org.spockframework:spock-bom:2.0-groovy-3.0")
         testImplementation 'org.spockframework:spock-core'
-        testRuntimeOnly "net.bytebuddy:byte-buddy:1.11.2"
+        testRuntimeOnly "net.bytebuddy:byte-buddy:1.11.3"
     }
 }
 
