@@ -1,8 +1,3 @@
-defaults:
-  actions:
-    merge:
-      bot_account: raynigon-bot
-
 pull_request_rules:
   - name: dependabot
     conditions:
