@@ -1,0 +1,23 @@
+defaults:
+  actions:
+    merge:
+      bot_account: raynigon-bot
+
+pull_request_rules:
+  - name: dependabot
+    conditions:
+      - and:
+        - draft=false
+        - base=main
+        - closed=false
+        - conflict=false
+        - label=dependencies
+        - author=dependabot[bot]
+        - check-success=CI - PR / test
+        - check-success=CI - PR / javadoc
+        - check-success=CI - PR / documentation
+        - check-success=Codacy Static Code Analysis
+    actions:
+      merge:
+        method: merge
+        strict: true
