@@ -73,3 +73,24 @@ You can also multiply and divide with factors:
     val y = 2.0
     val result = x / y // "2m"
     ```
+
+## Geometry
+To calculate the length of a hypothenuse in an right-angled triangle you can use the `pythagoreanTheorem` function.
+```kotlin
+val a: Quantity<Length> = Metre(3)
+val b: Quantity<Length> = Metre(4)
+val c: Quantity<Length> = pythagoreanTheorem(a, b) // = 5m
+```
+
+## Time Quantity
+The Kotlin module allows to convert Time Quantities to Java Durations and the other way around.
+When the Extension methods are imported, a Time Quantity can be converted to a java duration.
+```kotlin
+val quantity: Quantity<Time> = Second(10)
+val duration: Duration = quantity.toDuration()
+```
+Its also possible to create a Time Quantity from a java duration.
+```kotlin
+val duration: Duration = Duration.ofSeconds(10)
+val quantity: Quantity<Time> = duration.toQuantity()
+```
