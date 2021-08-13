@@ -29,11 +29,7 @@ import com.raynigon.unit_api.core.units.si.speed.KilometrePerHour;
 import com.raynigon.unit_api.core.units.si.speed.MetrePerSecond;
 import com.raynigon.unit_api.core.units.si.temperature.Celsius;
 import com.raynigon.unit_api.core.units.si.temperature.Kelvin;
-import com.raynigon.unit_api.core.units.si.time.Hour;
-import com.raynigon.unit_api.core.units.si.time.MicroSecond;
-import com.raynigon.unit_api.core.units.si.time.MilliSecond;
-import com.raynigon.unit_api.core.units.si.time.Minute;
-import com.raynigon.unit_api.core.units.si.time.Second;
+import com.raynigon.unit_api.core.units.si.time.*;
 import com.raynigon.unit_api.core.units.si.volume.CubicMetre;
 import com.raynigon.unit_api.core.units.si.volume.Litre;
 
@@ -83,6 +79,7 @@ public class SISystemUnitsConstants {
     public static final MilliWattHour MilliWattHour = new MilliWattHour();
     public static final Millimetre Millimetre = new Millimetre();
     public static final Minute Minute = new Minute();
+    public static final NanoSecond NanoSecond = new NanoSecond();
     public static final Newton Newton = new Newton();
     public static final One One = new One();
     public static final Percent Percent = new Percent();
@@ -218,6 +215,10 @@ public class SISystemUnitsConstants {
 
     public static Quantity<Time> MicroSecond(Number value) {
         return quantity(value, MicroSecond);
+    }
+
+    public static Quantity<Time> NanoSecond(Number value) {
+        return quantity(value, NanoSecond);
     }
 
     public static Quantity<Area> SquareMetre(Number value) {
