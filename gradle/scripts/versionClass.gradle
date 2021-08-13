@@ -1,4 +1,5 @@
 import java.time.OffsetDateTime
+import java.util.regex.Pattern
 
 task generateVersionClass() {
     mustRunAfter(clean)
@@ -9,6 +10,11 @@ task generateVersionClass() {
         def packageName = project.group.replace("-", "_") + "." + project.name.replace("-", "_")
         targetDirectory = targetDirectory.resolve(packageName.replace(".", "/"))
         targetDirectory.toFile().mkdirs()
+        String version = project.version
+        Pattern versionPattern = Pattern.compile("^[0-9]+\\.[0-9]+\\.[0-9]+(?>-SNAPSHOT)?\$")
+        if (!versionPattern.matcher(version).find()){
+            version = "0.0.1-SNAPSHOT"
+        }
         new File(targetDirectory.toFile(), "BuildVersion.java").text = """package ${packageName};
 import java.time.OffsetDateTime;
 
@@ -17,11 +23,11 @@ public class BuildVersion {
     public static final String GROUP_ID = "${project.group}";
 
 
-    public static final String VERSION = "${project.version}";
-    public static final int MAJOR_VERSION = ${(project.version as String).split("\\.")[0]};
-    public static final int MINOR_VERSION = ${(project.version as String).split("\\.")[1]};
-    public static final int PATCH_VERSION = ${(project.version as String).split("\\.")[2].split('-')[0]};
-    public static final boolean SNAPSHOT = ${(project.version as String).contains("-")};
+    public static final String VERSION = "${version}";
+    public static final int MAJOR_VERSION = ${version.split("\\.")[0]};
+    public static final int MINOR_VERSION = ${version.split("\\.")[1]};
+    public static final int PATCH_VERSION = ${version.split("\\.")[2].split('-')[0]};
+    public static final boolean SNAPSHOT = ${version.contains("-")};
     public static final OffsetDateTime BUILD_DATE = OffsetDateTime.parse("${OffsetDateTime.now().toString()}");
 }"""
     }

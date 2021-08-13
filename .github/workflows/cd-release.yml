@@ -29,7 +29,7 @@ jobs:
       - name: "Publish Artifacts"
         uses: eskatos/gradle-command-action@90ccf054e6b9905f30f98c938bce4c6acd323b6b #v1.3.3
         with:
-          arguments: ":release -Prelease.useAutomaticVersion=true -x test"
+          arguments: ":release -Prelease.useAutomaticVersion=true build -x test"
           wrapper-cache-enabled: true
           dependencies-cache-enabled: true
         env:
@@ -63,6 +63,13 @@ jobs:
             * {{ title }} PR: #{{ number }}
             {{/pull_requests.feature}}
             {{/pull_requests.feature.length}}
+            <!-- Bug Fixes -->
+            {{#pull_requests.bug.length}}
+            ## 🐛 Bug Fixes
+            {{#pull_requests.bug}}
+            * {{ title }} PR: #{{ number }}
+            {{/pull_requests.bug}}
+            {{/pull_requests.bug.length}}
             <!-- Documentation -->
             {{#pull_requests.documentation.length}}
             ## 📖 Documentation
