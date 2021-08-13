@@ -2,12 +2,11 @@ package com.raynigon.unit_api.kotlin
 
 import com.raynigon.unit_api.core.units.si.time.NanoSecond
 import com.raynigon.unit_api.core.units.si.time.Second
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
+import java.time.Duration
 import com.raynigon.unit_api.core.units.si.SISystemUnitsConstants.NanoSecond as cNanoSecond
 import com.raynigon.unit_api.core.units.si.SISystemUnitsConstants.Second as cSecond
-import org.junit.jupiter.api.Test
-
-import org.junit.jupiter.api.Assertions.*
-import java.time.Duration
 
 internal class DurationExtensionTest {
 
