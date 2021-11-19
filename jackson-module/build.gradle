@@ -1,6 +1,6 @@
 dependencies {
-    compileOnly 'com.fasterxml.jackson.core:jackson-databind:2.12.5'
+    compileOnly 'com.fasterxml.jackson.core:jackson-databind:2.13.0'
     implementation project(":unit-api-core")
 
-    testImplementation 'com.fasterxml.jackson.core:jackson-databind:2.12.4'
+    testImplementation 'com.fasterxml.jackson.core:jackson-databind:2.13.0'
 }
