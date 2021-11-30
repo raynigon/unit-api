@@ -1,6 +1,6 @@
 dependencies {
     compileOnly 'org.springframework.boot:spring-boot-starter'
-    compileOnly 'org.springdoc:springdoc-openapi-webmvc-core:1.5.12'
+    compileOnly 'org.springdoc:springdoc-openapi-webmvc-core:1.5.13'
     implementation project(":jackson-module")
     implementation project(":unit-api-core")
 
