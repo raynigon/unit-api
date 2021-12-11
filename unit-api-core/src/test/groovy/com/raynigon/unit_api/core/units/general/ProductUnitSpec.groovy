@@ -7,12 +7,32 @@ import com.raynigon.unit_api.core.units.si.power.Watt
 import com.raynigon.unit_api.core.units.si.time.Hour
 import com.raynigon.unit_api.core.units.si.time.Second
 import spock.lang.Ignore
+import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 
 import static com.raynigon.unit_api.core.units.general.ProductUnit.*
 
 class ProductUnitSpec extends Specification {
+
+    @Shared
+    ProductUnit wattSquared = ofPow(new Watt(), 2)
+
+    def 'default product unit'() {
+        when:
+        new ProductUnit()
+
+        then:
+        noExceptionThrown()
+    }
+
+    def 'simple product unit'() {
+        when:
+        new ProductUnit(ofPow(new Watt(), 2) as ProductUnit<?>)
+
+        then:
+        noExceptionThrown()
+    }
 
     def 'product of simple units'() {
         when:
@@ -90,13 +110,13 @@ class ProductUnitSpec extends Specification {
 
     def 'pow with simple unit'() {
         given:
-        def unit = ofProduct(new Watt(), new One())
+        def unit = ofProduct(new Watt(), new Watt())
 
         when:
         def result = unit.pow(2)
 
         then:
-        result == ofPow(new Watt(), 2)
+        result == ofPow(new Watt(), 4)
     }
 
     @Unroll
@@ -130,14 +150,38 @@ class ProductUnitSpec extends Specification {
 
     @Ignore
     def 'unit root at index #index should be #unit'() {
-        expect:
-        false
+        given:
+        def unit = ofProduct(new Watt(), ofRoot(new Hour(), 2))
+
+        when:
+        def result = (unit as ProductUnit).getUnitRoot(1)
+
+        then:
+        result == 2
     }
 
     @Ignore
     def 'base units should be...'() {
         expect:
         false
+    }
+
+    @Unroll
+    def 'unit #a and unit #b returns #expected for equality check'() {
+        given:
+        false
+
+        when:
+        def result = (a as ProductUnit).equals(b)
+
+        then:
+        result == expected
+
+        where:
+        a                    | b                    | expected
+        wattSquared          | wattSquared          | true
+        ofPow(new Watt(), 2) | ofPow(new Watt(), 2) | true
+        ofPow(new Watt(), 2) | new Watt()           | false
     }
 
     @Ignore
@@ -152,9 +196,19 @@ class ProductUnitSpec extends Specification {
         false
     }
 
-    @Ignore
-    def 'simple unit should have dimension #dimension'() {
+    @Unroll
+    def 'unit #unit should have dimension #dimension'() {
         expect:
-        false
+        unit.getDimension() == dimension
+
+        where:
+        unit                  | dimension
+        ofPow(new Metre(), 2) | UnitDimension.LENGTH.pow(2)
+        wattSquared           | UnitDimension.LENGTH.pow(4) * (UnitDimension.MASS.pow(2) * UnitDimension.TIME.pow(-6))
+    }
+
+    def 'toString returns adapted symbol'() {
+        expect:
+        wattSquared.toString() == "W^2"
     }
 }
