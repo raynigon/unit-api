@@ -30,8 +30,8 @@ tasks.withType<KotlinCompile>().all {
  * A version is stable, if it is semver conform,
  * or contains specific Keywords like 'RELEASE', 'FINAL' or 'GA'
  *
- * @param   version     the version to check for
- * @return  true if the version is stable, false if not
+ * @param version     the version to check for
+ * @return true if the version is stable, false if not
  * */
 fun isNonStable(version: String): Boolean {
     val stableKeyword = listOf("RELEASE", "FINAL", "GA").any { version.toUpperCase().contains(it) }
