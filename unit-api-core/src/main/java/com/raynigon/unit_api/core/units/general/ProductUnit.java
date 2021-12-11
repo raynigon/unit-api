@@ -33,7 +33,7 @@ package com.raynigon.unit_api.core.units.general;
 import com.raynigon.unit_api.core.function.unitconverter.AbstractConverter;
 import com.raynigon.unit_api.core.function.Lazy;
 import com.raynigon.unit_api.core.units.si.dimensionless.One;
-import java.io.Serializable;
+
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -59,476 +59,338 @@ import javax.measure.UnitConverter;
  */
 public class ProductUnit<Q extends Quantity<Q>> extends AbstractUnit<Q> {
 
-  /** */
-  private static final long serialVersionUID = 962983585531030093L;
-
-  /**
-   * Holds the units composing this product unit.
-   *
-   * <p>Note: considered immutable after constructor was called
-   */
-  private final ProductUnit.Element[] elements;
-
-  // thread safe cache for the expensive hashCode calculation
-  private transient Lazy<Integer> hashCode = new Lazy<>(this::calculateHashCode);
-
-  /** DefaultQuantityFactory constructor (used solely to create <code>ONE</code> instance). */
-  public ProductUnit() {
-    super("");
-    elements = new ProductUnit.Element[0];
-  }
-
-  /**
-   * Copy constructor (allows for parameterization of product units).
-   *
-   * @param productUnit the product unit source.
-   * @throws ClassCastException if the specified unit is not a product unit.
-   */
-  public ProductUnit(Unit<?> productUnit) {
-    super(productUnit.getSymbol());
-    this.elements = ((ProductUnit<?>) productUnit).elements;
-  }
-
-  /**
-   * Product unit constructor.
-   *
-   * @param elements the product elements.
-   */
-  private ProductUnit(ProductUnit.Element[] elements) {
-    super(null);
-    this.elements = elements;
-  }
-
-  /**
-   * Returns the product of the specified units.
-   *
-   * @param left the left unit operand.
-   * @param right the right unit operand.
-   * @return <code>left * right</code>
-   */
-  public static Unit<?> ofProduct(Unit<?> left, Unit<?> right) {
-    ProductUnit.Element[] leftElems;
-    if (left instanceof ProductUnit<?>) {
-      leftElems = ((ProductUnit<?>) left).elements;
-    } else {
-      leftElems = new ProductUnit.Element[] {new ProductUnit.Element(left, 1, 1)};
-    }
-    ProductUnit.Element[] rightElems;
-    if (right instanceof ProductUnit<?>) {
-      rightElems = ((ProductUnit<?>) right).elements;
-    } else {
-      rightElems = new ProductUnit.Element[] {new ProductUnit.Element(right, 1, 1)};
-    }
-    return getInstance(leftElems, rightElems);
-  }
-
-  /**
-   * Returns the quotient of the specified units.
-   *
-   * @param left the dividend unit operand.
-   * @param right the divisor unit operand.
-   * @return <code>dividend / divisor</code>
-   */
-  public static Unit<?> ofQuotient(Unit<?> left, Unit<?> right) {
-    ProductUnit.Element[] leftElems;
-    if (left instanceof ProductUnit<?>) leftElems = ((ProductUnit<?>) left).elements;
-    else leftElems = new ProductUnit.Element[] {new ProductUnit.Element(left, 1, 1)};
-    ProductUnit.Element[] rightElems;
-    if (right instanceof ProductUnit<?>) {
-      ProductUnit.Element[] elems = ((ProductUnit<?>) right).elements;
-      rightElems = new ProductUnit.Element[elems.length];
-      for (int i = 0; i < elems.length; i++) {
-        rightElems[i] = new ProductUnit.Element(elems[i].unit, -elems[i].pow, elems[i].root);
-      }
-    } else rightElems = new ProductUnit.Element[] {new ProductUnit.Element(right, -1, 1)};
-    return getInstance(leftElems, rightElems);
-  }
-
-  /**
-   * Returns the product unit corresponding to the specified root of the specified unit.
-   *
-   * @param unit the unit.
-   * @param n the root's order (n &gt; 0).
-   * @return <code>unit^(1/nn)</code>
-   * @throws ArithmeticException if <code>n == 0</code>.
-   */
-  public static Unit<?> ofRoot(Unit<?> unit, int n) {
-    ProductUnit.Element[] unitElems;
-    if (unit instanceof ProductUnit<?>) {
-      ProductUnit.Element[] elems = ((ProductUnit<?>) unit).elements;
-      unitElems = new ProductUnit.Element[elems.length];
-      for (int i = 0; i < elems.length; i++) {
-        int gcd = gcd(Math.abs(elems[i].pow), elems[i].root * n);
-        unitElems[i] =
-            new ProductUnit.Element(elems[i].unit, elems[i].pow / gcd, elems[i].root * n / gcd);
-      }
-    } else unitElems = new ProductUnit.Element[] {new ProductUnit.Element(unit, 1, n)};
-    return getInstance(unitElems, new ProductUnit.Element[0]);
-  }
-
-  /**
-   * Returns the product unit corresponding to this unit raised to the specified exponent.
-   *
-   * @param unit the unit.
-   * @param n the exponent (nn &gt; 0).
-   * @return <code>unit^n</code>
-   */
-  public static Unit<?> ofPow(Unit<?> unit, int n) {
-    ProductUnit.Element[] unitElems;
-    if (unit instanceof ProductUnit<?>) {
-      ProductUnit.Element[] elems = ((ProductUnit<?>) unit).elements;
-      unitElems = new ProductUnit.Element[elems.length];
-      for (int i = 0; i < elems.length; i++) {
-        int gcd = gcd(Math.abs(elems[i].pow * n), elems[i].root);
-        unitElems[i] =
-            new ProductUnit.Element(elems[i].unit, elems[i].pow * n / gcd, elems[i].root / gcd);
-      }
-    } else unitElems = new ProductUnit.Element[] {new ProductUnit.Element(unit, n, 1)};
-    return getInstance(unitElems, new ProductUnit.Element[0]);
-  }
-
-  @Override
-  public Unit<?> pow(int n) {
-    return ofPow(this, n);
-  }
-
-  /**
-   * Returns the number of unit elements in this product.
-   *
-   * @return the number of unit elements.
-   */
-  public int getUnitCount() {
-    return elements.length;
-  }
-
-  /**
-   * Returns the unit element at the specified position.
-   *
-   * @param index the index of the unit element to return.
-   * @return the unit element at the specified position.
-   * @throws IndexOutOfBoundsException if index is out of range <code>
-   *     (index &lt; 0 || index &gt;= getUnitCount())</code>.
-   */
-  public Unit<?> getUnit(int index) {
-    return elements[index].getUnit();
-  }
-
-  /**
-   * Returns the power exponent of the unit element at the specified position.
-   *
-   * @param index the index of the unit element.
-   * @return the unit power exponent at the specified position.
-   * @throws IndexOutOfBoundsException if index is out of range <code>
-   *     (index &lt; 0 || index &gt;= getUnitCount())</code>.
-   */
-  public int getUnitPow(int index) {
-    return elements[index].getPow();
-  }
-
-  /**
-   * Returns the root exponent of the unit element at the specified position.
-   *
-   * @param index the index of the unit element.
-   * @return the unit root exponent at the specified position.
-   * @throws IndexOutOfBoundsException if index is out of range <code>
-   *     (index &lt; 0 || index &gt;= getUnitCount())</code>.
-   */
-  public int getUnitRoot(int index) {
-    return elements[index].getRoot();
-  }
-
-  @Override
-  public Map<Unit<?>, Integer> getBaseUnits() {
-    final Map<Unit<?>, Integer> units = new LinkedHashMap<>();
-    for (int i = 0; i < getUnitCount(); i++) {
-      units.put(getUnit(i), getUnitPow(i));
-    }
-    return units;
-  }
-
-  @Override
-  public boolean equals(Object obj) {
-    if (this == obj) {
-      return true;
-    }
-    if (obj instanceof ProductUnit<?>) {
-      final ProductUnit<?> other = ((ProductUnit<?>) obj);
-      return ProductUnit.ElementUtil.arrayEqualsArbitraryOrder(this.elements, other.elements);
-    }
-    return false;
-  }
-
-  private int calculateHashCode() {
-    return Objects.hash((Object[]) ProductUnit.ElementUtil.copyAndSort(elements));
-  }
-
-  @Override
-  public int hashCode() {
-    return hashCode.get(); // lazy and thread-safe
-  }
-
-  @SuppressWarnings("unchecked")
-  @Override
-  public Unit<Q> toSystemUnit() {
-    Unit<?> systemUnit = new One();
-    for (ProductUnit.Element element : elements) {
-      Unit<?> unit = element.unit.getSystemUnit();
-      unit = unit.pow(element.pow);
-      unit = unit.root(element.root);
-      systemUnit = systemUnit.multiply(unit);
-    }
-    return (AbstractUnit<Q>) systemUnit;
-  }
-
-  @Override
-  public UnitConverter getSystemConverter() {
-    UnitConverter converter = AbstractConverter.IDENTITY;
-    for (ProductUnit.Element e : elements) {
-      if (e.unit instanceof AbstractUnit) {
-        UnitConverter cvtr = ((AbstractUnit<?>) e.unit).getSystemConverter();
-        if (!(cvtr.isLinear()))
-          throw new UnsupportedOperationException(e.unit + " is non-linear, cannot convert");
-        if (e.root != 1)
-          throw new UnsupportedOperationException(
-              e.unit + " holds a base unit with fractional exponent");
-        int pow = e.pow;
-        if (pow < 0) { // Negative power.
-          pow = -pow;
-          cvtr = cvtr.inverse();
-        }
-        for (int j = 0; j < pow; j++) {
-          converter = converter.concatenate(cvtr);
-        }
-      }
-    }
-    return converter;
-  }
-
-  @Override
-  public Dimension getDimension() {
-    Dimension dimension = UnitDimension.NONE;
-    for (int i = 0; i < this.getUnitCount(); i++) {
-      Unit<?> unit = this.getUnit(i);
-      if (this.elements != null && unit.getDimension() != null) {
-        Dimension d = unit.getDimension().pow(this.getUnitPow(i)).root(this.getUnitRoot(i));
-        dimension = dimension.multiply(d);
-      }
-    }
-    return dimension;
-  }
-
-  @Override
-  public String toString() {
-    return Arrays.stream(elements).map(Element::toString).collect(Collectors.joining("*"));
-  }
-
-  /**
-   * Returns the unit defined from the product of the specified elements.
-   *
-   * @param leftElems left multiplicand elements.
-   * @param rightElems right multiplicand elements.
-   * @return the corresponding unit.
-   */
-  @SuppressWarnings("rawtypes")
-  private static Unit<?> getInstance(
-      ProductUnit.Element[] leftElems, ProductUnit.Element[] rightElems) {
-
-    // Merges left elements with right elements.
-    ProductUnit.Element[] result = new ProductUnit.Element[leftElems.length + rightElems.length];
-    int resultIndex = 0;
-    for (ProductUnit.Element leftElem : leftElems) {
-      Unit<?> unit = leftElem.unit;
-      int p1 = leftElem.pow;
-      int r1 = leftElem.root;
-      int p2 = 0;
-      int r2 = 1;
-      for (ProductUnit.Element rightElem : rightElems) {
-        if (unit.equals(rightElem.unit)) {
-          p2 = rightElem.pow;
-          r2 = rightElem.root;
-          break; // No duplicate.
-        }
-      }
-      int pow = p1 * r2 + p2 * r1;
-      int root = r1 * r2;
-      if (pow != 0) {
-        int gcd = gcd(Math.abs(pow), root);
-        result[resultIndex++] = new ProductUnit.Element(unit, pow / gcd, root / gcd);
-      }
-    }
-
-    // Appends remaining right elements not merged.
-    for (ProductUnit.Element rightElem : rightElems) {
-      Unit<?> unit = rightElem.unit;
-      boolean hasBeenMerged = false;
-      for (ProductUnit.Element leftElem : leftElems) {
-        if (unit.equals(leftElem.unit)) {
-          hasBeenMerged = true;
-          break;
-        }
-      }
-      if (!hasBeenMerged) result[resultIndex++] = rightElem;
-    }
-
-    // Returns or creates instance.
-    if (resultIndex == 0) return new One();
-    else if (resultIndex == 1 && result[0].pow == result[0].root) return result[0].unit;
-    else {
-      ProductUnit.Element[] elems = new ProductUnit.Element[resultIndex];
-      System.arraycopy(result, 0, elems, 0, resultIndex);
-      return new ProductUnit(elems);
-    }
-  }
-
-  /**
-   * Returns the greatest common divisor (Euclid's algorithm).
-   *
-   * @param m the first number.
-   * @param n the second number.
-   * @return the greatest common divisor.
-   */
-  private static int gcd(int m, int n) {
-    return n == 0 ? m : gcd(n, m % n);
-  }
-
-  /** Inner product element represents a rational power of a single unit. */
-  private static final class Element implements Serializable {
-
-    /** */
-    private static final long serialVersionUID = 452938412398890507L;
-
-    /** Holds the single unit. */
-    private final Unit<?> unit;
-
-    /** Holds the power exponent. */
-    private final int pow;
-
-    /** Holds the root exponent. */
-    private final int root;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 962983585531030093L;
 
     /**
-     * Structural constructor.
+     * Holds the units composing this product unit.
+     *
+     * <p>Note: considered immutable after constructor was called
+     */
+    private final ProductUnitElement[] elements;
+
+    // thread safe cache for the expensive hashCode calculation
+    private transient Lazy<Integer> hashCode = new Lazy<>(this::calculateHashCode);
+
+    /**
+     * DefaultQuantityFactory constructor (used solely to create <code>ONE</code> instance).
+     */
+    public ProductUnit() {
+        super("");
+        elements = new ProductUnitElement[0];
+    }
+
+    /**
+     * Copy constructor (allows for parameterization of product units).
+     *
+     * @param productUnit the product unit source.
+     */
+    public ProductUnit(ProductUnit<?> productUnit) {
+        super(productUnit.getSymbol());
+        this.elements = productUnit.elements;
+    }
+
+    /**
+     * Product unit constructor.
+     *
+     * @param elements the product elements.
+     */
+    private ProductUnit(ProductUnitElement[] elements) {
+        super(null);
+        this.elements = elements;
+    }
+
+    /**
+     * Returns the product of the specified units.
+     *
+     * @param left  the left unit operand.
+     * @param right the right unit operand.
+     * @return <code>left * right</code>
+     */
+    public static Unit<?> ofProduct(Unit<?> left, Unit<?> right) {
+        ProductUnitElement[] leftElems;
+        if (left instanceof ProductUnit<?>) {
+            leftElems = ((ProductUnit<?>) left).elements;
+        } else {
+            leftElems = new ProductUnitElement[]{new ProductUnitElement(left, 1, 1)};
+        }
+        ProductUnitElement[] rightElems;
+        if (right instanceof ProductUnit<?>) {
+            rightElems = ((ProductUnit<?>) right).elements;
+        } else {
+            rightElems = new ProductUnitElement[]{new ProductUnitElement(right, 1, 1)};
+        }
+        return getInstance(leftElems, rightElems);
+    }
+
+    /**
+     * Returns the quotient of the specified units.
+     *
+     * @param left  the dividend unit operand.
+     * @param right the divisor unit operand.
+     * @return <code>dividend / divisor</code>
+     */
+    public static Unit<?> ofQuotient(Unit<?> left, Unit<?> right) {
+        ProductUnitElement[] leftElems;
+        if (left instanceof ProductUnit<?>) leftElems = ((ProductUnit<?>) left).elements;
+        else leftElems = new ProductUnitElement[]{new ProductUnitElement(left, 1, 1)};
+        ProductUnitElement[] rightElems;
+        if (right instanceof ProductUnit<?>) {
+            ProductUnitElement[] elems = ((ProductUnit<?>) right).elements;
+            rightElems = new ProductUnitElement[elems.length];
+            for (int i = 0; i < elems.length; i++) {
+                rightElems[i] = new ProductUnitElement(elems[i].getUnit(), -elems[i].getPow(), elems[i].getRoot());
+            }
+        } else rightElems = new ProductUnitElement[]{new ProductUnitElement(right, -1, 1)};
+        return getInstance(leftElems, rightElems);
+    }
+
+    /**
+     * Returns the product unit corresponding to the specified root of the specified unit.
      *
      * @param unit the unit.
-     * @param pow the power exponent.
-     * @param root the root exponent.
+     * @param n    the root's order (n &gt; 0).
+     * @return <code>unit^(1/nn)</code>
+     * @throws ArithmeticException if <code>n == 0</code>.
      */
-    private Element(Unit<?> unit, int pow, int root) {
-      this.unit = unit;
-      this.pow = pow;
-      this.root = root;
+    public static Unit<?> ofRoot(Unit<?> unit, int n) {
+        ProductUnitElement[] unitElems;
+        if (unit instanceof ProductUnit<?>) {
+            ProductUnitElement[] elems = ((ProductUnit<?>) unit).elements;
+            unitElems = new ProductUnitElement[elems.length];
+            for (int i = 0; i < elems.length; i++) {
+                int gcd = gcd(Math.abs(elems[i].getPow()), elems[i].getRoot() * n);
+                unitElems[i] =
+                        new ProductUnitElement(elems[i].getUnit(), elems[i].getPow() / gcd, elems[i].getRoot() * n / gcd);
+            }
+        } else unitElems = new ProductUnitElement[]{new ProductUnitElement(unit, 1, n)};
+        return getInstance(unitElems, new ProductUnitElement[0]);
     }
 
     /**
-     * Returns this element's unit.
+     * Returns the product unit corresponding to this unit raised to the specified exponent.
      *
-     * @return the single unit.
+     * @param unit the unit.
+     * @param n    the exponent (nn &gt; 0).
+     * @return <code>unit^n</code>
      */
-    public Unit<?> getUnit() {
-      return unit;
-    }
-
-    /**
-     * Returns the power exponent. The power exponent can be negative but is always different from
-     * zero.
-     *
-     * @return the power exponent of the single unit.
-     */
-    public int getPow() {
-      return pow;
-    }
-
-    /**
-     * Returns the root exponent. The root exponent is always greater than zero.
-     *
-     * @return the root exponent of the single unit.
-     */
-    public int getRoot() {
-      return root;
+    public static Unit<?> ofPow(Unit<?> unit, int n) {
+        ProductUnitElement[] unitElems;
+        if (unit instanceof ProductUnit<?>) {
+            ProductUnitElement[] elems = ((ProductUnit<?>) unit).elements;
+            unitElems = new ProductUnitElement[elems.length];
+            for (int i = 0; i < elems.length; i++) {
+                int gcd = gcd(Math.abs(elems[i].getPow() * n), elems[i].getRoot());
+                unitElems[i] =
+                        new ProductUnitElement(elems[i].getUnit(), elems[i].getPow() * n / gcd, elems[i].getRoot() / gcd);
+            }
+        } else unitElems = new ProductUnitElement[]{new ProductUnitElement(unit, n, 1)};
+        return getInstance(unitElems, new ProductUnitElement[0]);
     }
 
     @Override
-    public boolean equals(Object o) {
-      if (this == o) return true;
-      if (o == null || getClass() != o.getClass()) return false;
+    public Unit<?> pow(int n) {
+        return ofPow(this, n);
+    }
 
-      final ProductUnit.Element other = (ProductUnit.Element) o;
+    /**
+     * Returns the number of unit elements in this product.
+     *
+     * @return the number of unit elements.
+     */
+    public int getUnitCount() {
+        return elements.length;
+    }
 
-      if (!Objects.equals(this.pow, other.pow)) {
+    /**
+     * Returns the unit element at the specified position.
+     *
+     * @param index the index of the unit element to return.
+     * @return the unit element at the specified position.
+     * @throws IndexOutOfBoundsException if index is out of range <code>
+     *                                   (index &lt; 0 || index &gt;= getUnitCount())</code>.
+     */
+    public Unit<?> getUnit(int index) {
+        return elements[index].getUnit();
+    }
+
+    /**
+     * Returns the power exponent of the unit element at the specified position.
+     *
+     * @param index the index of the unit element.
+     * @return the unit power exponent at the specified position.
+     * @throws IndexOutOfBoundsException if index is out of range <code>
+     *                                   (index &lt; 0 || index &gt;= getUnitCount())</code>.
+     */
+    public int getUnitPow(int index) {
+        return elements[index].getPow();
+    }
+
+    /**
+     * Returns the root exponent of the unit element at the specified position.
+     *
+     * @param index the index of the unit element.
+     * @return the unit root exponent at the specified position.
+     * @throws IndexOutOfBoundsException if index is out of range <code>
+     *                                   (index &lt; 0 || index &gt;= getUnitCount())</code>.
+     */
+    public int getUnitRoot(int index) {
+        return elements[index].getRoot();
+    }
+
+    @Override
+    public Map<Unit<?>, Integer> getBaseUnits() {
+        final Map<Unit<?>, Integer> units = new LinkedHashMap<>();
+        for (int i = 0; i < getUnitCount(); i++) {
+            units.put(getUnit(i), getUnitPow(i));
+        }
+        return units;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj instanceof ProductUnit<?>) {
+            final ProductUnit<?> other = ((ProductUnit<?>) obj);
+            return ProductUnitElementUtil.arrayEqualsArbitraryOrder(this.elements, other.elements);
+        }
         return false;
-      }
-      if (!Objects.equals(this.root, other.root)) {
-        return false;
-      }
-      return Objects.equals(this.unit, other.unit);
+    }
+
+    private int calculateHashCode() {
+        return Objects.hash((Object[]) ProductUnitElementUtil.copyAndSort(elements));
     }
 
     @Override
     public int hashCode() {
-      return Objects.hash(unit, pow, root);
+        return hashCode.get(); // lazy and thread-safe
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public Unit<Q> toSystemUnit() {
+        Unit<?> systemUnit = new One();
+        for (ProductUnitElement element : elements) {
+            Unit<?> unit = element.getUnit().getSystemUnit();
+            unit = unit.pow(element.getPow());
+            unit = unit.root(element.getRoot());
+            systemUnit = systemUnit.multiply(unit);
+        }
+        return (AbstractUnit<Q>) systemUnit;
+    }
+
+    @Override
+    public UnitConverter getSystemConverter() {
+        UnitConverter converter = AbstractConverter.IDENTITY;
+        for (ProductUnitElement e : elements) {
+            if (e.getUnit() instanceof AbstractUnit) {
+                UnitConverter cvtr = ((AbstractUnit<?>) e.getUnit()).getSystemConverter();
+                if (!(cvtr.isLinear()))
+                    throw new UnsupportedOperationException(e.getUnit() + " is non-linear, cannot convert");
+                if (e.getRoot() != 1)
+                    throw new UnsupportedOperationException(
+                            e.getUnit() + " holds a base unit with fractional exponent");
+                int pow = e.getPow();
+                if (pow < 0) { // Negative power.
+                    pow = -pow;
+                    cvtr = cvtr.inverse();
+                }
+                for (int j = 0; j < pow; j++) {
+                    converter = converter.concatenate(cvtr);
+                }
+            }
+        }
+        return converter;
+    }
+
+    @Override
+    public Dimension getDimension() {
+        Dimension dimension = UnitDimension.NONE;
+        for (int i = 0; i < this.getUnitCount(); i++) {
+            Unit<?> unit = this.getUnit(i);
+            if (this.elements != null && unit.getDimension() != null) {
+                Dimension d = unit.getDimension().pow(this.getUnitPow(i)).root(this.getUnitRoot(i));
+                dimension = dimension.multiply(d);
+            }
+        }
+        return dimension;
     }
 
     @Override
     public String toString() {
-      if (pow == 1 && root == 1) {
-        return unit.toString();
-      } else if (root != 1) {
-        return unit.toString() + "^(" + pow + "/" + root + ")";
-      } // else if (root == 1)
-      return unit.toString() + "^" + pow;
-    }
-  }
-
-  // Element specific algorithms provided locally to this class
-  private static final class ElementUtil {
-
-    // -- returns a defensive sorted copy, unless size <= 1
-    private static ProductUnit.Element[] copyAndSort(final ProductUnit.Element[] elements) {
-      if (elements == null || elements.length <= 1) {
-        return elements;
-      }
-      final ProductUnit.Element[] elementsSorted = Arrays.copyOf(elements, elements.length);
-      Arrays.sort(elementsSorted, ProductUnit.ElementUtil::compare);
-      return elementsSorted;
+        return Arrays.stream(elements).map(ProductUnitElement::toString).collect(Collectors.joining("*"));
     }
 
-    private static int compare(final ProductUnit.Element e0, final ProductUnit.Element e1) {
-      final Unit<?> sysUnit0 = e0.getUnit().getSystemUnit();
-      final Unit<?> sysUnit1 = e1.getUnit().getSystemUnit();
-      final String symbol0 = sysUnit0.getSymbol();
-      final String symbol1 = sysUnit1.getSymbol();
+    /**
+     * Returns the unit defined from the product of the specified elements.
+     *
+     * @param leftElems  left multiplicand elements.
+     * @param rightElems right multiplicand elements.
+     * @return the corresponding unit.
+     */
+    @SuppressWarnings("rawtypes")
+    private static Unit<?> getInstance(
+            ProductUnitElement[] leftElems, ProductUnitElement[] rightElems) {
 
-      if (symbol0 != null && symbol1 != null) {
-        return symbol0.compareTo(symbol1);
-      } else {
-        return sysUnit0.toString().compareTo(sysUnit1.toString());
-      }
-    }
-
-    // optimized for the fact, that can only return true, if for each element in e0 there exist a
-    // single match in e1
-    private static boolean arrayEqualsArbitraryOrder(
-        final ProductUnit.Element[] e0, final ProductUnit.Element[] e1) {
-      if (e0.length != e1.length) {
-        return false;
-      }
-      for (ProductUnit.Element left : e0) {
-        boolean unitFound = false;
-        for (ProductUnit.Element right : e1) {
-          if (left.unit.equals(right.unit)) {
-            if (left.pow != right.pow || left.root != right.root) {
-              return false;
-            } else {
-              unitFound = true;
-              break;
+        // Merges left elements with right elements.
+        ProductUnitElement[] result = new ProductUnitElement[leftElems.length + rightElems.length];
+        int resultIndex = 0;
+        for (ProductUnitElement leftElem : leftElems) {
+            Unit<?> unit = leftElem.getUnit();
+            int p1 = leftElem.getPow();
+            int r1 = leftElem.getRoot();
+            int p2 = 0;
+            int r2 = 1;
+            for (ProductUnitElement rightElem : rightElems) {
+                if (unit.equals(rightElem.getUnit())) {
+                    p2 = rightElem.getPow();
+                    r2 = rightElem.getRoot();
+                    break; // No duplicate.
+                }
             }
-          }
+            int pow = p1 * r2 + p2 * r1;
+            int root = r1 * r2;
+            if (pow != 0) {
+                int gcd = gcd(Math.abs(pow), root);
+                result[resultIndex++] = new ProductUnitElement(unit, pow / gcd, root / gcd);
+            }
         }
-        if (!unitFound) {
-          return false;
+
+        // Appends remaining right elements not merged.
+        for (ProductUnitElement rightElem : rightElems) {
+            Unit<?> unit = rightElem.getUnit();
+            boolean hasBeenMerged = false;
+            for (ProductUnitElement leftElem : leftElems) {
+                if (unit.equals(leftElem.getUnit())) {
+                    hasBeenMerged = true;
+                    break;
+                }
+            }
+            if (!hasBeenMerged) result[resultIndex++] = rightElem;
         }
-      }
-      return true;
+
+        // Returns or creates instance.
+        if (resultIndex == 0) return new One();
+        else if (resultIndex == 1 && result[0].getPow() == result[0].getRoot()) return result[0].getUnit();
+        else {
+            ProductUnitElement[] elems = new ProductUnitElement[resultIndex];
+            System.arraycopy(result, 0, elems, 0, resultIndex);
+            return new ProductUnit(elems);
+        }
     }
-  }
+
+    /**
+     * Returns the greatest common divisor (Euclid's algorithm).
+     *
+     * @param m the first number.
+     * @param n the second number.
+     * @return the greatest common divisor.
+     */
+    private static int gcd(int m, int n) {
+        return n == 0 ? m : gcd(n, m % n);
+    }
 }

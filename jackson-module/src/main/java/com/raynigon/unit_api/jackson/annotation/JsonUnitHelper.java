@@ -2,6 +2,7 @@ package com.raynigon.unit_api.jackson.annotation;
 
 import com.raynigon.unit_api.core.annotation.QuantityShape;
 import com.raynigon.unit_api.core.units.general.IUnit;
+import com.raynigon.unit_api.jackson.exception.InitializationException;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -40,7 +41,7 @@ public class JsonUnitHelper {
             Constructor<? extends IUnit<?>> ctor = unitType.getConstructor();
             return ctor.newInstance();
         } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
-            throw new RuntimeException("Unable to create Unit " + unitType, e);
+            throw new InitializationException("Unable to create Unit " + unitType, e);
         }
     }
 }

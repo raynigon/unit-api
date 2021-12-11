@@ -25,7 +25,14 @@ tasks.withType<KotlinCompile>().all {
         jvmTarget = "1.8"
     }
 }
-
+/**
+ * Checks if the given version is stable or not.
+ * A version is stable, if it is semver conform,
+ * or contains specific Keywords like 'RELEASE', 'FINAL' or 'GA'
+ *
+ * @param version     the version to check for
+ * @return true if the version is stable, false if not
+ * */
 fun isNonStable(version: String): Boolean {
     val stableKeyword = listOf("RELEASE", "FINAL", "GA").any { version.toUpperCase().contains(it) }
     val regex = "^[0-9,.v-]+(-r)?$".toRegex()

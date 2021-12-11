@@ -56,7 +56,7 @@ subprojects {
 
     jar {
         enabled = true
-        classifier = ''
+        archiveClassifier.set("")
     }
 
     sourceSets {
