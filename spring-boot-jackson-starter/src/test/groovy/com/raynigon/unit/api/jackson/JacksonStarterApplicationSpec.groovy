@@ -1,6 +1,9 @@
 package com.raynigon.unit.api.jackson
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.raynigon.unit.api.jackson.helpers.BasicApplicationConfig
+import com.raynigon.unit.api.jackson.helpers.BasicRestController
+import com.raynigon.unit.api.jackson.helpers.BasicService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
@@ -13,9 +16,9 @@ import static com.raynigon.unit.api.core.units.si.SISystemUnitsConstants.Percent
 @SpringBootTest(
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
         classes = [
-                com.raynigon.unit.api.jackson.helpers.BasicApplicationConfig,
-                com.raynigon.unit.api.jackson.helpers.BasicRestController,
-                com.raynigon.unit.api.jackson.helpers.BasicService
+                BasicApplicationConfig,
+                BasicRestController,
+                BasicService
         ],
         properties = [
                 "spring.jackson.unit-api.features.SYSTEM_UNIT_ON_MISSING_ANNOTATION=true"
@@ -24,7 +27,7 @@ import static com.raynigon.unit.api.core.units.si.SISystemUnitsConstants.Percent
 class JacksonStarterApplicationSpec extends Specification {
 
     @Autowired
-    com.raynigon.unit.api.jackson.helpers.BasicService service
+    BasicService service
 
     @Autowired
     TestRestTemplate restTemplate

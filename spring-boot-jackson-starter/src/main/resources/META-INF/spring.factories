@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-UnitApiJacksonConfiguration
+com.raynigon.unit.api.jackson.UnitApiJacksonConfiguration
