@@ -8,12 +8,12 @@ plugins {
     id 'java-library'
     id 'signing'
     id 'maven-publish'
-    id 'org.springframework.boot' version '2.6.1'
+    id 'org.springframework.boot' version '2.6.3'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 
     // Auto Update Versions
     id 'se.patrikerdes.use-latest-versions' version '0.2.18'
-    id 'com.github.ben-manes.versions' version '0.39.0'
+    id 'com.github.ben-manes.versions' version '0.41.0'
 
     // Auto Release
     id('net.researchgate.release') version '2.8.1'
@@ -68,11 +68,12 @@ subprojects {
     dependencies {
         implementation 'javax.measure:unit-api:2.1.3'
         implementation 'org.apache.commons:commons-lang3:3.12.0'
+        implementation 'org.slf4j:slf4j-api:1.7.35'
 
         testImplementation 'org.codehaus.groovy:groovy:3.0.9'
         testImplementation platform("org.spockframework:spock-bom:2.0-groovy-3.0")
         testImplementation 'org.spockframework:spock-core'
-        testRuntimeOnly "net.bytebuddy:byte-buddy:1.12.3"
+        testRuntimeOnly "net.bytebuddy:byte-buddy:1.12.7"
     }
 }
 
