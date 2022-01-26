@@ -1,0 +1,14 @@
+dependencies {
+    compileOnly 'org.springframework.boot:spring-boot-starter'
+    compileOnly 'org.springdoc:springdoc-openapi-webmvc-core:1.6.5'
+    implementation project(":unit-api-jackson")
+    implementation project(":unit-api-core")
+    implementation project(":spring-boot-core-starter")
+
+    testImplementation 'org.springdoc:springdoc-openapi-webmvc-core:1.6.4'
+    testImplementation 'org.springframework.boot:spring-boot-starter'
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+    testImplementation 'org.spockframework:spock-spring'
+}
