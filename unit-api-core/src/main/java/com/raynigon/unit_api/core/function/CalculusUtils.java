@@ -38,6 +38,7 @@ import com.raynigon.unit_api.core.function.unitconverter.RationalConverter;
 import com.raynigon.unit_api.core.function.unitconverter.DoubleMultiplyConverter;
 import com.raynigon.unit_api.core.function.unitconverter.LogConverter;
 import com.raynigon.unit_api.core.function.unitconverter.ExpConverter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
@@ -59,9 +60,8 @@ import java.util.logging.Logger;
  * @version 1.4, August 21, 2019
  * @since 2.0
  */
+@Slf4j
 public final class CalculusUtils {
-
-    private static final Logger log = Logger.getLogger(CalculusUtils.class.getName());
 
     /**
      * Memoization of Pi by number-of-digits.
@@ -143,8 +143,8 @@ public final class CalculusUtils {
                     __ -> {
                         final int calcDigits = numDigits + 10;
                         return FOUR.multiply(
-                                (FOUR.multiply(arccot(FIVE, calcDigits)))
-                                        .subtract(arccot(TWO_HUNDRED_THIRTY_NINE, calcDigits)))
+                                        (FOUR.multiply(arccot(FIVE, calcDigits)))
+                                                .subtract(arccot(TWO_HUNDRED_THIRTY_NINE, calcDigits)))
                                 .setScale(numDigits, RoundingMode.DOWN);
                     });
         }
@@ -160,7 +160,7 @@ public final class CalculusUtils {
             int nTerms = 0;
 
             BigDecimal nearZero = BigDecimal.ONE.scaleByPowerOfTen(-numDigits);
-            log.log(Level.FINER, () -> "arccot: ARGUMENT=" + x + " (nearZero=" + nearZero + ")");
+            log.trace("arccot: ARGUMENT=" + x + " (nearZero=" + nearZero + ")");
             boolean add = false;
             // Add one term of Taylor series each time thru loop. Stop looping
             // when _term_
@@ -171,14 +171,10 @@ public final class CalculusUtils {
                 term = xpower.divide(n, RoundingMode.DOWN);
                 sum = add ? sum.add(term) : sum.subtract(term);
                 add = !add;
-                if (log.isLoggable(Level.FINEST)) {
-                    log.log(Level.FINEST, "arccot: term=" + term);
-                }
+                log.trace("arccot: term=" + term);
                 nTerms++;
             }
-            if (log.isLoggable(Level.FINEST)) {
-                log.log(Level.FINER, "arccot: done. nTerms=" + nTerms);
-            }
+            log.trace("arccot: done. nTerms=" + nTerms);
             return sum;
         }
     }

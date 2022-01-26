@@ -29,9 +29,13 @@
  */
 package com.raynigon.unit_api.core.units.general;
 
+import com.raynigon.unit_api.core.exception.UnitNotFoundException;
 import com.raynigon.unit_api.core.service.UnitsApiService;
 import com.raynigon.unit_api.core.units.si.SISystem;
 import com.raynigon.unit_api.core.units.si.dimensionless.One;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.LoggerFactory;
+
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
@@ -62,220 +66,228 @@ import javax.measure.Unit;
  * @version 1.0, $Date: 2019-07-05 $
  * @since 2.0
  */
+@Slf4j
 public class UnitDimension implements Dimension, Serializable {
-  /** */
-  private static final long serialVersionUID = 7806787530512644696L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 7806787530512644696L;
 
-  private static final Logger LOGGER = Logger.getLogger(UnitDimension.class.getName());
+    /**
+     * Holds dimensionless.
+     *
+     * @since 1.0
+     */
+    public static final Dimension NONE = new UnitDimension(new One());
 
-  /**
-   * Holds dimensionless.
-   *
-   * @since 1.0
-   */
-  public static final Dimension NONE = new UnitDimension(new One());
+    /**
+     * Holds length dimension (L).
+     *
+     * @since 1.0
+     */
+    public static final Dimension LENGTH = new UnitDimension('L');
 
-  /**
-   * Holds length dimension (L).
-   *
-   * @since 1.0
-   */
-  public static final Dimension LENGTH = new UnitDimension('L');
+    /**
+     * Holds mass dimension (M).
+     *
+     * @since 1.0
+     */
+    public static final Dimension MASS = new UnitDimension('M');
 
-  /**
-   * Holds mass dimension (M).
-   *
-   * @since 1.0
-   */
-  public static final Dimension MASS = new UnitDimension('M');
+    /**
+     * Holds time dimension (T).
+     *
+     * @since 1.0
+     */
+    public static final Dimension TIME = new UnitDimension('T');
 
-  /**
-   * Holds time dimension (T).
-   *
-   * @since 1.0
-   */
-  public static final Dimension TIME = new UnitDimension('T');
+    /**
+     * Holds electric current dimension (I).
+     *
+     * @since 1.0
+     */
+    public static final Dimension ELECTRIC_CURRENT = new UnitDimension('I');
 
-  /**
-   * Holds electric current dimension (I).
-   *
-   * @since 1.0
-   */
-  public static final Dimension ELECTRIC_CURRENT = new UnitDimension('I');
+    /**
+     * Holds temperature dimension (Θ).
+     *
+     * @since 1.0
+     */
+    public static final Dimension TEMPERATURE = new UnitDimension('\u0398');
 
-  /**
-   * Holds temperature dimension (Θ).
-   *
-   * @since 1.0
-   */
-  public static final Dimension TEMPERATURE = new UnitDimension('\u0398');
+    /**
+     * Holds amount of substance dimension (N).
+     *
+     * @since 1.0
+     */
+    public static final Dimension AMOUNT_OF_SUBSTANCE = new UnitDimension('N');
 
-  /**
-   * Holds amount of substance dimension (N).
-   *
-   * @since 1.0
-   */
-  public static final Dimension AMOUNT_OF_SUBSTANCE = new UnitDimension('N');
+    /**
+     * Holds luminous intensity dimension (J).
+     */
+    public static final Dimension LUMINOUS_INTENSITY = new UnitDimension('J');
 
-  /** Holds luminous intensity dimension (J). */
-  public static final Dimension LUMINOUS_INTENSITY = new UnitDimension('J');
+    /**
+     * Holds the pseudo unit associated to this dimension.
+     */
+    private final Unit<?> pseudoUnit;
 
-  /** Holds the pseudo unit associated to this dimension. */
-  private final Unit<?> pseudoUnit;
-
-  /**
-   * Returns the dimension for the specified symbol.
-   *
-   * @param symbol the quantity symbol.
-   * @return the dimension for the given symbol.
-   * @since 1.0.1
-   */
-  public static Dimension parse(char symbol) {
-    return new UnitDimension(symbol);
-  }
-
-  /**
-   * Returns the unit dimension having the specified symbol.
-   *
-   * @param symbol the associated symbol.
-   */
-  private UnitDimension(char symbol) {
-    pseudoUnit =
-        new BaseUnit<>(SISystem.ID, "[" + symbol + "]", "[" + symbol + "]", Quantity.class, NONE);
-  }
-
-  /**
-   * Constructor from pseudo-unit (not visible).
-   *
-   * @param pseudoUnit the pseudo-unit.
-   */
-  private UnitDimension(Unit<?> pseudoUnit) {
-    this.pseudoUnit = pseudoUnit;
-  }
-
-  /** Default Constructor (not visible). */
-  protected UnitDimension() {
-    this(new One());
-  }
-
-  public static <Q extends Quantity<Q>> Dimension of(Class<Q> quantityType) {
-    Unit<Q> siUnit = UnitsApiService.getInstance().getUnit(quantityType);
-    if (siUnit == null) {
-      LOGGER.log(Level.FINER, "Quantity type: " + quantityType + " unknown");
-      // we're logging but probably FINER is enough?
+    /**
+     * Returns the dimension for the specified symbol.
+     *
+     * @param symbol the quantity symbol.
+     * @return the dimension for the given symbol.
+     * @since 1.0.1
+     */
+    public static Dimension parse(char symbol) {
+        return new UnitDimension(symbol);
     }
-    return (siUnit != null) ? siUnit.getDimension() : null;
-  }
 
-  /**
-   * Returns the product of this dimension with the one specified. If the specified dimension is not
-   * a physics dimension, then <code>that.multiply(this)</code> is returned.
-   *
-   * @param that the dimension multiplicand.
-   * @return <code>this * that</code>
-   * @since 1.0
-   */
-  public Dimension multiply(Dimension that) {
-    return that instanceof UnitDimension
-        ? this.multiply((UnitDimension) that)
-        : this.multiply(that);
-  }
-
-  /**
-   * Returns the product of this dimension with the one specified.
-   *
-   * @param that the dimension multiplicand.
-   * @return <code>this * that</code>
-   * @since 1.0
-   */
-  private UnitDimension multiply(UnitDimension that) {
-    return new UnitDimension(this.pseudoUnit.multiply(that.pseudoUnit));
-  }
-
-  /**
-   * Returns the quotient of this dimension with the one specified.
-   *
-   * @param that the dimension divisor.
-   * @return <code>this.multiply(that.pow(-1))</code>
-   * @since 1.0
-   */
-  public Dimension divide(Dimension that) {
-    return that instanceof UnitDimension ? this.divide((UnitDimension) that) : this.divide(that);
-  }
-
-  /**
-   * Returns the quotient of this dimension with the one specified.
-   *
-   * @param that the dimension divisor.
-   * @return <code>this.multiply(that.pow(-1))</code>
-   * @since 1.0
-   */
-  private UnitDimension divide(UnitDimension that) {
-    return new UnitDimension(ProductUnit.ofQuotient(pseudoUnit, that.pseudoUnit));
-  }
-
-  /**
-   * Returns this dimension raised to an exponent.
-   *
-   * @param n the exponent.
-   * @return the result of raising this dimension to the exponent.
-   * @since 1.0
-   */
-  public UnitDimension pow(int n) {
-    return new UnitDimension(this.pseudoUnit.pow(n));
-  }
-
-  /**
-   * Returns the given root of this dimension.
-   *
-   * @param n the root's order.
-   * @return the result of taking the given root of this dimension.
-   * @throws ArithmeticException if <code>n == 0</code>.
-   * @since 1.0
-   */
-  public UnitDimension root(int n) {
-    return new UnitDimension(this.pseudoUnit.root(n));
-  }
-
-  /**
-   * Returns the fundamental (base) dimensions and their exponent whose product is this dimension or
-   * <code>null</code> if this dimension is a fundamental dimension.
-   *
-   * @return the mapping between the base dimensions and their exponent.
-   * @since 1.0
-   */
-  @SuppressWarnings("rawtypes")
-  public Map<? extends Dimension, Integer> getBaseDimensions() {
-    Map<? extends Unit, Integer> pseudoUnits = pseudoUnit.getBaseUnits();
-    if (pseudoUnits == null) {
-      return null;
+    /**
+     * Returns the unit dimension having the specified symbol.
+     *
+     * @param symbol the associated symbol.
+     */
+    private UnitDimension(char symbol) {
+        pseudoUnit =
+                new BaseUnit<>(SISystem.ID, "[" + symbol + "]", "[" + symbol + "]", Quantity.class, NONE);
     }
-    final Map<UnitDimension, Integer> baseDimensions = new HashMap<>();
-    for (Map.Entry<? extends Unit, Integer> entry : pseudoUnits.entrySet()) {
-      baseDimensions.put(new UnitDimension(entry.getKey()), entry.getValue());
-    }
-    return baseDimensions;
-  }
 
-  @Override
-  public String toString() {
-    return pseudoUnit.toString();
-  }
-
-  @Override
-  public boolean equals(Object obj) {
-    if (this == obj) {
-      return true;
+    /**
+     * Constructor from pseudo-unit (not visible).
+     *
+     * @param pseudoUnit the pseudo-unit.
+     */
+    private UnitDimension(Unit<?> pseudoUnit) {
+        this.pseudoUnit = pseudoUnit;
     }
-    if (obj instanceof UnitDimension) {
-      UnitDimension other = (UnitDimension) obj;
-      return Objects.equals(pseudoUnit, other.pseudoUnit);
-    }
-    return false;
-  }
 
-  @Override
-  public int hashCode() {
-    return Objects.hashCode(pseudoUnit);
-  }
+    /**
+     * Default Constructor (not visible).
+     */
+    protected UnitDimension() {
+        this(new One());
+    }
+
+    public static <Q extends Quantity<Q>> Dimension of(Class<Q> quantityType) {
+        try {
+            Unit<Q> siUnit = UnitsApiService.getInstance().getUnit(quantityType);
+            return siUnit.getDimension();
+        } catch (UnitNotFoundException exception) {
+            log.trace("Quantity type: {} unknown", quantityType);
+        }
+        return null;
+    }
+
+    /**
+     * Returns the product of this dimension with the one specified. If the specified dimension is not
+     * a physics dimension, then <code>that.multiply(this)</code> is returned.
+     *
+     * @param that the dimension multiplicand.
+     * @return <code>this * that</code>
+     * @since 1.0
+     */
+    public Dimension multiply(Dimension that) {
+        return that instanceof UnitDimension
+                ? this.multiply((UnitDimension) that)
+                : this.multiply(that);
+    }
+
+    /**
+     * Returns the product of this dimension with the one specified.
+     *
+     * @param that the dimension multiplicand.
+     * @return <code>this * that</code>
+     * @since 1.0
+     */
+    private UnitDimension multiply(UnitDimension that) {
+        return new UnitDimension(this.pseudoUnit.multiply(that.pseudoUnit));
+    }
+
+    /**
+     * Returns the quotient of this dimension with the one specified.
+     *
+     * @param that the dimension divisor.
+     * @return <code>this.multiply(that.pow(-1))</code>
+     * @since 1.0
+     */
+    public Dimension divide(Dimension that) {
+        return that instanceof UnitDimension ? this.divide((UnitDimension) that) : this.divide(that);
+    }
+
+    /**
+     * Returns the quotient of this dimension with the one specified.
+     *
+     * @param that the dimension divisor.
+     * @return <code>this.multiply(that.pow(-1))</code>
+     * @since 1.0
+     */
+    private UnitDimension divide(UnitDimension that) {
+        return new UnitDimension(ProductUnit.ofQuotient(pseudoUnit, that.pseudoUnit));
+    }
+
+    /**
+     * Returns this dimension raised to an exponent.
+     *
+     * @param n the exponent.
+     * @return the result of raising this dimension to the exponent.
+     * @since 1.0
+     */
+    public UnitDimension pow(int n) {
+        return new UnitDimension(this.pseudoUnit.pow(n));
+    }
+
+    /**
+     * Returns the given root of this dimension.
+     *
+     * @param n the root's order.
+     * @return the result of taking the given root of this dimension.
+     * @throws ArithmeticException if <code>n == 0</code>.
+     * @since 1.0
+     */
+    public UnitDimension root(int n) {
+        return new UnitDimension(this.pseudoUnit.root(n));
+    }
+
+    /**
+     * Returns the fundamental (base) dimensions and their exponent whose product is this dimension or
+     * <code>null</code> if this dimension is a fundamental dimension.
+     *
+     * @return the mapping between the base dimensions and their exponent.
+     * @since 1.0
+     */
+    @SuppressWarnings("rawtypes")
+    public Map<? extends Dimension, Integer> getBaseDimensions() {
+        Map<? extends Unit, Integer> pseudoUnits = pseudoUnit.getBaseUnits();
+        if (pseudoUnits == null) {
+            return null;
+        }
+        final Map<UnitDimension, Integer> baseDimensions = new HashMap<>();
+        for (Map.Entry<? extends Unit, Integer> entry : pseudoUnits.entrySet()) {
+            baseDimensions.put(new UnitDimension(entry.getKey()), entry.getValue());
+        }
+        return baseDimensions;
+    }
+
+    @Override
+    public String toString() {
+        return pseudoUnit.toString();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj instanceof UnitDimension) {
+            UnitDimension other = (UnitDimension) obj;
+            return Objects.equals(pseudoUnit, other.pseudoUnit);
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(pseudoUnit);
+    }
 }

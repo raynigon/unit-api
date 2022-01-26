@@ -1,7 +1,9 @@
 package com.raynigon.unit_api.core.service;
 
+import com.raynigon.unit_api.core.exception.UnitNotFoundException;
 import com.raynigon.unit_api.core.io.QuantityReader;
 import com.raynigon.unit_api.core.io.QuantityWriter;
+import org.jetbrains.annotations.NotNull;
 
 import javax.measure.Quantity;
 import javax.measure.Unit;
@@ -9,32 +11,32 @@ import javax.measure.spi.SystemOfUnits;
 
 public interface UnitsApiService {
 
-    static UnitsApiService getInstance() {
+    static @NotNull UnitsApiService getInstance() {
         return DefaultUnitsApiService.getInstance();
     }
 
-    static <T extends Quantity<T>> Unit<T> unit(Class<T> quantityType) {
+    static <T extends Quantity<T>> @NotNull Unit<T> unit(@NotNull Class<T> quantityType) {
         return getInstance().getUnit(quantityType);
     }
 
-    static Unit<?> unit(String symbol) {
+    static @NotNull Unit<?> unit(@NotNull String symbol) {
         return getInstance().getUnit(symbol);
     }
 
     @Deprecated
-    static Quantity<?> quantity(String quantity) {
+    static @NotNull Quantity<?> quantity(@NotNull String quantity) {
         return getInstance().parseQuantity(quantity);
     }
 
-    static QuantityReader reader() {
+    static @NotNull QuantityReader reader() {
         return getInstance().defaultReader();
     }
 
-    static QuantityWriter writer() {
+    static @NotNull QuantityWriter writer() {
         return getInstance().defaultWriter();
     }
 
-    static <Q extends Quantity<Q>> Quantity<Q> quantity(Number number, Unit<Q> unit) {
+    static <Q extends Quantity<Q>> @NotNull Quantity<Q> quantity(@NotNull Number number, @NotNull Unit<Q> unit) {
         return getInstance().createQuantity(number, unit);
     }
 
@@ -46,21 +48,21 @@ public interface UnitsApiService {
      */
     void addSystemOfUnits(SystemOfUnits system);
 
-    <T extends Quantity<T>> Unit<T> getUnit(Class<T> quantityType);
+    <T extends Quantity<T>> @NotNull Unit<T> getUnit(Class<T> quantityType) throws UnitNotFoundException;
 
-    Unit<?> getUnit(String symbol);
+    @NotNull Unit<?> getUnit(@NotNull String symbol) throws UnitNotFoundException;
 
-    String format(Quantity<?> quantity);
+    @NotNull String format(@NotNull Quantity<?> quantity);
 
-    Quantity<?> parseQuantity(String quantity);
+    @NotNull Quantity<?> parseQuantity(@NotNull String quantity);
 
-    <Q extends Quantity<Q>> Quantity<Q> createQuantity(Number number, Unit<Q> unit);
+    <Q extends Quantity<Q>> Quantity<Q> createQuantity(@NotNull Number number, @NotNull Unit<Q> unit);
 
-    default QuantityReader defaultReader() {
+    default @NotNull QuantityReader defaultReader() {
         return (String quantity) -> getInstance().parseQuantity(quantity);
     }
 
-    default QuantityWriter defaultWriter() {
+    default @NotNull QuantityWriter defaultWriter() {
         return Object::toString;
     }
 }

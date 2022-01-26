@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.raynigon.unit_api.core.UnitApiCoreConfiguration
