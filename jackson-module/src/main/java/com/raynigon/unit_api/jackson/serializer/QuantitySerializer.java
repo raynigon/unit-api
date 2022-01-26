@@ -15,7 +15,10 @@ import com.raynigon.unit_api.jackson.annotation.JsonQuantityWriter;
 import com.raynigon.unit_api.jackson.config.UnitApiConfig;
 import com.raynigon.unit_api.jackson.annotation.JsonUnit;
 import com.raynigon.unit_api.jackson.annotation.JsonUnitHelper;
+import com.raynigon.unit_api.jackson.exception.IncompatibleUnitException;
 import com.raynigon.unit_api.jackson.exception.UnknownUnitException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -25,10 +28,11 @@ import javax.measure.Unit;
 @SuppressWarnings("rawtypes")
 public class QuantitySerializer extends JsonSerializer<Quantity> implements ContextualSerializer {
 
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final UnitApiConfig config;
-    private Unit<?> unit;
-    private QuantityShape shape;
-    private QuantityWriter writer;
+    private final Unit<?> unit;
+    private final QuantityShape shape;
+    private final QuantityWriter writer;
 
     public QuantitySerializer(UnitApiConfig config) {
         this(config, null, QuantityShape.NUMBER, UnitsApiService.writer());
@@ -40,33 +44,29 @@ public class QuantitySerializer extends JsonSerializer<Quantity> implements Cont
         this.unit = unit;
         this.shape = shape;
         this.writer = writer;
+        logger.trace("Created QuantitySerializer with config={}, unit={}, shape={}, writer={}", config, unit, shape, writer);
     }
 
     @Override
-    @SuppressWarnings({"unchecked", "rawtypes"})
     public JsonSerializer<?> createContextual(SerializerProvider prov, BeanProperty property)
             throws JsonMappingException {
-        Class<Quantity> quantityType =
-                (Class<Quantity>) property.getType().getBindings().getBoundType(0).getRawClass();
-        unit = UnitsApiService.getInstance().getUnit(quantityType);
+        UnitApiConfig config = this.config;
+        Unit<?> unit = getSystemUnit(prov, property);
+        QuantityShape shape = this.shape;
+        QuantityWriter writer = this.writer;
+        logger.trace("Property {} has system unit {}", property.getName(), unit);
 
         JsonUnit unitWrapper = property.getAnnotation(JsonUnit.class);
         if (unitWrapper == null) return new QuantitySerializer(config, unit, shape, writer);
         shape = JsonUnitHelper.getShape(unitWrapper);
-        IUnit<?> unitInstance = JsonUnitHelper.getUnitInstance(unitWrapper);
-
-        if (unitInstance != null) {
-            unit = unitInstance;
-        }
-        if (unit == null) {
-            throw new UnknownUnitException(prov.getGenerator(), quantityType);
-        }
+        unit = getAnnotatedUnit(prov, property, unit, unitWrapper);
 
         JsonQuantityWriter writerWrapper = property.getAnnotation(JsonQuantityWriter.class);
         if (writerWrapper != null) {
             writer = JsonQuantityHelper.getWriterInstance(writerWrapper);
             shape = QuantityShape.STRING;
         }
+        logger.trace("Property {} is using custom quantity writer {}", property.getName(), writer);
 
         return new QuantitySerializer(config, unit, shape, writer);
     }
@@ -75,6 +75,7 @@ public class QuantitySerializer extends JsonSerializer<Quantity> implements Cont
     @SuppressWarnings({"unchecked", "rawtypes"})
     public void serialize(Quantity quantity, JsonGenerator gen, SerializerProvider serializers)
             throws IOException {
+        logger.debug("Prepare {} with unit={} shape={} for write to {}", quantity, unit, shape, gen.getOutputContext());
         Quantity convertedQuantity = quantity;
         if (this.unit != null) {
             convertedQuantity = quantity.to(unit);
@@ -100,5 +101,31 @@ public class QuantitySerializer extends JsonSerializer<Quantity> implements Cont
             default:
                 throw new IllegalArgumentException("Unknown Shape: " + shape);
         }
+    }
+
+    private Unit<?> getAnnotatedUnit(SerializerProvider prov, BeanProperty property, Unit<?> systemUnit, JsonUnit unitWrapper) throws IncompatibleUnitException {
+        IUnit<?> annotatedUnit = JsonUnitHelper.getUnitInstance(unitWrapper);
+        if (annotatedUnit == null) {
+            return systemUnit;
+        }
+        logger.trace("Property {} is using annotated unit {}", property.getName(), systemUnit);
+        if (!systemUnit.isCompatible(annotatedUnit)) {
+            throw new IncompatibleUnitException(prov.getGenerator(), systemUnit, annotatedUnit);
+        }
+        return annotatedUnit;
+    }
+
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    private Unit<?> getSystemUnit(SerializerProvider prov, BeanProperty property) throws UnknownUnitException {
+        Unit<?> unit;
+        Class<Quantity> quantityType = (Class<Quantity>) property.getType()
+                .getBindings()
+                .getBoundType(0)
+                .getRawClass();
+        unit = UnitsApiService.getInstance().getUnit(quantityType);
+        if (unit == null) {
+            throw new UnknownUnitException(prov.getGenerator(), quantityType);
+        }
+        return unit;
     }
 }
