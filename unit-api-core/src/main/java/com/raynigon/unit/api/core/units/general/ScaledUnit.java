@@ -7,6 +7,9 @@ import javax.measure.Prefix;
 import javax.measure.Quantity;
 import javax.measure.UnitConverter;
 
+/**
+ *
+ * */
 public class ScaledUnit<Q extends Quantity<Q>> extends TransformedUnit<Q> implements IUnit<Q> {
 
     private final String systemId;
@@ -18,14 +21,31 @@ public class ScaledUnit<Q extends Quantity<Q>> extends TransformedUnit<Q> implem
         return prefix.getSymbol() + parent.getSymbol();
     }
 
+    /**
+     * @param prefix
+     * @param parent
+     * @param name
+     */
     public ScaledUnit(Prefix prefix, IUnit<Q> parent, String name) {
         this(MultiplyConverter.ofPrefix(prefix), parent, generateSymbol(prefix, parent), name);
     }
 
+    /**
+     * @param factor
+     * @param parent
+     * @param symbol
+     * @param name
+     */
     public ScaledUnit(Number factor, IUnit<Q> parent, String symbol, String name) {
         this(MultiplyConverter.of(factor), parent, symbol, name);
     }
 
+    /**
+     * @param converter
+     * @param parent
+     * @param symbol
+     * @param name
+     */
     public ScaledUnit(UnitConverter converter, IUnit<Q> parent, String symbol, String name) {
         super(symbol, Objects.requireNonNull(name), parent, parent.getSystemUnit(), converter);
         Objects.requireNonNull(name);

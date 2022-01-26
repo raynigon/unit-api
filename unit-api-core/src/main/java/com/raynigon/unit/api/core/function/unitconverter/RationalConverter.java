@@ -48,9 +48,6 @@ import javax.measure.UnitConverter;
  */
 public final class RationalConverter extends AbstractConverter implements MultiplyConverter {
 
-    /**
-     *
-     */
     private static final long serialVersionUID = -9192231963353351648L;
 
     /**

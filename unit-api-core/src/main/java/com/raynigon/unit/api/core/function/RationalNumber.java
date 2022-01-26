@@ -71,7 +71,7 @@ public final class RationalNumber extends Number {
      * Returns a {@code RationalNumber} with divisor <i>ONE</i>. In other words, returns a {@code
      * RationalNumber} that represents given integer {@code number}.
      *
-     * @param number
+     * @param number the value which should be used as dividend
      * @return number/1
      * @throws NullPointerException - if number is {@code null}
      */
@@ -83,7 +83,7 @@ public final class RationalNumber extends Number {
      * Returns a {@code RationalNumber} with divisor <i>ONE</i>. In other words, returns a {@code
      * RationalNumber} that represents given integer {@code number}.
      *
-     * @param number
+     * @param number the value which should be used as dividend
      * @return number/1
      * @throws NullPointerException - if number is {@code null}
      */
@@ -95,8 +95,8 @@ public final class RationalNumber extends Number {
     /**
      * Returns a {@code RationalNumber} that represents the division {@code dividend/divisor}.
      *
-     * @param dividend
-     * @param divisor
+     * @param dividend long value for the dividend, which is the first value in a division
+     * @param divisor  long value for the divisor, which is the second value in a division
      * @return dividend/divisor
      * @throws IllegalArgumentException if <code>divisor = 0</code>
      */
@@ -108,7 +108,7 @@ public final class RationalNumber extends Number {
      * Returns a {@code RationalNumber} that represents the given double precision {@code number},
      * with an accuracy equivalent to {@link BigDecimal#valueOf(double)}.
      *
-     * @param number
+     * @param number the value which should be represented as rational number
      */
     public static RationalNumber of(double number) {
         final BigDecimal decimalValue = BigDecimal.valueOf(number);
@@ -118,7 +118,7 @@ public final class RationalNumber extends Number {
     /**
      * Returns a {@code RationalNumber} that represents the given BigDecimal decimalValue.
      *
-     * @param decimalValue
+     * @param decimalValue the value which should be represented as rational number
      */
     public static RationalNumber of(BigDecimal decimalValue) {
         Objects.requireNonNull(decimalValue);
@@ -138,8 +138,8 @@ public final class RationalNumber extends Number {
     /**
      * Returns a {@code RationalNumber} that represents the division {@code dividend/divisor}.
      *
-     * @param dividend
-     * @param divisor
+     * @param dividend value for the dividend, which is the first value in a division
+     * @param divisor  value for the divisor, which is the second value in a division
      * @return dividend/divisor
      * @throws IllegalArgumentException if <code>divisor = 0</code>
      * @throws NullPointerException     - if dividend is {@code null} or divisor is {@code null}
@@ -238,21 +238,21 @@ public final class RationalNumber extends Number {
     /**
      * Returns a new instance of {@code RationalNumber} representing the addition {@code this + that}.
      *
-     * @param that
-     * @return this + that
+     * @param summand value which should be added to this number
+     * @return this + summand
      */
-    public RationalNumber add(RationalNumber that) {
+    public RationalNumber add(RationalNumber summand) {
 
         // a/b + c/d = (ad + bc) / bd
         BigInteger a = this.absDividend;
         BigInteger b = this.absDivisor;
-        BigInteger c = that.absDividend;
-        BigInteger d = that.absDivisor;
+        BigInteger c = summand.absDividend;
+        BigInteger d = summand.absDivisor;
 
         if (this.signum < 0) {
             a = a.negate();
         }
-        if (that.signum < 0) {
+        if (summand.signum < 0) {
             c = c.negate();
         }
 
@@ -264,25 +264,25 @@ public final class RationalNumber extends Number {
 
     /**
      * Returns a new instance of {@code RationalNumber} representing the subtraction {@code this -
-     * that}.
+     * subtrahend}.
      *
-     * @param that
-     * @return this - that
+     * @param subtrahend the value which should be subtracted from this number
+     * @return this - subtrahend
      */
-    public RationalNumber subtract(RationalNumber that) {
-        return add(that.negate());
+    public RationalNumber subtract(RationalNumber subtrahend) {
+        return add(subtrahend.negate());
     }
 
     /**
      * Returns a new instance of {@code RationalNumber} representing the multiplication {@code this *
-     * that}.
+     * factor}.
      *
-     * @param that
-     * @return this * that
+     * @param factor value with which the current number should be multiplied
+     * @return this * factor
      */
-    public RationalNumber multiply(RationalNumber that) {
+    public RationalNumber multiply(RationalNumber factor) {
 
-        final int productSignum = this.signum * that.signum;
+        final int productSignum = this.signum * factor.signum;
         if (productSignum == 0) {
             return ZERO;
         }
@@ -290,8 +290,8 @@ public final class RationalNumber extends Number {
         // a/b * c/d = ac / bd
         final BigInteger a = this.absDividend;
         final BigInteger b = this.absDivisor;
-        final BigInteger c = that.absDividend;
-        final BigInteger d = that.absDivisor;
+        final BigInteger c = factor.absDividend;
+        final BigInteger d = factor.absDivisor;
 
         final BigInteger ac = a.multiply(c);
         final BigInteger bd = b.multiply(d);
@@ -303,19 +303,19 @@ public final class RationalNumber extends Number {
     }
 
     /**
-     * Returns a new instance of {@code RationalNumber} representing the division {@code this / that}.
+     * Returns a new instance of {@code RationalNumber} representing the division {@code this / divisor}.
      *
-     * @param that
-     * @return this / that
+     * @param divisor the value which should be used as the second value for a division
+     * @return this / divisor
      */
-    public RationalNumber divide(RationalNumber that) {
-        return multiply(that.reciprocal());
+    public RationalNumber divide(RationalNumber divisor) {
+        return multiply(divisor.reciprocal());
     }
 
     /**
      * Returns a new instance of {@code RationalNumber} representing the negation of {@code this}.
      *
-     * @return -this
+     * @return this * -1.0
      */
     public RationalNumber negate() {
         return new RationalNumber(-signum, absDividend, absDivisor);
@@ -333,7 +333,7 @@ public final class RationalNumber extends Number {
     /**
      * Returns a new instance of {@code RationalNumber} representing the reciprocal of {@code this}.
      *
-     * @param exponent
+     * @param exponent the value which is used as an exponent for this base
      * @return this^exponent
      */
     public RationalNumber pow(int exponent) {
@@ -355,6 +355,7 @@ public final class RationalNumber extends Number {
             newSignum = 1;
         }
 
+        // TODO examine what should happen here and why the if was added...
         if (exponent > 0) {
             return new RationalNumber(newSignum, absDividend.pow(exponent), absDivisor.pow(exponent));
         } else {
@@ -375,7 +376,7 @@ public final class RationalNumber extends Number {
     /**
      * Compares two {@code RationalNumber} values numerically.
      *
-     * @param that
+     * @param that other instance which should be compared to
      * @return the value {@code 0} if {@code this} equals (numerically) {@code that}; a value less
      * than {@code 0} if {@code this < that}; and a value greater than {@code 0} if {@code this >
      * that}
@@ -385,8 +386,7 @@ public final class RationalNumber extends Number {
         final int comp = Integer.compare(this.signum, that.signum);
         if (comp != 0) {
             return comp;
-        }
-        if (comp == 0 && this.signum == 0) {
+        } else if (this.signum == 0) {
             return 0; // both are ZERO
         }
 

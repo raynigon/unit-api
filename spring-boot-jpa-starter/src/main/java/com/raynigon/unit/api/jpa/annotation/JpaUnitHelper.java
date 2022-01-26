@@ -8,7 +8,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 /**
- * Support a simple usage of the @JpaUnit properties
+ * Support a simple usage of the @JpaUnit properties.
  */
 public class JpaUnitHelper {
 
@@ -19,7 +19,9 @@ public class JpaUnitHelper {
      * @return the specified Shape or QuantityShape.NUMBER if no shape was specified
      */
     public static QuantityShape getShape(JpaUnit jpaUnit) {
-        if (jpaUnit == null) return QuantityShape.NUMBER;
+        if (jpaUnit == null) {
+            return QuantityShape.NUMBER;
+        }
         return jpaUnit.shape();
     }
 
@@ -30,9 +32,15 @@ public class JpaUnitHelper {
      * @return the name of the specified unit or null if no unit was specified
      */
     public static IUnit<?> getUnitInstance(JpaUnit jpaUnit) {
-        if (jpaUnit == null) return null;
-        if (!jpaUnit.value().equals(JpaUnit.NoneUnit.class)) return createUnit(jpaUnit.value());
-        if (!jpaUnit.unit().equals(JpaUnit.NoneUnit.class)) return createUnit(jpaUnit.unit());
+        if (jpaUnit == null) {
+            return null;
+        }
+        if (!jpaUnit.value().equals(JpaUnit.NoneUnit.class)) {
+            return createUnit(jpaUnit.value());
+        }
+        if (!jpaUnit.unit().equals(JpaUnit.NoneUnit.class)) {
+            return createUnit(jpaUnit.unit());
+        }
         return null;
     }
 
@@ -43,10 +51,16 @@ public class JpaUnitHelper {
      * @return the name of the specified unit or null if no unit was specified
      */
     public static Class<? extends Quantity<?>> getQuantityType(JpaUnit jpaUnit) {
-        if (jpaUnit == null) return null;
+        if (jpaUnit == null) {
+            return null;
+        }
         Class<? extends Quantity<?>> quantityType = jpaUnit.quantityType();
-        if (quantityType.equals(NoneQuantity.class)) return null;
-        if (!Quantity.class.isAssignableFrom(quantityType)) return null;
+        if (quantityType.equals(NoneQuantity.class)) {
+            return null;
+        }
+        if (!Quantity.class.isAssignableFrom(quantityType)) {
+            return null;
+        }
         return quantityType;
     }
 

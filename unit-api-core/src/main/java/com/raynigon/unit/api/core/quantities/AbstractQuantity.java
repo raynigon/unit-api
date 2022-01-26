@@ -75,7 +75,7 @@ import javax.measure.quantity.Dimensionless;
  * public Double getValue() { return kilograms; }<br>
  * ...<br>
  * }<br>
- * <p>
+ * <br>
  * // Complex numbers measurements.<br>
  * public class ComplexQuantity
  * &lt;Q extends Quantity&gt;extends AbstractQuantity
@@ -89,7 +89,7 @@ import javax.measure.quantity.Dimensionless;
  * public final class Tension extends ComplexQuantity&lt;ElectricPotential&gt; {...} <br>
  * </code>
  *
- * <p>All instances of this class shall be immutable.
+ * <p>All instances of this class shall be immutable.</p>
  *
  * @author <a href="mailto:werner@uom.technology">Werner Keil</a>
  * @author Andi Huber

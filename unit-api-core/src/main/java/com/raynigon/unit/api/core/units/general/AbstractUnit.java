@@ -74,9 +74,6 @@ import javax.measure.UnitConverter;
 public abstract class AbstractUnit<Q extends Quantity<Q>>
         implements ComparableUnit<Q>, Nameable, PrefixOperator<Q>, SymbolSupplier {
 
-    /**
-     *
-     */
     private static final long serialVersionUID = -4344589505537030204L;
 
     /**
@@ -109,9 +106,123 @@ public abstract class AbstractUnit<Q extends Quantity<Q>>
         this.symbol = symbol;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public String getSymbol() {
+        return symbol;
+    }
+
+    /**
+     * Annotates the specified unit. Annotation does not change the unit semantic. Annotations are
+     * often written between curly braces behind units. Note: Annotation of system units are not
+     * considered themselves as system units.
+     *
+     * @param annotation the unit annotation.
+     * @return the annotated unit.
+     */
+    public final Unit<Q> annotate(String annotation) {
+        return new AnnotatedUnit<>(this, annotation);
+    }
+
     protected Type getActualType() {
         ParameterizedType parameterizedType = (ParameterizedType) getClass().getGenericSuperclass();
         return parameterizedType.getActualTypeArguments()[0].getClass().getGenericInterfaces()[0];
+    }
+
+    protected void setName(String name) {
+        this.name = name;
+    }
+
+    protected void setSymbol(String s) {
+        this.symbol = s;
+    }
+
+    /**
+     * Returns the unscaled {@link SISystem} unit from which this
+     * unit is derived.
+     *
+     * <p>The SI unit can be be used to identify a quantity given the unit. For example:<code>
+     * static boolean isAngularVelocity(AbstractUnit unit) {
+     * return unit.toSystemUnit().equals(RADIAN.divide(SECOND)); } assert(REVOLUTION.divide(MINUTE).isAngularVelocity()); // Returns true.
+     * </code>
+     *
+     * @return the unscaled metric unit from which this unit is derived.
+     */
+    protected abstract Unit<Q> toSystemUnit();
+
+    /**
+     * Returns the quotient of this physical unit with the one specified.
+     *
+     * @param that the physical unit divisor.
+     * @return <code>this.multiply(that.inverse())</code>
+     */
+    protected final Unit<?> divide(ComparableUnit<?> that) {
+        return this.multiply(that.inverse());
+    }
+
+    /**
+     * Returns the product of this physical unit with the one specified.
+     *
+     * @param that the physical unit multiplicand.
+     * @return <code>this * that</code>
+     */
+    protected final Unit<?> multiply(ComparableUnit<?> that) {
+        if (this.equals(new One())) return that;
+        if (that.equals(new One())) return this;
+        return ProductUnit.ofProduct(this, that);
+    }
+
+    protected final UnitConverter internalGetConverterTo(Unit<Q> that, boolean useEquals)
+            throws UnconvertibleException {
+        if (useEquals) {
+            if (this == that || this.equals(that)) return AbstractConverter.IDENTITY;
+        } else {
+            if (this == that) return AbstractConverter.IDENTITY;
+        }
+        Unit<Q> thisSystemUnit = this.getSystemUnit();
+        Unit<Q> thatSystemUnit = that.getSystemUnit();
+        if (!thisSystemUnit.equals(thatSystemUnit))
+            try {
+                return getConverterToAny(that);
+            } catch (IncommensurableException e) {
+                throw new UnconvertibleException(e);
+            }
+        UnitConverter thisToSI = this.getSystemConverter();
+        UnitConverter thatToSI = that.getConverterTo(thatSystemUnit);
+        return thatToSI.inverse().concatenate(thisToSI);
+    }
+
+    /**
+     * Internal helper for isCompatible
+     */
+    private boolean internalIsCompatible(Unit<?> that, boolean checkEquals) {
+        if (checkEquals) {
+            if (this == that || this.equals(that)) return true;
+        } else {
+            if (this == that) return true;
+        }
+        if (!(that instanceof ComparableUnit)) return false;
+        Dimension thisDimension = this.getDimension();
+        Dimension thatDimension = that.getDimension();
+        if (thisDimension.equals(thatDimension)) return true;
+        DimensionalModel model = DimensionalModel.current(); // Use
+        // dimensional
+        // analysis
+        // model.
+        return model
+                .getFundamentalDimension(thisDimension)
+                .equals(model.getFundamentalDimension(thatDimension));
+    }
+
+
+    private int compareToWithPossibleNullValues(String a, String b) {
+        if (a == null) {
+            return (b == null) ? 0 : -1;
+        } else {
+            return (b == null) ? 1 : a.compareTo(b);
+        }
     }
 
     /**
@@ -129,31 +240,6 @@ public abstract class AbstractUnit<Q extends Quantity<Q>>
     public boolean isSystemUnit() {
         Unit<Q> sys = this.toSystemUnit();
         return this == sys || this.equals(sys);
-    }
-
-    /**
-     * Returns the unscaled {@link SISystem} unit from which this
-     * unit is derived.
-     *
-     * <p>The SI unit can be be used to identify a quantity given the unit. For example:<code>
-     * static boolean isAngularVelocity(AbstractUnit unit) {
-     * return unit.toSystemUnit().equals(RADIAN.divide(SECOND)); } assert(REVOLUTION.divide(MINUTE).isAngularVelocity()); // Returns true.
-     * </code>
-     *
-     * @return the unscaled metric unit from which this unit is derived.
-     */
-    protected abstract Unit<Q> toSystemUnit();
-
-    /**
-     * Annotates the specified unit. Annotation does not change the unit semantic. Annotations are
-     * often written between curly braces behind units. Note: Annotation of system units are not
-     * considered themselves as system units.
-     *
-     * @param annotation the unit annotation.
-     * @return the annotated unit.
-     */
-    public final Unit<Q> annotate(String annotation) {
-        return new AnnotatedUnit<>(this, annotation);
     }
 
     @Override
@@ -213,22 +299,6 @@ public abstract class AbstractUnit<Q extends Quantity<Q>>
 
     @Override
     public abstract Dimension getDimension();
-
-    protected void setName(String name) {
-        this.name = name;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getSymbol() {
-        return symbol;
-    }
-
-    protected void setSymbol(String s) {
-        this.symbol = s;
-    }
 
     @Override
     public final UnitConverter getConverterTo(Unit<Q> that) throws UnconvertibleException {
@@ -311,48 +381,6 @@ public abstract class AbstractUnit<Q extends Quantity<Q>>
     }
 
     /**
-     * Internal helper for isCompatible
-     */
-    private final boolean internalIsCompatible(Unit<?> that, boolean checkEquals) {
-        if (checkEquals) {
-            if (this == that || this.equals(that)) return true;
-        } else {
-            if (this == that) return true;
-        }
-        if (!(that instanceof ComparableUnit)) return false;
-        Dimension thisDimension = this.getDimension();
-        Dimension thatDimension = that.getDimension();
-        if (thisDimension.equals(thatDimension)) return true;
-        DimensionalModel model = DimensionalModel.current(); // Use
-        // dimensional
-        // analysis
-        // model.
-        return model
-                .getFundamentalDimension(thisDimension)
-                .equals(model.getFundamentalDimension(thatDimension));
-    }
-
-    protected final UnitConverter internalGetConverterTo(Unit<Q> that, boolean useEquals)
-            throws UnconvertibleException {
-        if (useEquals) {
-            if (this == that || this.equals(that)) return AbstractConverter.IDENTITY;
-        } else {
-            if (this == that) return AbstractConverter.IDENTITY;
-        }
-        Unit<Q> thisSystemUnit = this.getSystemUnit();
-        Unit<Q> thatSystemUnit = that.getSystemUnit();
-        if (!thisSystemUnit.equals(thatSystemUnit))
-            try {
-                return getConverterToAny(that);
-            } catch (IncommensurableException e) {
-                throw new UnconvertibleException(e);
-            }
-        UnitConverter thisToSI = this.getSystemConverter();
-        UnitConverter thatToSI = that.getConverterTo(thatSystemUnit);
-        return thatToSI.inverse().concatenate(thisToSI);
-    }
-
-    /**
      * Returns the product of this unit with the one specified.
      *
      * <p>Note: If the specified unit (that) is not a physical unit, then <code>that.multiply(this)
@@ -365,18 +393,6 @@ public abstract class AbstractUnit<Q extends Quantity<Q>>
     public final Unit<?> multiply(Unit<?> that) {
         if (that instanceof ComparableUnit) return multiply((ComparableUnit<?>) that);
         // return that.multiply(this); // Commutatif.
-        return ProductUnit.ofProduct(this, that);
-    }
-
-    /**
-     * Returns the product of this physical unit with the one specified.
-     *
-     * @param that the physical unit multiplicand.
-     * @return <code>this * that</code>
-     */
-    protected final Unit<?> multiply(ComparableUnit<?> that) {
-        if (this.equals(new One())) return that;
-        if (that.equals(new One())) return this;
         return ProductUnit.ofProduct(this, that);
     }
 
@@ -419,16 +435,6 @@ public abstract class AbstractUnit<Q extends Quantity<Q>>
      */
     @Override
     public final Unit<?> divide(Unit<?> that) {
-        return this.multiply(that.inverse());
-    }
-
-    /**
-     * Returns the quotient of this physical unit with the one specified.
-     *
-     * @param that the physical unit divisor.
-     * @return <code>this.multiply(that.inverse())</code>
-     */
-    protected final Unit<?> divide(ComparableUnit<?> that) {
         return this.multiply(that.inverse());
     }
 
@@ -486,14 +492,6 @@ public abstract class AbstractUnit<Q extends Quantity<Q>>
         }
     }
 
-    private int compareToWithPossibleNullValues(String a, String b) {
-        if (a == null) {
-            return (b == null) ? 0 : -1;
-        } else {
-            return (b == null) ? 1 : a.compareTo(b);
-        }
-    }
-
     @Override
     public boolean isEquivalentTo(Unit<Q> that) {
         return this.getConverterTo(that).isIdentity();
@@ -536,4 +534,5 @@ public abstract class AbstractUnit<Q extends Quantity<Q>>
             return (u1 != null && u1.equals(u2));
         }
     }
+
 }

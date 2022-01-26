@@ -4,7 +4,6 @@ import static com.raynigon.unit.api.core.service.UnitsApiService.quantity;
 
 import com.raynigon.unit.api.core.units.si.area.SquareMetre;
 import com.raynigon.unit.api.core.units.si.mass.Kilogram;
-import com.raynigon.unit.api.core.units.si.time.*;
 import com.raynigon.unit.api.core.units.si.acceleration.MetrePerSquaredSecond;
 import com.raynigon.unit.api.core.units.si.dimensionless.One;
 import com.raynigon.unit.api.core.units.si.dimensionless.Percent;
@@ -32,6 +31,13 @@ import com.raynigon.unit.api.core.units.si.temperature.Celsius;
 import com.raynigon.unit.api.core.units.si.temperature.Kelvin;
 import com.raynigon.unit.api.core.units.si.volume.CubicMetre;
 import com.raynigon.unit.api.core.units.si.volume.Litre;
+import com.raynigon.unit.api.core.units.si.time.Hour;
+import com.raynigon.unit.api.core.units.si.time.Minute;
+import com.raynigon.unit.api.core.units.si.time.Second;
+import com.raynigon.unit.api.core.units.si.time.MilliSecond;
+import com.raynigon.unit.api.core.units.si.time.MicroSecond;
+import com.raynigon.unit.api.core.units.si.time.NanoSecond;
+import org.jetbrains.annotations.NotNull;
 
 import javax.measure.Quantity;
 import javax.measure.quantity.Acceleration;
@@ -60,31 +66,31 @@ public class SISystemUnitsConstants {
     public static final Coulomb Coulomb = new Coulomb();
     public static final CubicMetre CubicMetre = new CubicMetre();
     public static final Hertz Hertz = new Hertz();
-    public static final com.raynigon.unit.api.core.units.si.time.Hour Hour = new Hour();
+    public static final Hour Hour = new Hour();
     public static final Joule Joule = new Joule();
     public static final Kelvin Kelvin = new Kelvin();
     public static final KiloWattHour KiloWattHour = new KiloWattHour();
-    public static final com.raynigon.unit.api.core.units.si.mass.Kilogram Kilogram = new Kilogram();
+    public static final Kilogram Kilogram = new Kilogram();
     public static final Kilometre Kilometre = new Kilometre();
     public static final KilometrePerHour KilometrePerHour = new KilometrePerHour();
     public static final Litre Litre = new Litre();
     public static final Metre Metre = new Metre();
     public static final MetrePerSecond MetrePerSecond = new MetrePerSecond();
     public static final MetrePerSquaredSecond MetrePerSquaredSecond = new MetrePerSquaredSecond();
-    public static final com.raynigon.unit.api.core.units.si.time.MicroSecond MicroSecond = new MicroSecond();
+    public static final MicroSecond MicroSecond = new MicroSecond();
     public static final MilliAmpere MilliAmpere = new MilliAmpere();
-    public static final com.raynigon.unit.api.core.units.si.time.MilliSecond MilliSecond = new MilliSecond();
+    public static final MilliSecond MilliSecond = new MilliSecond();
     public static final MilliVolt MilliVolt = new MilliVolt();
     public static final MilliWatt MilliWatt = new MilliWatt();
     public static final MilliWattHour MilliWattHour = new MilliWattHour();
     public static final Millimetre Millimetre = new Millimetre();
-    public static final com.raynigon.unit.api.core.units.si.time.Minute Minute = new Minute();
-    public static final com.raynigon.unit.api.core.units.si.time.NanoSecond NanoSecond = new NanoSecond();
+    public static final Minute Minute = new Minute();
+    public static final NanoSecond NanoSecond = new NanoSecond();
     public static final Newton Newton = new Newton();
     public static final One One = new One();
     public static final Percent Percent = new Percent();
     public static final Second Second = new Second();
-    public static final com.raynigon.unit.api.core.units.si.area.SquareMetre SquareMetre = new SquareMetre();
+    public static final SquareMetre SquareMetre = new SquareMetre();
     public static final Volt Volt = new Volt();
     public static final Watt Watt = new Watt();
     public static final WattHour WattHour = new WattHour();
@@ -92,145 +98,178 @@ public class SISystemUnitsConstants {
     /*
      * Quantity Factory Methods
      * */
-
+    @SuppressWarnings("PMD.MethodNamingConventions")
     public static Quantity<Acceleration> MetrePerSquaredSecond(Number value) {
         return quantity(value, MetrePerSquaredSecond);
     }
 
-    public static Quantity<Dimensionless> Number(Number value) {
+    @SuppressWarnings("PMD.MethodNamingConventions")
+    public static @NotNull Quantity<Dimensionless> Number(@NotNull Number value) {
         return quantity(value, One);
     }
 
-    public static Quantity<Dimensionless> Percent(Number value) {
+    @SuppressWarnings("PMD.MethodNamingConventions")
+    public static @NotNull Quantity<Dimensionless> Percent(@NotNull Number value) {
         return quantity(value, Percent);
     }
 
-    public static Quantity<ElectricCurrent> MilliAmpere(Number value) {
+    @SuppressWarnings("PMD.MethodNamingConventions")
+    public static @NotNull Quantity<ElectricCurrent> MilliAmpere(@NotNull Number value) {
         return quantity(value, MilliAmpere);
     }
 
-    public static Quantity<ElectricCurrent> Ampere(Number value) {
+    @SuppressWarnings("PMD.MethodNamingConventions")
+    public static @NotNull Quantity<ElectricCurrent> Ampere(@NotNull Number value) {
         return quantity(value, Ampere);
     }
 
-    public static Quantity<ElectricPotential> MilliVolt(Number value) {
+    @SuppressWarnings("PMD.MethodNamingConventions")
+    public static @NotNull Quantity<ElectricPotential> MilliVolt(@NotNull Number value) {
         return quantity(value, MilliVolt);
     }
 
-    public static Quantity<ElectricPotential> Volt(Number value) {
+    @SuppressWarnings("PMD.MethodNamingConventions")
+    public static @NotNull Quantity<ElectricPotential> Volt(@NotNull Number value) {
         return quantity(value, Volt);
     }
 
-    public static Quantity<ElectricCharge> AmpereHour(Number value) {
+    @SuppressWarnings("PMD.MethodNamingConventions")
+    public static @NotNull Quantity<ElectricCharge> AmpereHour(@NotNull Number value) {
         return quantity(value, AmpereHour);
     }
 
-    public static Quantity<ElectricCharge> Coulomb(Number value) {
+    @SuppressWarnings("PMD.MethodNamingConventions")
+    public static @NotNull Quantity<ElectricCharge> Coulomb(@NotNull Number value) {
         return quantity(value, Coulomb);
     }
 
-    public static Quantity<Energy> Joule(Number value) {
+    @SuppressWarnings("PMD.MethodNamingConventions")
+    public static @NotNull Quantity<Energy> Joule(@NotNull Number value) {
         return quantity(value, Joule);
     }
 
-    public static Quantity<Energy> KiloWattHour(Number value) {
+    @SuppressWarnings("PMD.MethodNamingConventions")
+    public static @NotNull Quantity<Energy> KiloWattHour(@NotNull Number value) {
         return quantity(value, KiloWattHour);
     }
 
-    public static Quantity<Energy> WattHour(Number value) {
+    @SuppressWarnings("PMD.MethodNamingConventions")
+    public static @NotNull Quantity<Energy> WattHour(@NotNull Number value) {
         return quantity(value, WattHour);
     }
 
-    public static Quantity<Energy> MilliWattHour(Number value) {
+    @SuppressWarnings("PMD.MethodNamingConventions")
+    public static @NotNull Quantity<Energy> MilliWattHour(@NotNull Number value) {
         return quantity(value, MilliWattHour);
     }
 
-    public static Quantity<Force> Newton(Number value) {
+    @SuppressWarnings("PMD.MethodNamingConventions")
+    public static @NotNull Quantity<Force> Newton(@NotNull Number value) {
         return quantity(value, Newton);
     }
 
-    public static Quantity<Frequency> Hertz(Number value) {
+    @SuppressWarnings("PMD.MethodNamingConventions")
+    public static @NotNull Quantity<Frequency> Hertz(@NotNull Number value) {
         return quantity(value, Hertz);
     }
 
-    public static Quantity<Length> Millimetre(Number value) {
+    @SuppressWarnings("PMD.MethodNamingConventions")
+    public static @NotNull Quantity<Length> Millimetre(@NotNull Number value) {
         return quantity(value, Millimetre);
     }
 
-    public static Quantity<Length> Centimetre(Number value) {
+    @SuppressWarnings("PMD.MethodNamingConventions")
+    public static @NotNull Quantity<Length> Centimetre(@NotNull Number value) {
         return quantity(value, Centimetre);
     }
 
-    public static Quantity<Length> Metre(Number value) {
+    @SuppressWarnings("PMD.MethodNamingConventions")
+    public static @NotNull Quantity<Length> Metre(@NotNull Number value) {
         return quantity(value, Metre);
     }
 
-    public static Quantity<Length> Kilometre(Number value) {
+    @SuppressWarnings("PMD.MethodNamingConventions")
+    public static @NotNull Quantity<Length> Kilometre(@NotNull Number value) {
         return quantity(value, Kilometre);
     }
 
-    public static Quantity<Mass> Kilogram(Number value) {
+    @SuppressWarnings("PMD.MethodNamingConventions")
+    public static @NotNull Quantity<Mass> Kilogram(@NotNull Number value) {
         return quantity(value, Kilogram);
     }
 
-    public static Quantity<Power> MilliWatt(Number value) {
+    @SuppressWarnings("PMD.MethodNamingConventions")
+    public static @NotNull Quantity<Power> MilliWatt(@NotNull Number value) {
         return quantity(value, MilliWatt);
     }
 
-    public static Quantity<Power> Watt(Number value) {
+    @SuppressWarnings("PMD.MethodNamingConventions")
+    public static @NotNull Quantity<Power> Watt(@NotNull Number value) {
         return quantity(value, Watt);
     }
 
-    public static Quantity<Speed> KilometrePerHour(Number value) {
+    @SuppressWarnings("PMD.MethodNamingConventions")
+    public static @NotNull Quantity<Speed> KilometrePerHour(@NotNull Number value) {
         return quantity(value, KilometrePerHour);
     }
 
-    public static Quantity<Speed> MetrePerSecond(Number value) {
+    @SuppressWarnings("PMD.MethodNamingConventions")
+    public static @NotNull Quantity<Speed> MetrePerSecond(@NotNull Number value) {
         return quantity(value, MetrePerSecond);
     }
 
-    public static Quantity<Temperature> Celsius(Number value) {
+    @SuppressWarnings("PMD.MethodNamingConventions")
+    public static @NotNull Quantity<Temperature> Celsius(@NotNull Number value) {
         return quantity(value, Celsius);
     }
 
-    public static Quantity<Temperature> Kelvin(Number value) {
+    @SuppressWarnings("PMD.MethodNamingConventions")
+    public static @NotNull Quantity<Temperature> Kelvin(@NotNull Number value) {
         return quantity(value, Kelvin);
     }
 
-    public static Quantity<Time> Hour(Number value) {
+    @SuppressWarnings("PMD.MethodNamingConventions")
+    public static @NotNull Quantity<Time> Hour(@NotNull Number value) {
         return quantity(value, Hour);
     }
 
-    public static Quantity<Time> Minute(Number value) {
+    @SuppressWarnings("PMD.MethodNamingConventions")
+    public static @NotNull Quantity<Time> Minute(@NotNull Number value) {
         return quantity(value, Minute);
     }
 
-    public static Quantity<Time> Second(Number value) {
+    @SuppressWarnings("PMD.MethodNamingConventions")
+    public static @NotNull Quantity<Time> Second(@NotNull Number value) {
         return quantity(value, Second);
     }
 
-    public static Quantity<Time> MilliSecond(Number value) {
+    @SuppressWarnings("PMD.MethodNamingConventions")
+    public static @NotNull Quantity<Time> MilliSecond(@NotNull Number value) {
         return quantity(value, MilliSecond);
     }
 
-    public static Quantity<Time> MicroSecond(Number value) {
+    @SuppressWarnings("PMD.MethodNamingConventions")
+    public static @NotNull Quantity<Time> MicroSecond(@NotNull Number value) {
         return quantity(value, MicroSecond);
     }
 
-    public static Quantity<Time> NanoSecond(Number value) {
+    @SuppressWarnings("PMD.MethodNamingConventions")
+    public static @NotNull Quantity<Time> NanoSecond(@NotNull Number value) {
         return quantity(value, NanoSecond);
     }
 
-    public static Quantity<Area> SquareMetre(Number value) {
+    @SuppressWarnings("PMD.MethodNamingConventions")
+    public static @NotNull Quantity<Area> SquareMetre(@NotNull Number value) {
         return quantity(value, SquareMetre);
     }
 
-    public static Quantity<Volume> CubicMetre(Number value) {
+    @SuppressWarnings("PMD.MethodNamingConventions")
+    public static @NotNull Quantity<Volume> CubicMetre(@NotNull Number value) {
         return quantity(value, CubicMetre);
     }
 
-    public static Quantity<Volume> Litre(Number value) {
+    @SuppressWarnings("PMD.MethodNamingConventions")
+    public static @NotNull Quantity<Volume> Litre(@NotNull Number value) {
         return quantity(value, Litre);
     }
-
 }
