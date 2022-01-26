@@ -39,13 +39,13 @@ package com.raynigon.unit.api.core.function;
  * href="http://download.java.net/jdk8/docs/api/java/util/function/package-summary.html">functional
  * interface</a> whose functional method is {@link #getFactor()}.
  *
- * @author Werner Keil
  * @param <T> the type of factor
+ * @author Werner Keil
  * @version 0.3, $Date: 2018-05-10 $
  * @since 0.9
  */
 @FunctionalInterface
 public interface FactorSupplier<T> {
 
-  T getFactor();
+    T getFactor();
 }

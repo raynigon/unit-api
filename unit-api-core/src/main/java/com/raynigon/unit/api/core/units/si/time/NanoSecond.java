@@ -7,7 +7,7 @@ import javax.measure.quantity.Time;
 
 public class NanoSecond extends ScaledUnit<Time> {
 
-  public NanoSecond() {
-    super(MetricPrefix.NANO, new Second(), "NanoSecond");
-  }
+    public NanoSecond() {
+        super(MetricPrefix.NANO, new Second(), "NanoSecond");
+    }
 }
