@@ -1,0 +1,94 @@
+package com.raynigon.unit.api.jackson
+
+import com.fasterxml.jackson.databind.ObjectMapper
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.web.client.TestRestTemplate
+import spock.lang.Specification
+
+import static com.raynigon.unit.api.core.units.si.SISystemUnitsConstants.Celsius
+import static com.raynigon.unit.api.core.units.si.SISystemUnitsConstants.MetrePerSecond
+import static com.raynigon.unit.api.core.units.si.SISystemUnitsConstants.Percent
+
+@SpringBootTest(
+        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
+        classes = [
+                com.raynigon.unit.api.jackson.helpers.BasicApplicationConfig,
+                com.raynigon.unit.api.jackson.helpers.BasicRestController,
+                com.raynigon.unit.api.jackson.helpers.BasicService
+        ],
+        properties = [
+                "spring.jackson.unit-api.features.SYSTEM_UNIT_ON_MISSING_ANNOTATION=true"
+        ]
+)
+class JacksonStarterApplicationSpec extends Specification {
+
+    @Autowired
+    com.raynigon.unit.api.jackson.helpers.BasicService service
+
+    @Autowired
+    TestRestTemplate restTemplate
+
+    @Autowired
+    ObjectMapper objectMapper
+
+    def 'context setup works'() {
+        expect:
+        true
+    }
+
+    def 'entity creation works'() {
+
+        given:
+        def data = [
+                "id"         : "1",
+                "speed"      : 100,
+                "temperature": 30
+        ]
+
+        when:
+        def response = restTemplate.postForEntity("/api/basic-entity", data, Map.class)
+
+        then:
+        response.statusCode.'2xxSuccessful'
+
+        and:
+        service.getEntity("1") != null
+        service.getEntity("1").speed == MetrePerSecond(100)
+    }
+
+    def 'entity with custom reader'() {
+
+        given:
+        true
+
+        when:
+        com.raynigon.unit.api.jackson.helpers.WeatherEntity result = objectMapper.readValue(input, com.raynigon.unit.api.jackson.helpers.WeatherEntity)
+
+        then:
+        expected.temperature == result.temperature
+        expected.humidity == result.humidity
+
+        where:
+        input                                             | expected
+        '{ "temperature": "30 °C", "humidity": "10 %" }'  | new com.raynigon.unit.api.jackson.helpers.WeatherEntity(Celsius(30), Percent(10))
+        '{ "temperature": "30°C", "humidity": "10 %" }'   | new com.raynigon.unit.api.jackson.helpers.WeatherEntity(Celsius(30), Percent(10))
+        '{ "temperature": "-30 °C", "humidity": "10 %" }' | new com.raynigon.unit.api.jackson.helpers.WeatherEntity(Celsius(-30), Percent(10))
+        '{ "temperature": "-30°C", "humidity": "10 %" }'  | new com.raynigon.unit.api.jackson.helpers.WeatherEntity(Celsius(-30), Percent(10))
+    }
+
+    def 'entity with custom writer'() {
+
+        when:
+        def result = objectMapper.writeValueAsString(entity)
+
+        then:
+        expected == result
+
+        where:
+        entity                                        | expected
+        new com.raynigon.unit.api.jackson.helpers.WeatherEntity(Celsius(30), Percent(10))   | '{"temperature":30.0,"humidity":"10.0%"}'
+        new com.raynigon.unit.api.jackson.helpers.WeatherEntity(Celsius(30), Percent(10.1)) | '{"temperature":30.0,"humidity":"10.1%"}'
+        new com.raynigon.unit.api.jackson.helpers.WeatherEntity(Celsius(30), Percent(-10))  | '{"temperature":30.0,"humidity":"-10.0%"}'
+    }
+}

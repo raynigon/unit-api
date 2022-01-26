@@ -21,6 +21,7 @@ plugins {
     // Linting
     id 'checkstyle'
     id 'pmd'
+    id 'com.github.spotbugs' version '5.0.5'
 }
 
 allprojects {
@@ -44,6 +45,7 @@ subprojects {
     apply plugin: 'net.researchgate.release'
     apply plugin: 'checkstyle'
     apply plugin: 'pmd'
+    apply plugin: 'com.github.spotbugs'
 
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
@@ -102,6 +104,10 @@ subprojects {
         ignoreFailures = true
         toolVersion = "6.41.0"
         rulesMinimumPriority = 3
+    }
+
+    spotbugs {
+        ignoreFailures = true
     }
 }
 
