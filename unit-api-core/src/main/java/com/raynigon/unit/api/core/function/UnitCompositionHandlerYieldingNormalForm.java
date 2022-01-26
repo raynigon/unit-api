@@ -47,77 +47,77 @@ import java.util.function.BinaryOperator;
  */
 public class UnitCompositionHandlerYieldingNormalForm implements ConverterCompositionHandler {
 
-  private final Map<Class<? extends AbstractConverter>, Integer> normalFormOrder;
+    private final Map<Class<? extends AbstractConverter>, Integer> normalFormOrder;
 
-  public UnitCompositionHandlerYieldingNormalForm() {
-    normalFormOrder = CalculusUtils.getNormalFormOrder();
-  }
-
-  @Override
-  public AbstractConverter compose(
-      AbstractConverter a,
-      AbstractConverter b,
-      BiPredicate<AbstractConverter, AbstractConverter> canReduce,
-      BinaryOperator<AbstractConverter> doReduce) {
-
-    if (a.isIdentity()) {
-      if (b.isIdentity()) {
-        return isNormalFormOrderWhenIdentity(a, b) ? a : b;
-      }
-      return b;
-    }
-    if (b.isIdentity()) {
-      return a;
+    public UnitCompositionHandlerYieldingNormalForm() {
+        normalFormOrder = CalculusUtils.getNormalFormOrder();
     }
 
-    if (canReduce.test(a, b)) {
-      return doReduce.apply(a, b);
+    @Override
+    public AbstractConverter compose(
+            AbstractConverter a,
+            AbstractConverter b,
+            BiPredicate<AbstractConverter, AbstractConverter> canReduce,
+            BinaryOperator<AbstractConverter> doReduce) {
+
+        if (a.isIdentity()) {
+            if (b.isIdentity()) {
+                return isNormalFormOrderWhenIdentity(a, b) ? a : b;
+            }
+            return b;
+        }
+        if (b.isIdentity()) {
+            return a;
+        }
+
+        if (canReduce.test(a, b)) {
+            return doReduce.apply(a, b);
+        }
+
+        final boolean commutative = a.isLinear() && b.isLinear();
+        final boolean swap = commutative && !isNormalFormOrderWhenCommutative(a, b);
+
+        final AbstractConverter.Pair nonSimplifiedForm =
+                swap ? new AbstractConverter.Pair(b, a) : new AbstractConverter.Pair(a, b);
+
+        return new CompositionTask(
+                this::isNormalFormOrderWhenIdentity,
+                this::isNormalFormOrderWhenCommutative,
+                canReduce,
+                doReduce)
+                .reduceToNormalForm(nonSimplifiedForm.getConversionSteps());
     }
 
-    final boolean commutative = a.isLinear() && b.isLinear();
-    final boolean swap = commutative && !isNormalFormOrderWhenCommutative(a, b);
+    // -- HELPER
 
-    final AbstractConverter.Pair nonSimplifiedForm =
-        swap ? new AbstractConverter.Pair(b, a) : new AbstractConverter.Pair(a, b);
-
-    return new CompositionTask(
-            this::isNormalFormOrderWhenIdentity,
-            this::isNormalFormOrderWhenCommutative,
-            canReduce,
-            doReduce)
-        .reduceToNormalForm(nonSimplifiedForm.getConversionSteps());
-  }
-
-  // -- HELPER
-
-  private boolean isNormalFormOrderWhenIdentity(AbstractConverter a, AbstractConverter b) {
-    if (a.getClass().equals(b.getClass())) {
-      return true;
-    }
-    return normalFormOrder.get(a.getClass()) <= normalFormOrder.get(b.getClass());
-  }
-
-  private boolean isNormalFormOrderWhenCommutative(AbstractConverter a, AbstractConverter b) {
-    if (a.getClass().equals(b.getClass())) {
-      if (a instanceof PowerOfIntConverter) {
-        return ((PowerOfIntConverter) a).getBase() <= ((PowerOfIntConverter) b).getBase();
-      }
-      return true;
+    private boolean isNormalFormOrderWhenIdentity(AbstractConverter a, AbstractConverter b) {
+        if (a.getClass().equals(b.getClass())) {
+            return true;
+        }
+        return normalFormOrder.get(a.getClass()) <= normalFormOrder.get(b.getClass());
     }
 
-    Integer orderA =
-        Objects.requireNonNull(
-            normalFormOrder.get(a.getClass()),
-            () ->
-                String.format(
-                    "no normal-form order defined for class '%s'", a.getClass().getName()));
-    Integer orderB =
-        Objects.requireNonNull(
-            normalFormOrder.get(b.getClass()),
-            () ->
-                String.format(
-                    "no normal-form order defined for class '%s'", b.getClass().getName()));
+    private boolean isNormalFormOrderWhenCommutative(AbstractConverter a, AbstractConverter b) {
+        if (a.getClass().equals(b.getClass())) {
+            if (a instanceof PowerOfIntConverter) {
+                return ((PowerOfIntConverter) a).getBase() <= ((PowerOfIntConverter) b).getBase();
+            }
+            return true;
+        }
 
-    return orderA <= orderB;
-  }
+        Integer orderA =
+                Objects.requireNonNull(
+                        normalFormOrder.get(a.getClass()),
+                        () ->
+                                String.format(
+                                        "no normal-form order defined for class '%s'", a.getClass().getName()));
+        Integer orderB =
+                Objects.requireNonNull(
+                        normalFormOrder.get(b.getClass()),
+                        () ->
+                                String.format(
+                                        "no normal-form order defined for class '%s'", b.getClass().getName()));
+
+        return orderA <= orderB;
+    }
 }

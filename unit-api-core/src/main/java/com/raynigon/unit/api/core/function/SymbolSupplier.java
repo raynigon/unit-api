@@ -46,6 +46,8 @@ package com.raynigon.unit.api.core.function;
 @FunctionalInterface
 public interface SymbolSupplier {
 
-  /** @return a symbol */
-  String getSymbol();
+    /**
+     * @return a symbol
+     */
+    String getSymbol();
 }

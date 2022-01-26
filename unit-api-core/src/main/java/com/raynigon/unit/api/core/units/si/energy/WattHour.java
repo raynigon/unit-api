@@ -12,23 +12,23 @@ import javax.measure.quantity.Energy;
 
 public class WattHour extends TransformedUnit<Energy> implements IUnit<Energy> {
 
-  @SuppressWarnings("unchecked")
-  public WattHour() {
-    super(
-        "Wh",
-        "WattHour",
-        (Unit<Energy>) new Watt().multiply(new Hour()),
-        new Joule(),
-        MultiplyConverter.of(1));
-  }
+    @SuppressWarnings("unchecked")
+    public WattHour() {
+        super(
+                "Wh",
+                "WattHour",
+                (Unit<Energy>) new Watt().multiply(new Hour()),
+                new Joule(),
+                MultiplyConverter.of(1));
+    }
 
-  @Override
-  public String getSystemId() {
-    return SISystem.ID;
-  }
+    @Override
+    public String getSystemId() {
+        return SISystem.ID;
+    }
 
-  @Override
-  public Class<Energy> getQuantityType() {
-    return Energy.class;
-  }
+    @Override
+    public Class<Energy> getQuantityType() {
+        return Energy.class;
+    }
 }

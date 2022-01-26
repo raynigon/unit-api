@@ -7,7 +7,7 @@ import javax.measure.quantity.Length;
 
 public class Millimetre extends ScaledUnit<Length> {
 
-  public Millimetre() {
-    super(MetricPrefix.MILLI, new Metre(), "Millimetre");
-  }
+    public Millimetre() {
+        super(MetricPrefix.MILLI, new Metre(), "Millimetre");
+    }
 }

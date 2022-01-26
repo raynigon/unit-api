@@ -5,7 +5,7 @@ public class UnitApiConfig {
 
     private final int featureMask;
 
-    public UnitApiConfig(int featureMask){
+    public UnitApiConfig(int featureMask) {
         this.featureMask = featureMask;
     }
 

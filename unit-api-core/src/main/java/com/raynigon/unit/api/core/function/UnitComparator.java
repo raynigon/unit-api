@@ -53,12 +53,12 @@ import javax.measure.Unit;
  */
 public class UnitComparator<U extends Unit<?>> implements Comparator<U> {
 
-  @Override
-  public int compare(U u1, U u2) {
-    if (u1.getName() != null && u1.getName().equals(u2.getName())) {
-      return u1.toString().compareTo(u2.toString());
-      // TODO why is this the same as below?
+    @Override
+    public int compare(U u1, U u2) {
+        if (u1.getName() != null && u1.getName().equals(u2.getName())) {
+            return u1.toString().compareTo(u2.toString());
+            // TODO why is this the same as below?
+        }
+        return u1.toString().compareTo(u2.toString());
     }
-    return u1.toString().compareTo(u2.toString());
-  }
 }
