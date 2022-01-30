@@ -1,7 +1,10 @@
 site_name: Unit API
 plugins:
   - search
-  - markdownextradata
+#  - markdownextradata
+#  - mkdocs_pymdownx_material_extras
+  - codeinclude:
+      title_mode: pymdownx.tabbed
 theme:
   name: 'material'
   palette:
@@ -13,25 +16,22 @@ theme:
 repo_name: 'unit-api'
 repo_url: 'https://github.com/raynigon/unit-api'
 markdown_extensions:
-  - admonition
-  - codehilite:
-      linenums: False
+  - pymdownx.tabbed
   - pymdownx.superfences
   - pymdownx.snippets
-  - pymdownx.tabbed
+  - admonition
 nav:
   - Home: index.md
-  - Quickstart:
-      - Jackson: quickstart/jackson.md
-      - Spring Boot: quickstart/spring-boot.md
-      - Custom Units: quickstart/custom-units.md
-  - Modules:
-      - Jackson Module: modules/jackson-module.md
-      - Jackson Starter: modules/jackson-starter.md
-      - Jpa Starter: modules/jpa-starter.md
-      - Springdoc Starter: modules/springdoc-starter.md
-      - Kotlin Module: modules/kotlin-module.md
-  - Examples: examples.md
+  - Java:
+      - General: java/index.md
+      - Jackson: java/jackson.md
+  - Spring Boot:
+      - General: spring-boot/index.md
+      - Jackson: spring-boot/jackson.md
+      - Hibernate: spring-boot/hibernate.md
+      - Springdoc: spring-boot/springdoc.md
+  - Kotlin: kotlin/index.md
+  #- Examples: examples.md
   - JavaDoc: javadoc-ref.md
   - Contribution: contribution.md
 extra:
