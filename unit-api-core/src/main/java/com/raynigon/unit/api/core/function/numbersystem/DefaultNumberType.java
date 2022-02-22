@@ -1,6 +1,7 @@
 package com.raynigon.unit.api.core.function.numbersystem;
 
 import com.raynigon.unit.api.core.function.RationalNumber;
+import com.raynigon.unit.api.core.function.numbersystem.types.*;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -13,33 +14,40 @@ import java.util.concurrent.atomic.AtomicLong;
 public enum DefaultNumberType {
 
     // integer types
-    BYTE_BOXED(true, Byte.class, (byte) 1, (byte) 0),
-    SHORT_BOXED(true, Short.class, (short) 1, (short) 0),
-    INTEGER_BOXED(true, Integer.class, 1, 0),
-    INTEGER_ATOMIC(true, AtomicInteger.class, 1, 0),
-    LONG_BOXED(true, Long.class, 1L, 0L),
-    LONG_ATOMIC(true, AtomicLong.class, 1L, 0),
-    BIG_INTEGER(true, BigInteger.class, BigInteger.ONE, BigInteger.ZERO),
+    BYTE_BOXED(true, Byte.class, (byte) 1, (byte) 0, null),
+    SHORT_BOXED(true, Short.class, (short) 1, (short) 0, null),
+    INTEGER_BOXED(true, Integer.class, 1, 0, new IntegerHelper()),
+    INTEGER_ATOMIC(true, AtomicInteger.class, 1, 0, null),
+    LONG_BOXED(true, Long.class, 1L, 0L, new LongHelper()),
+    LONG_ATOMIC(true, AtomicLong.class, 1L, 0, null),
+    BIG_INTEGER(true, BigInteger.class, BigInteger.ONE, BigInteger.ZERO, new BigIntegerHelper()),
 
     // rational types
-    RATIONAL(false, RationalNumber.class, RationalNumber.ONE, RationalNumber.ZERO),
+    RATIONAL(false, RationalNumber.class, RationalNumber.ONE, RationalNumber.ZERO, new RationalNumberHelper()),
 
     // fractional types
-    FLOAT_BOXED(false, Float.class, 1.f, 0.f),
-    DOUBLE_BOXED(false, Double.class, 1.d, 0.d),
-    BIG_DECIMAL(false, BigDecimal.class, BigDecimal.ONE, BigDecimal.ZERO),
+    FLOAT_BOXED(false, Float.class, 1.f, 0.f, new FloatHelper()),
+    DOUBLE_BOXED(false, Double.class, 1.d, 0.d, new DoubleHelper()),
+    BIG_DECIMAL(false, BigDecimal.class, BigDecimal.ONE, BigDecimal.ZERO, new BigDecimalHelper()),
     ;
     private final boolean integerOnly;
     private final Class<? extends Number> type;
     public final Number one;
     public final Number zero;
+    private final TypedNumberHelper<?> helper;
 
-    DefaultNumberType(boolean integerOnly, Class<? extends Number> type, Number one, Number zero) {
+    DefaultNumberType(boolean integerOnly, Class<? extends Number> type, Number one, Number zero, TypedNumberHelper<?> helper) {
 
         this.integerOnly = integerOnly;
         this.type = type;
         this.one = one;
         this.zero = zero;
+        this.helper = helper;
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T extends Number> TypedNumberHelper<T> helper() {
+        return (TypedNumberHelper<T>) helper;
     }
 
     public boolean isIntegerOnly() {
@@ -52,6 +60,7 @@ public enum DefaultNumberType {
     }
 
     // 'hardcoded' for performance reasons
+    @SuppressWarnings("PMD.NPathComplexity")
     public static DefaultNumberType valueOf(Number number) {
         if (number instanceof Long) {
             return LONG_BOXED;
