@@ -7,7 +7,15 @@ import java.math.BigInteger;
 
 public class BigIntegerHelper implements TypedNumberHelper<BigInteger> {
 
-    private final BigDecimalHelper bdh = new BigDecimalHelper();
+    private final BigDecimalHelper bdh;
+
+    public BigIntegerHelper() {
+        bdh = new BigDecimalHelper();
+    }
+
+    public BigIntegerHelper(BigDecimalHelper bdh) {
+        this.bdh = bdh;
+    }
 
     @Override
     public RationalNumber reciprocal(BigInteger number) {
@@ -57,6 +65,28 @@ public class BigIntegerHelper implements TypedNumberHelper<BigInteger> {
     @Override
     public boolean isInteger(BigInteger number) {
         return true;
+    }
+
+    @Override
+    public Number narrow(BigInteger number) {
+        final int total_bits_required = number.bitLength();
+
+        // check whether we have enough bits to store the result into an int
+        if (total_bits_required < 31) {
+            return number.intValue();
+        }
+
+        // check whether we have enough bits to store the result into a long
+        if (total_bits_required < 63) {
+            return number.longValue();
+        }
+
+        return number; // cannot narrow down
+    }
+
+    @Override
+    public Number power(BigInteger number, int exponent) {
+        return number.pow(exponent);
     }
 
     @Override

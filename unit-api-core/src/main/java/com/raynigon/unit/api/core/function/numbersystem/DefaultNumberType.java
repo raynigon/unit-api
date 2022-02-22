@@ -5,6 +5,7 @@ import com.raynigon.unit.api.core.function.numbersystem.types.*;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -47,6 +48,7 @@ public enum DefaultNumberType {
 
     @SuppressWarnings("unchecked")
     public <T extends Number> TypedNumberHelper<T> helper() {
+        Objects.requireNonNull(helper);
         return (TypedNumberHelper<T>) helper;
     }
 

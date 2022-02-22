@@ -191,6 +191,28 @@ class BigDecimalHelperSpec extends Specification {
         0.0   | true
     }
 
+    def "narrow #input to #output"() {
+        expect:
+        helper.narrow(new BigDecimal(input)) == output
+
+        where:
+        input                                                                           | output
+        "0.0"                                                                           | 0.0
+        "1.0"                                                                           | 1.0
+        "3.141592653589793238462643383279502884197169399375105820974944592307816406286" | new BigDecimal("3.141592653589793238462643383279502884197169399375105820974944592307816406286")
+    }
+
+    def "calculate #input^#exp = #output"() {
+        expect:
+        helper.power(BigDecimal.valueOf(input), exp) == BigDecimal.valueOf(output)
+
+        where:
+        input | exp | output
+        1.0   | 1   | 1.0
+        2.0   | 2   | 4.0
+        2.5   | 2   | 6.25
+    }
+
     def "convert BigDecimal to BigDecimal"() {
         expect:
         helper.toBigDecimal(BigDecimal.valueOf(1.2)) == BigDecimal.valueOf(1.2)

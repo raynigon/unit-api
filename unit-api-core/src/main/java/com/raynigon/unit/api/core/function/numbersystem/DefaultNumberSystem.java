@@ -173,117 +173,22 @@ public class DefaultNumberSystem implements NumberSystem {
 
     @Override
     public Number power(Number number, int exponent) {
-        if (exponent == 0) {
-            if (isZero(number)) {
-                throw new ArithmeticException("0^0 is not defined");
-            }
-            return 1; // x^0 == 1, for any x!=0
-        }
-        if (exponent == 1) {
-            return number; // x^1 == x, for any x
-        }
-        if (number instanceof BigInteger
-                || number instanceof Long
-                || number instanceof AtomicLong
-                || number instanceof Integer
-                || number instanceof AtomicInteger
-                || number instanceof Short
-                || number instanceof Byte) {
-            final BigInteger bigInt = integerToBigInteger(number);
-            if (exponent > 0) {
-                return bigInt.pow(exponent);
-            }
-            return RationalNumber.ofInteger(bigInt).pow(exponent);
-        }
-        if (number instanceof BigDecimal) {
-            return ((BigDecimal) number).pow(exponent, CalculusUtils.MATH_CONTEXT);
-        }
-        if (number instanceof RationalNumber) {
-            ((RationalNumber) number).pow(exponent);
-        }
-        if (number instanceof Double || number instanceof Float) {
-            return toBigDecimal(number).pow(exponent, CalculusUtils.MATH_CONTEXT);
-        }
-        throw new UnsupportedNumberTypeException(number, this.getClass());
+        return createHelper(number).power(exponent);
     }
 
     @Override
     public Number exp(Number number) {
-        // TODO[220] this is a poor implementation, certainly we can do better using BigDecimal
-        return Math.exp(number.doubleValue());
+        return createHelper(number).exp();
     }
 
     @Override
     public Number log(Number number) {
-        // TODO[220] this is a poor implementation, certainly we can do better using BigDecimal
-        return Math.log(number.doubleValue());
+        return createHelper(number).log();
     }
 
     @Override
     public Number narrow(Number number) {
-
-        // Implementation Note: for performance we stop narrowing down at 'double' or 'integer' level
-
-        if (number instanceof Integer
-                || number instanceof AtomicInteger
-                || number instanceof Short
-                || number instanceof Byte) {
-            return number;
-        }
-
-        if (number instanceof Double || number instanceof Float) {
-            final double doubleValue = number.doubleValue();
-            if (!Double.isFinite(doubleValue)) {
-                throw new UnsupportedNumberValueException(doubleValue, this.getClass());
-            }
-            if (doubleValue % 1 == 0) {
-                // double represents an integer
-                return narrow(BigDecimal.valueOf(doubleValue));
-            }
-            return number;
-        }
-
-        if (isIntegerOnly(number)) {
-
-            // number is one of {BigInteger, Long}
-
-            final int total_bits_required = bitLengthOfInteger(number);
-
-            // check whether we have enough bits to store the result into an int
-            if (total_bits_required < 31) {
-                return number.intValue();
-            }
-
-            // check whether we have enough bits to store the result into a long
-            if (total_bits_required < 63) {
-                return number.longValue();
-            }
-
-            return number; // cannot narrow down
-        }
-
-        if (number instanceof BigDecimal) {
-
-            final BigDecimal decimal = ((BigDecimal) number);
-            try {
-                BigInteger integer = decimal.toBigIntegerExact();
-                return narrow(integer);
-            } catch (ArithmeticException e) {
-                return number; // cannot narrow to integer
-            }
-        }
-
-        if (number instanceof RationalNumber) {
-
-            final RationalNumber rational = ((RationalNumber) number);
-
-            return rational.isInteger()
-                    ? narrow(rational.getDividend()) // divisor is ONE
-                    : number; // cannot narrow to integer;
-        }
-
-        // for any other number type just do nothing
-        return number;
+        return createHelper(number).narrow();
     }
 
     @Override
@@ -319,10 +224,6 @@ public class DefaultNumberSystem implements NumberSystem {
 
     // -- HELPER
 
-    private boolean isIntegerOnly(Number number) {
-        return DefaultNumberType.valueOf(number).isIntegerOnly();
-    }
-
     private int bitLengthOfInteger(Number number) {
         if (number instanceof BigInteger) {
             return ((BigInteger) number).bitLength();
@@ -345,29 +246,7 @@ public class DefaultNumberSystem implements NumberSystem {
     }
 
     private BigDecimal toBigDecimal(Number number) {
-        if (number instanceof BigDecimal) {
-            return (BigDecimal) number;
-        }
-        if (number instanceof BigInteger) {
-            return new BigDecimal((BigInteger) number);
-        }
-        if (number instanceof Long
-                || number instanceof AtomicLong
-                || number instanceof Integer
-                || number instanceof AtomicInteger
-                || number instanceof Short
-                || number instanceof Byte) {
-            return BigDecimal.valueOf(number.longValue());
-        }
-        if (number instanceof Double || number instanceof Float) {
-            return BigDecimal.valueOf(number.doubleValue());
-        }
-        if (number instanceof RationalNumber) {
-            throw new UnexpectedCodeReachException();
-            // Note: don't do that (potential precision loss)
-            // return ((RationalNumber) number).bigDecimalValue();
-        }
-        throw new UnsupportedNumberTypeException(number, this.getClass());
+        return createHelper(number).toBigDecimal();
     }
 
     private Number addWideAndNarrow(DefaultNumberType wideType, Number wide, Number narrow) {
@@ -609,6 +488,7 @@ public class DefaultNumberSystem implements NumberSystem {
         return new Number[]{operator.apply(array[0]), operator.apply(array[1])};
     }
 
+    @SuppressWarnings("PMD.NPathComplexity")
     private NumberHelperContainer<?> createHelper(Number number) {
         if (number instanceof BigInteger) {
             return new NumberHelperContainer<>(BIG_INTEGER.helper(), (BigInteger) number);

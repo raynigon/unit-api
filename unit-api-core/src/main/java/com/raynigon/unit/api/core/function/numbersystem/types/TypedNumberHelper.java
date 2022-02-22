@@ -25,7 +25,7 @@ public interface TypedNumberHelper<T extends Number> {
     /**
      * Calculates the natural logarithm using a Taylor sequqnce.
      *
-     * @param number the input number > 0
+     * @param number the input number &gt; 0
      * @return the natural logarithm
      */
     Number log(T number);
@@ -39,4 +39,8 @@ public interface TypedNumberHelper<T extends Number> {
     boolean isInteger(T number);
 
     BigDecimal toBigDecimal(T number);
+
+    Number narrow(T number);
+
+    Number power(T number, int exponent);
 }

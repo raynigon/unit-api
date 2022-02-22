@@ -158,6 +158,29 @@ class LongHelperSpec extends Specification {
         0L    | true
     }
 
+    def "narrow #input to #output"() {
+        expect:
+        helper.narrow(input) == output
+
+        where:
+        input | output
+        0L    | 0L
+        1L    | 1L
+        -1L   | -1L
+    }
+
+    def "calculate #input^#exp = #output"() {
+        expect:
+        helper.power(input, exp) == output
+
+        where:
+        input | exp | output
+        1L    | 1   | 1L
+        2L    | 2   | 4L
+        -3L   | 2   | 9L
+        -3L   | 3   | -27L
+    }
+
     def "convert BigInteger to BigInteger"() {
         expect:
         helper.toBigDecimal(1L) == BigDecimal.valueOf(1.0)

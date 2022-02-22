@@ -1,11 +1,16 @@
 package com.raynigon.unit.api.core.function.numbersystem.types;
 
+import com.raynigon.unit.api.core.function.CalculusUtils;
 import com.raynigon.unit.api.core.function.RationalNumber;
+import com.raynigon.unit.api.core.function.numbersystem.DefaultNumberSystem;
+import com.raynigon.unit.api.core.function.numbersystem.exception.UnsupportedNumberValueException;
 import org.apache.commons.lang3.NotImplementedException;
 
 import java.math.BigDecimal;
 
 public class FloatHelper implements TypedNumberHelper<Float> {
+
+    private BigIntegerHelper bigIntegerHelper = new BigIntegerHelper();
 
     @Override
     public RationalNumber reciprocal(Float number) {
@@ -60,7 +65,24 @@ public class FloatHelper implements TypedNumberHelper<Float> {
     }
 
     @Override
+    public Number narrow(Float number) {
+        if (!Float.isFinite(number)) {
+            throw new UnsupportedNumberValueException(number, DefaultNumberSystem.class);
+        }
+        if (number % 1 == 0) {
+            // float represents an integer
+            return bigIntegerHelper.narrow(BigDecimal.valueOf(number).toBigIntegerExact());
+        }
+        return number;
+    }
+
+    @Override
+    public Number power(Float number, int exponent) {
+        return toBigDecimal(number).pow(exponent, CalculusUtils.MATH_CONTEXT);
+    }
+
+    @Override
     public BigDecimal toBigDecimal(Float number) {
-        return new BigDecimal(number);
+        return BigDecimal.valueOf(number);
     }
 }

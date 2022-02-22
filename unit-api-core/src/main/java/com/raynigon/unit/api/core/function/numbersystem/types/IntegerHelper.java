@@ -1,11 +1,12 @@
 package com.raynigon.unit.api.core.function.numbersystem.types;
 
 import com.raynigon.unit.api.core.function.RationalNumber;
+import org.apache.commons.lang3.NotImplementedException;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
-public class IntegerHelper implements TypedNumberHelper<Integer> {
+public class IntegerHelper implements TypedNumberHelper<Integer>, IntegerNumberHelper<Integer> {
     @Override
     public RationalNumber reciprocal(Integer number) {
         return RationalNumber.of(BigInteger.ONE, BigInteger.valueOf((int) number));
@@ -60,6 +61,25 @@ public class IntegerHelper implements TypedNumberHelper<Integer> {
     @Override
     public boolean isInteger(Integer number) {
         return true;
+    }
+
+    @Override
+    public Number narrow(Integer number) {
+        return number;
+    }
+
+    @Override
+    public Number power(Integer number, int exponent) {
+        final BigInteger bigInt = toBigInteger(number);
+        if (exponent > 0) {
+            return bigInt.pow(exponent);
+        }
+        return RationalNumber.ofInteger(bigInt).pow(exponent);
+    }
+
+    @Override
+    public BigInteger toBigInteger(Integer number) {
+        return BigInteger.valueOf(number);
     }
 
     @Override

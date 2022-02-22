@@ -5,6 +5,4 @@ import java.math.BigInteger;
 public interface IntegerNumberHelper<T extends Number> {
 
     BigInteger toBigInteger(T number);
-
-    int bitLength(T number);
 }

@@ -1,11 +1,12 @@
 package com.raynigon.unit.api.core.function.numbersystem.types;
 
 import com.raynigon.unit.api.core.function.RationalNumber;
+import org.apache.commons.lang3.NotImplementedException;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
-public class LongHelper implements TypedNumberHelper<Long> {
+public class LongHelper implements TypedNumberHelper<Long>, IntegerNumberHelper<Long> {
 
     private final BigDecimalHelper bdh = new BigDecimalHelper();
 
@@ -66,7 +67,47 @@ public class LongHelper implements TypedNumberHelper<Long> {
     }
 
     @Override
+    public Number narrow(Long number) {
+        final int total_bits_required = bitLengthOfInteger(number);
+
+        // check whether we have enough bits to store the result into an int
+        if (total_bits_required < 31) {
+            return number.intValue();
+        }
+
+        // check whether we have enough bits to store the result into a long
+        if (total_bits_required < 63) {
+            return number;
+        }
+
+        return number; // cannot narrow down
+    }
+
+    @Override
+    public Number power(Long number, int exponent) {
+        final BigInteger bigInt = toBigInteger(number);
+        if (exponent > 0) {
+            return bigInt.pow(exponent);
+        }
+        return RationalNumber.ofInteger(bigInt).pow(exponent);
+    }
+
+    @Override
     public BigDecimal toBigDecimal(Long number) {
         return new BigDecimal(number);
+    }
+
+    @Override
+    public BigInteger toBigInteger(Long number) {
+        return BigInteger.valueOf(number);
+    }
+
+    private int bitLengthOfInteger(long number) {
+        if (number == Long.MIN_VALUE) {
+            return 63;
+        } else {
+            int leadingZeros = Long.numberOfLeadingZeros(Math.abs(number));
+            return 64 - leadingZeros;
+        }
     }
 }

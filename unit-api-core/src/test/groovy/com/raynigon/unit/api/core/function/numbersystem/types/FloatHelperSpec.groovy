@@ -171,6 +171,28 @@ class FloatHelperSpec extends Specification {
         0.0f  | true
     }
 
+    def "narrow #input to #output"() {
+        expect:
+        helper.narrow(input) == output
+
+        where:
+        input | output
+        0.0f  | 0.0f
+        1.0f  | 1.0f
+    }
+
+    def "calculate #input^#exp = #output"() {
+        expect:
+        helper.power(input, exp) == output
+
+        where:
+        input | exp | output
+        1.0f  | 1   | 1.0f
+        2.0f  | 2   | 4.0f
+        2.5f  | 2   | 6.25f
+
+    }
+
     def "convert BigDecimal to BigDecimal"() {
         expect:
         Math.abs((helper.toBigDecimal(1.3f) - BigDecimal.valueOf(1.3)).doubleValue()) <= 0.00001

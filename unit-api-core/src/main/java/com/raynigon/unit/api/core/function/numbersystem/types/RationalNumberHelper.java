@@ -1,6 +1,7 @@
 package com.raynigon.unit.api.core.function.numbersystem.types;
 
 import com.raynigon.unit.api.core.function.RationalNumber;
+import org.apache.commons.lang3.NotImplementedException;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -8,6 +9,7 @@ import java.math.BigInteger;
 public class RationalNumberHelper implements TypedNumberHelper<RationalNumber> {
 
     private final BigDecimalHelper bdh = new BigDecimalHelper();
+    private final BigIntegerHelper bih = new BigIntegerHelper();
 
     @Override
     public RationalNumber reciprocal(RationalNumber number) {
@@ -58,6 +60,27 @@ public class RationalNumberHelper implements TypedNumberHelper<RationalNumber> {
     @Override
     public boolean isInteger(RationalNumber number) {
         return number.isInteger();
+    }
+
+    @Override
+    public Number narrow(RationalNumber number) {
+        // divisor is ONE
+        if (BigInteger.ONE.compareTo(number.getDivisor()) == 0) {
+            return bih.narrow(number.getDividend());
+        }
+
+        BigInteger modulo = number.getDividend().mod(number.getDivisor());
+        // dividend is multiplier of divisor
+        if (BigInteger.ZERO.compareTo(modulo) == 0) {
+            return bih.narrow(number.getDividend().divide(number.getDivisor()));
+        }
+
+        return number;
+    }
+
+    @Override
+    public Number power(RationalNumber number, int exponent) {
+        return number.pow(exponent);
     }
 
     @Override

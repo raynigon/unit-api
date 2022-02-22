@@ -171,6 +171,28 @@ class DoubleHelperSpec extends Specification {
         0.0d  | true
     }
 
+    def "narrow #input to #output"() {
+        expect:
+        helper.narrow(input) == output
+
+        where:
+        input | output
+        0.0d  | 0.0d
+        1.0d  | 1.0d
+    }
+
+    def "calculate #input^#exp = #output"() {
+        expect:
+        helper.power(input, exp) == output
+
+        where:
+        input | exp | output
+        1.0d  | 1   | 1.0d
+        2.0d  | 2   | 4.0d
+        2.5d  | 2   | 6.25d
+
+    }
+
     def "convert BigDecimal to BigDecimal"() {
         expect:
         Math.abs((helper.toBigDecimal(1.3d) - BigDecimal.valueOf(1.3)).doubleValue()) <= 0.00001

@@ -1,7 +1,7 @@
 package com.raynigon.unit.api.core.function.numbersystem.types;
 
+import com.raynigon.unit.api.core.function.CalculusUtils;
 import com.raynigon.unit.api.core.function.RationalNumber;
-import org.apache.commons.lang3.NotImplementedException;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -9,6 +9,8 @@ import java.math.MathContext;
 import java.math.RoundingMode;
 
 public class BigDecimalHelper implements TypedNumberHelper<BigDecimal> {
+
+    private BigIntegerHelper bih = new BigIntegerHelper(this);
 
     @Override
     public RationalNumber reciprocal(BigDecimal number) {
@@ -58,6 +60,7 @@ public class BigDecimalHelper implements TypedNumberHelper<BigDecimal> {
     }
 
     @Override
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     public boolean isInteger(BigDecimal number) {
         // see https://stackoverflow.com/questions/1078953/check-if-bigdecimal-is-integer-value
         if (number.scale() <= 0) {
@@ -72,6 +75,21 @@ public class BigDecimalHelper implements TypedNumberHelper<BigDecimal> {
     }
 
     @Override
+    public Number narrow(BigDecimal number) {
+        try {
+            BigInteger integer = number.toBigIntegerExact();
+            return bih.narrow(integer);
+        } catch (ArithmeticException e) {
+            return number; // cannot narrow to integer
+        }
+    }
+
+    @Override
+    public Number power(BigDecimal number, int exponent) {
+        return number.pow(exponent, CalculusUtils.MATH_CONTEXT);
+    }
+
+    @Override
     public BigDecimal toBigDecimal(BigDecimal number) {
         return number;
     }
@@ -79,7 +97,7 @@ public class BigDecimalHelper implements TypedNumberHelper<BigDecimal> {
     /**
      * Calculates the natural logarithm using a Taylor sequence.
      *
-     * @param input the input big decimal > 0
+     * @param input the input big decimal &gt; 0
      * @return the natural logarithm
      */
     public static BigDecimal log(BigDecimal input, MathContext context) {

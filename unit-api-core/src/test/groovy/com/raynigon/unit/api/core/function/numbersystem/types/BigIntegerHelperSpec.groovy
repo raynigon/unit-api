@@ -24,8 +24,8 @@ class BigIntegerHelperSpec extends Specification {
         input | dividend | divisor
         1     | 1L       | 1L
         2     | 1L       | 2L
-        -1    | -1L       | 1L
-        -2    | -1L       | 2L
+        -1    | -1L      | 1L
+        -2    | -1L      | 2L
     }
 
     def "negate of #input returns #output"() {
@@ -174,6 +174,30 @@ class BigIntegerHelperSpec extends Specification {
         1     | true
         -1    | true
         0     | true
+    }
+
+    def "narrow #input to #output"() {
+        expect:
+        helper.narrow(new BigInteger(input)) == output
+
+        where:
+        input                                                                          | output
+        "0"                                                                            | 0
+        "1"                                                                            | 1
+        "3141592653589793238462643383279502884197169399375105820974944592307816406286" | new BigInteger("3141592653589793238462643383279502884197169399375105820974944592307816406286")
+    }
+
+    def "calculate #input^#exp = #output"() {
+        expect:
+        helper.power(BigInteger.valueOf(input), exp) == BigInteger.valueOf(output)
+
+        where:
+        input | exp | output
+        1     | 1   | 1
+        2     | 2   | 4
+        -3    | 2   | 9
+        -4    | 3   | -64
+
     }
 
     def "convert BigInteger to BigInteger"() {
