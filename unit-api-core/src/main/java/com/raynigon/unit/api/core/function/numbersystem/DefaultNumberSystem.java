@@ -32,6 +32,10 @@ package com.raynigon.unit.api.core.function.numbersystem;
 import com.raynigon.unit.api.core.function.CalculusUtils;
 import com.raynigon.unit.api.core.function.NumberSystem;
 import com.raynigon.unit.api.core.function.RationalNumber;
+import com.raynigon.unit.api.core.function.numbersystem.exception.UnexpectedCodeReachException;
+import com.raynigon.unit.api.core.function.numbersystem.exception.UnsupportedNumberTypeException;
+import com.raynigon.unit.api.core.function.numbersystem.exception.UnsupportedNumberValueException;
+import com.raynigon.unit.api.core.function.numbersystem.types.*;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -40,6 +44,8 @@ import java.math.RoundingMode;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.UnaryOperator;
+
+import static com.raynigon.unit.api.core.function.numbersystem.DefaultNumberType.*;
 
 /**
  * {@link NumberSystem} implementation to support Java's built-in {@link Number}s and the {@link
@@ -147,138 +153,22 @@ public class DefaultNumberSystem implements NumberSystem {
 
     @Override
     public Number reciprocal(Number number) {
-        if (isIntegerOnly(number)) {
-            return RationalNumber.of(BigInteger.ONE, integerToBigInteger(number));
-        }
-        if (number instanceof BigDecimal) {
-            return RationalNumber.of((BigDecimal) number).reciprocal();
-        }
-        if (number instanceof RationalNumber) {
-            return ((RationalNumber) number).reciprocal();
-        }
-        if (number instanceof Double) {
-            return RationalNumber.of((double) number).reciprocal();
-        }
-        if (number instanceof Float) {
-            return RationalNumber.of(number.doubleValue()).reciprocal();
-        }
-        throw unsupportedNumberType(number);
+        return createHelper(number).reciprocal();
     }
 
     @Override
     public int signum(Number number) {
-        if (number instanceof BigInteger) {
-            return ((BigInteger) number).signum();
-        }
-        if (number instanceof BigDecimal) {
-            return ((BigDecimal) number).signum();
-        }
-        if (number instanceof RationalNumber) {
-            return ((RationalNumber) number).signum();
-        }
-        if (number instanceof Double) {
-            return (int) Math.signum((double) number);
-        }
-        if (number instanceof Float) {
-            return (int) Math.signum((float) number);
-        }
-        if (number instanceof Long || number instanceof AtomicLong) {
-            final long longValue = number.longValue();
-            return Long.signum(longValue);
-        }
-        if (number instanceof Integer
-                || number instanceof AtomicInteger
-                || number instanceof Short
-                || number instanceof Byte) {
-            final int intValue = number.intValue();
-            return Integer.signum(intValue);
-        }
-        throw unsupportedNumberType(number);
+        return createHelper(number).signum();
     }
 
     @Override
     public Number abs(Number number) {
-        if (number instanceof BigInteger) {
-            return ((BigInteger) number).abs();
-        }
-        if (number instanceof BigDecimal) {
-            return ((BigDecimal) number).abs();
-        }
-        if (number instanceof RationalNumber) {
-            return ((RationalNumber) number).abs();
-        }
-        if (number instanceof Double) {
-            return Math.abs((double) number);
-        }
-        if (number instanceof Float) {
-            return Math.abs((float) number);
-        }
-        if (number instanceof Long || number instanceof AtomicLong) {
-            final long longValue = number.longValue();
-            if (longValue == Long.MIN_VALUE) {
-                return BigInteger.valueOf(longValue).abs(); // widen to BigInteger
-            }
-            return Math.abs(longValue);
-        }
-        if (number instanceof Integer || number instanceof AtomicInteger) {
-            final int intValue = number.intValue();
-            if (intValue == Integer.MIN_VALUE) {
-                return Math.abs(number.longValue()); // widen to long
-            }
-            return Math.abs(intValue);
-        }
-        if (number instanceof Short || number instanceof Byte) {
-            Math.abs(number.intValue()); // widen to int
-        }
-        throw unsupportedNumberType(number);
+        return createHelper(number).abs();
     }
 
     @Override
     public Number negate(Number number) {
-        if (number instanceof BigInteger) {
-            return ((BigInteger) number).negate();
-        }
-        if (number instanceof BigDecimal) {
-            return ((BigDecimal) number).negate();
-        }
-        if (number instanceof RationalNumber) {
-            return ((RationalNumber) number).negate();
-        }
-        if (number instanceof Double) {
-            return -((double) number);
-        }
-        if (number instanceof Float) {
-            return -((float) number);
-        }
-        if (number instanceof Long || number instanceof AtomicLong) {
-            final long longValue = number.longValue();
-            if (longValue == Long.MIN_VALUE) {
-                return BigInteger.valueOf(longValue).negate(); // widen to BigInteger
-            }
-            return -longValue;
-        }
-        if (number instanceof Integer || number instanceof AtomicInteger) {
-            final int intValue = number.intValue();
-            if (intValue == Integer.MIN_VALUE) {
-                return -number.longValue(); // widen to long
-            }
-            return -intValue;
-        }
-        if (number instanceof Short) {
-            final short shortValue = (short) number;
-            if (shortValue == Short.MIN_VALUE) {
-                return -number.intValue(); // widen to int
-            }
-            return -shortValue;
-        }
-        if (number instanceof Byte) {
-            final short byteValue = (byte) number;
-            if (byteValue == Byte.MIN_VALUE) {
-                return -number.intValue(); // widen to int
-            }
-            return -byteValue;
-        }
-        throw unsupportedNumberType(number);
+        return createHelper(number).negate();
     }
 
     @Override
@@ -314,7 +204,7 @@ public class DefaultNumberSystem implements NumberSystem {
         if (number instanceof Double || number instanceof Float) {
             return toBigDecimal(number).pow(exponent, CalculusUtils.MATH_CONTEXT);
         }
-        throw unsupportedNumberType(number);
+        throw new UnsupportedNumberTypeException(number, this.getClass());
     }
 
     @Override
@@ -344,7 +234,7 @@ public class DefaultNumberSystem implements NumberSystem {
         if (number instanceof Double || number instanceof Float) {
             final double doubleValue = number.doubleValue();
             if (!Double.isFinite(doubleValue)) {
-                throw unsupportedNumberValue(doubleValue);
+                throw new UnsupportedNumberValueException(doubleValue, this.getClass());
             }
             if (doubleValue % 1 == 0) {
                 // double represents an integer
@@ -409,88 +299,28 @@ public class DefaultNumberSystem implements NumberSystem {
 
     @Override
     public boolean isZero(Number number) {
-        DefaultNumberType numberType = DefaultNumberType.valueOf(number);
-        return compare(numberType.zero, number) == 0;
+        return createHelper(number).isZero();
     }
 
     @Override
     public boolean isOne(Number number) {
-        DefaultNumberType numberType = DefaultNumberType.valueOf(number);
-        return compare(numberType.one, number) == 0;
+        return createHelper(number).isOne();
     }
 
     @Override
     public boolean isLessThanOne(Number number) {
-        DefaultNumberType numberType = DefaultNumberType.valueOf(number);
-        return compare(numberType.one, number) > 0;
+        return createHelper(number).isLessThanOne();
     }
 
     @Override
     public boolean isInteger(Number number) {
-        DefaultNumberType numberType = DefaultNumberType.valueOf(number);
-        return isInteger(numberType, number);
+        return createHelper(number).isInteger();
     }
 
     // -- HELPER
 
-    private IllegalArgumentException unsupportedNumberValue(Number number) {
-        final String msg =
-                String.format(
-                        "Unsupported number value '%s' of type '%s' in number system '%s'",
-                        "" + number, number.getClass(), this.getClass().getName());
-
-        return new IllegalArgumentException(msg);
-    }
-
-    private IllegalArgumentException unsupportedNumberType(Number number) {
-        final String msg =
-                String.format(
-                        "Unsupported number type '%s' in number system '%s'",
-                        number.getClass().getName(), this.getClass().getName());
-
-        return new IllegalArgumentException(msg);
-    }
-
-    private IllegalStateException unexpectedCodeReach() {
-        final String msg =
-                String.format("Implementation Error: Code was reached that is expected unreachable");
-        return new IllegalStateException(msg);
-    }
-
     private boolean isIntegerOnly(Number number) {
         return DefaultNumberType.valueOf(number).isIntegerOnly();
-    }
-
-    private boolean isInteger(DefaultNumberType numberType, Number number) {
-        if (numberType.isIntegerOnly()) {
-            return true; // numberType only allows integer
-        }
-        if (number instanceof RationalNumber) {
-            return ((RationalNumber) number).isInteger();
-        }
-
-        // remaining types to check: Double, Float, BigDecimal ...
-
-        if (number instanceof BigDecimal) {
-            final BigDecimal decimal = (BigDecimal) number;
-            // see https://stackoverflow.com/questions/1078953/check-if-bigdecimal-is-integer-value
-            if (decimal.scale() <= 0) {
-                return true;
-            }
-            try {
-                decimal.toBigIntegerExact();
-                return true;
-            } catch (ArithmeticException ex) {
-                return false;
-            }
-        }
-        if (number instanceof Double || number instanceof Float) {
-            double doubleValue = number.doubleValue();
-            // see
-            // https://stackoverflow.com/questions/15963895/how-to-check-if-a-double-value-has-no-decimal-part
-            return doubleValue % 1 == 0;
-        }
-        throw unsupportedNumberType(number);
     }
 
     private int bitLengthOfInteger(Number number) {
@@ -533,11 +363,11 @@ public class DefaultNumberSystem implements NumberSystem {
             return BigDecimal.valueOf(number.doubleValue());
         }
         if (number instanceof RationalNumber) {
-            throw unexpectedCodeReach();
+            throw new UnexpectedCodeReachException();
             // Note: don't do that (potential precision loss)
             // return ((RationalNumber) number).bigDecimalValue();
         }
-        throw unsupportedNumberType(number);
+        throw new UnsupportedNumberTypeException(number, this.getClass());
     }
 
     private Number addWideAndNarrow(DefaultNumberType wideType, Number wide, Number narrow) {
@@ -777,5 +607,42 @@ public class DefaultNumberSystem implements NumberSystem {
     private static Number[] applyToArray(Number[] array, UnaryOperator<Number> operator) {
         // only ever used for length=2
         return new Number[]{operator.apply(array[0]), operator.apply(array[1])};
+    }
+
+    private NumberHelperContainer<?> createHelper(Number number) {
+        if (number instanceof BigInteger) {
+            return new NumberHelperContainer<>(BIG_INTEGER.helper(), (BigInteger) number);
+        }
+        if (number instanceof BigDecimal) {
+            return new NumberHelperContainer<>(BIG_DECIMAL.helper(), (BigDecimal) number);
+        }
+        if (number instanceof RationalNumber) {
+            return new NumberHelperContainer<>(RATIONAL.helper(), (RationalNumber) number);
+        }
+        if (number instanceof Double) {
+            return new NumberHelperContainer<>(DOUBLE_BOXED.helper(), (Double) number);
+        }
+        if (number instanceof Float) {
+            return new NumberHelperContainer<>(FLOAT_BOXED.helper(), (Float) number);
+        }
+        if (number instanceof Long) {
+            return new NumberHelperContainer<>(LONG_BOXED.helper(), (Long) number);
+        }
+        if (number instanceof Integer) {
+            return new NumberHelperContainer<>(INTEGER_BOXED.helper(), (Integer) number);
+        }
+        if (number instanceof Short) {
+            return new NumberHelperContainer<>(SHORT_BOXED.helper(), (Short) number);
+        }
+        if (number instanceof Byte) {
+            return new NumberHelperContainer<>(BYTE_BOXED.helper(), (byte) number);
+        }
+        if (number instanceof AtomicInteger) {
+            return new NumberHelperContainer<>(INTEGER_ATOMIC.helper(), (AtomicInteger) number);
+        }
+        if (number instanceof AtomicLong) {
+            return new NumberHelperContainer<>(LONG_ATOMIC.helper(), (AtomicLong) number);
+        }
+        throw new UnsupportedNumberTypeException(number, this.getClass());
     }
 }

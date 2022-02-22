@@ -1,6 +1,6 @@
 package com.raynigon.unit.api.jackson
 
-
+import com.raynigon.unit.api.jackson.config.UnitApiFeature
 import spock.lang.Specification
 
 class UnitApiJacksonPropertiesSpec extends Specification {
@@ -10,10 +10,10 @@ class UnitApiJacksonPropertiesSpec extends Specification {
         def props = new UnitApiJacksonProperties()
 
         when:
-        props.setFeatures(Map.of(com.raynigon.unit.api.jackson.config.UnitApiFeature.SYSTEM_UNIT_ON_MISSING_ANNOTATION, true))
+        props.setFeatures(Map.of(UnitApiFeature.SYSTEM_UNIT_ON_MISSING_ANNOTATION, true))
 
         then:
-        props.enabledFeatures == [com.raynigon.unit.api.jackson.config.UnitApiFeature.SYSTEM_UNIT_ON_MISSING_ANNOTATION] as Set
+        props.enabledFeatures == [UnitApiFeature.SYSTEM_UNIT_ON_MISSING_ANNOTATION] as Set
         props.disabledFeatures == [] as Set
 
     }
@@ -23,11 +23,11 @@ class UnitApiJacksonPropertiesSpec extends Specification {
         def props = new UnitApiJacksonProperties()
 
         when:
-        props.setFeatures(Map.of(com.raynigon.unit.api.jackson.config.UnitApiFeature.SYSTEM_UNIT_ON_MISSING_ANNOTATION, false))
+        props.setFeatures(Map.of(UnitApiFeature.SYSTEM_UNIT_ON_MISSING_ANNOTATION, false))
 
         then:
         props.enabledFeatures == [] as Set
-        props.disabledFeatures == [com.raynigon.unit.api.jackson.config.UnitApiFeature.SYSTEM_UNIT_ON_MISSING_ANNOTATION] as Set
+        props.disabledFeatures == [UnitApiFeature.SYSTEM_UNIT_ON_MISSING_ANNOTATION] as Set
 
     }
 }
