@@ -15,12 +15,12 @@ import java.util.concurrent.atomic.AtomicLong;
 public enum DefaultNumberType {
 
     // integer types
-    BYTE_BOXED(true, Byte.class, (byte) 1, (byte) 0, null),
-    SHORT_BOXED(true, Short.class, (short) 1, (short) 0, null),
+    BYTE_BOXED(true, Byte.class, (byte) 1, (byte) 0, new ByteHelper()),
+    SHORT_BOXED(true, Short.class, (short) 1, (short) 0, new ShortHelper()),
     INTEGER_BOXED(true, Integer.class, 1, 0, new IntegerHelper()),
-    INTEGER_ATOMIC(true, AtomicInteger.class, 1, 0, null),
+    INTEGER_ATOMIC(true, AtomicInteger.class, 1, 0, new AtomicIntegerHelper()),
     LONG_BOXED(true, Long.class, 1L, 0L, new LongHelper()),
-    LONG_ATOMIC(true, AtomicLong.class, 1L, 0, null),
+    LONG_ATOMIC(true, AtomicLong.class, 1L, 0, new AtomicLongHelper()),
     BIG_INTEGER(true, BigInteger.class, BigInteger.ONE, BigInteger.ZERO, new BigIntegerHelper()),
 
     // rational types
@@ -38,7 +38,10 @@ public enum DefaultNumberType {
     private final TypedNumberHelper<?> helper;
 
     DefaultNumberType(boolean integerOnly, Class<? extends Number> type, Number one, Number zero, TypedNumberHelper<?> helper) {
-
+        Objects.requireNonNull(type);
+        Objects.requireNonNull(one);
+        Objects.requireNonNull(zero);
+        Objects.requireNonNull(helper);
         this.integerOnly = integerOnly;
         this.type = type;
         this.one = one;
@@ -48,7 +51,6 @@ public enum DefaultNumberType {
 
     @SuppressWarnings("unchecked")
     public <T extends Number> TypedNumberHelper<T> helper() {
-        Objects.requireNonNull(helper);
         return (TypedNumberHelper<T>) helper;
     }
 
