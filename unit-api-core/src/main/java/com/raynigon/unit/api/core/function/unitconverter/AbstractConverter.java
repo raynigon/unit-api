@@ -56,9 +56,6 @@ import javax.measure.UnitConverter;
 public abstract class AbstractConverter
         implements UnitConverter, Converter<Number, Number>, Serializable, Comparable<UnitConverter> {
 
-    /**
-     *
-     */
     private static final long serialVersionUID = 5790242858468427131L;
 
     /**

@@ -55,7 +55,7 @@ final class CompositionTaskArrayAdapter<T> {
     /**
      * For the underlying array visits all sequential pairs of elements.
      *
-     * @param visitor
+     * @param visitor visitor which accepts the current and the previous element
      */
     public void visitSequentialPairs(BiConsumer<T, T> visitor) {
         if (array.length < 2) {

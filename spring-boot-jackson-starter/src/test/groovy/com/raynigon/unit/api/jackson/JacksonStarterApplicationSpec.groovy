@@ -4,9 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.raynigon.unit.api.jackson.helpers.BasicApplicationConfig
 import com.raynigon.unit.api.jackson.helpers.BasicRestController
 import com.raynigon.unit.api.jackson.helpers.BasicService
+import com.raynigon.unit.api.jackson.helpers.WeatherEntity
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
+import spock.lang.Ignore
 import spock.lang.Specification
 
 import static com.raynigon.unit.api.core.units.si.SISystemUnitsConstants.Celsius
@@ -37,7 +39,7 @@ class JacksonStarterApplicationSpec extends Specification {
 
     def 'context setup works'() {
         expect:
-        true
+        objectMapper.getRegisteredModuleIds().contains(new UnitApiModule().getTypeId())
     }
 
     def 'entity creation works'() {
@@ -66,7 +68,7 @@ class JacksonStarterApplicationSpec extends Specification {
         true
 
         when:
-        com.raynigon.unit.api.jackson.helpers.WeatherEntity result = objectMapper.readValue(input, com.raynigon.unit.api.jackson.helpers.WeatherEntity)
+        WeatherEntity result = objectMapper.readValue(input, WeatherEntity)
 
         then:
         expected.temperature == result.temperature
@@ -74,10 +76,10 @@ class JacksonStarterApplicationSpec extends Specification {
 
         where:
         input                                             | expected
-        '{ "temperature": "30 °C", "humidity": "10 %" }'  | new com.raynigon.unit.api.jackson.helpers.WeatherEntity(Celsius(30), Percent(10))
-        '{ "temperature": "30°C", "humidity": "10 %" }'   | new com.raynigon.unit.api.jackson.helpers.WeatherEntity(Celsius(30), Percent(10))
-        '{ "temperature": "-30 °C", "humidity": "10 %" }' | new com.raynigon.unit.api.jackson.helpers.WeatherEntity(Celsius(-30), Percent(10))
-        '{ "temperature": "-30°C", "humidity": "10 %" }'  | new com.raynigon.unit.api.jackson.helpers.WeatherEntity(Celsius(-30), Percent(10))
+        '{ "temperature": "30 °C", "humidity": "10 %" }'  | new WeatherEntity(Celsius(30), Percent(10))
+        '{ "temperature": "30°C", "humidity": "10 %" }'   | new WeatherEntity(Celsius(30), Percent(10))
+        '{ "temperature": "-30 °C", "humidity": "10 %" }' | new WeatherEntity(Celsius(-30), Percent(10))
+        '{ "temperature": "-30°C", "humidity": "10 %" }'  | new WeatherEntity(Celsius(-30), Percent(10))
     }
 
     def 'entity with custom writer'() {
@@ -90,8 +92,8 @@ class JacksonStarterApplicationSpec extends Specification {
 
         where:
         entity                                        | expected
-        new com.raynigon.unit.api.jackson.helpers.WeatherEntity(Celsius(30), Percent(10))   | '{"temperature":30.0,"humidity":"10.0%"}'
-        new com.raynigon.unit.api.jackson.helpers.WeatherEntity(Celsius(30), Percent(10.1)) | '{"temperature":30.0,"humidity":"10.1%"}'
-        new com.raynigon.unit.api.jackson.helpers.WeatherEntity(Celsius(30), Percent(-10))  | '{"temperature":30.0,"humidity":"-10.0%"}'
+        new WeatherEntity(Celsius(30), Percent(10))   | '{"temperature":30.0,"humidity":"10.0%"}'
+        new WeatherEntity(Celsius(30), Percent(10.1)) | '{"temperature":30.0,"humidity":"10.1%"}'
+        new WeatherEntity(Celsius(30), Percent(-10))  | '{"temperature":30.0,"humidity":"-10.0%"}'
     }
 }

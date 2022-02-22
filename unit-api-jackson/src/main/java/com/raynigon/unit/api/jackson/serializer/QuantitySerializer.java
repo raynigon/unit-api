@@ -117,7 +117,6 @@ public class QuantitySerializer extends JsonSerializer<Quantity> implements Cont
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     private Unit<?> getSystemUnit(SerializerProvider prov, BeanProperty property) throws UnknownUnitException {
-        Unit<?> unit;
         Class<Quantity> quantityType = (Class<Quantity>) property.getType()
                 .getBindings()
                 .getBoundType(0)

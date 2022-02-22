@@ -2,8 +2,12 @@ package com.raynigon.unit.api.jpa.type
 
 import com.raynigon.unit.api.core.annotation.QuantityShape
 import com.raynigon.unit.api.core.units.si.length.Metre
+import org.testcontainers.shaded.com.google.common.util.concurrent.AtomicDouble
 import spock.lang.Specification
 import spock.lang.Unroll
+
+import java.util.concurrent.atomic.AtomicInteger
+import java.util.concurrent.atomic.AtomicLong
 
 import static com.raynigon.unit.api.core.units.si.SISystemUnitsConstants.Metre
 
@@ -11,7 +15,7 @@ import static com.raynigon.unit.api.core.units.si.SISystemUnitsConstants.Metre
 class QuantityJavaDescriptorSpec extends Specification {
 
     @Unroll
-    def 'valid wrap #source'() {
+    def 'valid wrap #source.getClass()(#source)'() {
 
         given:
         QuantityJavaDescriptor descriptor = new QuantityJavaDescriptor(new Metre(), QuantityShape.NUMBER)
@@ -24,15 +28,17 @@ class QuantityJavaDescriptorSpec extends Specification {
         expectedResult.value.toDouble() == result.value.toDouble()
 
         where:
-        source              | expectedResult
-        Float.valueOf(1.1)  | Metre(1.1)
-        Double.valueOf(1.2) | Metre(1.2)
-        Byte.valueOf("2")   | Metre(2)
-        Short.valueOf("3")  | Metre(3)
-        Integer.valueOf(4)  | Metre(4)
-        Long.valueOf(5)     | Metre(5)
-        "6"                 | Metre(6)
-        "7 m"               | Metre(7)
+        source               | expectedResult
+        Float.valueOf(1.1)   | Metre(1.1)
+        Double.valueOf(1.2)  | Metre(1.2)
+        Byte.valueOf("2")    | Metre(2)
+        Short.valueOf("3")   | Metre(3)
+        Integer.valueOf(4)   | Metre(4)
+        Long.valueOf(5)      | Metre(5)
+        "6"                  | Metre(6)
+        "7 m"                | Metre(7)
+        new AtomicInteger(8) | Metre(8)
+        new AtomicLong(9)    | Metre(9)
     }
 
     @Unroll

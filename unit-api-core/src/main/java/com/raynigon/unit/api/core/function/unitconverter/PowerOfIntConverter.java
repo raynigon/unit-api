@@ -33,6 +33,7 @@ import com.raynigon.unit.api.core.function.IntExponentSupplier;
 import com.raynigon.unit.api.core.function.Calculator;
 import com.raynigon.unit.api.core.function.IntBaseSupplier;
 import com.raynigon.unit.api.core.function.RationalNumber;
+import org.jetbrains.annotations.NotNull;
 
 import java.math.BigInteger;
 import java.util.Objects;
@@ -68,9 +69,9 @@ public final class PowerOfIntConverter extends AbstractConverter
     /**
      * Creates a converter with a factor represented by specified base^exponent.
      *
-     * @param base
-     * @param exponent
-     * @return
+     * @param base     the base as an integer
+     * @param exponent the exponent as an integer
+     * @return instance which represents the given base^exponent
      */
     public static PowerOfIntConverter of(int base, int exponent) {
         return new PowerOfIntConverter(base, exponent);
@@ -79,15 +80,15 @@ public final class PowerOfIntConverter extends AbstractConverter
     /**
      * Creates a converter with a factor represented by specified base^exponent.
      *
-     * @param base
-     * @param exponent
-     * @return
+     * @param base     the base as number object, which will be converted to int
+     * @param exponent the exponent as an integer
+     * @return instance which represents the given base^exponent
      */
-    public static PowerOfIntConverter of(Number base, int exponent) {
+    public static PowerOfIntConverter of(@NotNull Number base, int exponent) {
         return new PowerOfIntConverter(base.intValue(), exponent);
     }
 
-    protected PowerOfIntConverter(int base, int exponent) {
+    private PowerOfIntConverter(int base, int exponent) {
         if (base == 0) {
             throw new IllegalArgumentException("base cannot be zero (because 0^0 is undefined)");
         }

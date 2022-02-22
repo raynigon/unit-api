@@ -7,7 +7,7 @@ import static ConverterTestUtils.closeTo
 
 class ExpConverterSpec extends Specification {
 
-    def 'identity returns false'(){
+    def 'identity returns false'() {
         expect:
         !new ExpConverter(10.0).isIdentity()
     }
@@ -57,15 +57,15 @@ class ExpConverterSpec extends Specification {
         invertedConverter == logConverter
 
         and:
-        result == value
+        Math.abs(result - value) < 0.00001
 
         where:
         base   | value
-        Math.E | 1.0
-        Math.E | 0.0
-        Math.E | -1.0
-        10.0d  | 1.0
-        10.0d  | 0.0
-        10.0d  | -1.0
+        Math.E | 1.0d
+        Math.E | 0.0d
+        Math.E | -1.0d
+        10.0d  | 1.0d
+        10.0d  | 0.0d
+        10.0d  | -1.0d
     }
 }
