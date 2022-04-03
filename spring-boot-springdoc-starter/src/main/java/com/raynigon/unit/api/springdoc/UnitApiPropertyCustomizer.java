@@ -59,10 +59,12 @@ public class UnitApiPropertyCustomizer implements PropertyCustomizer {
     @SuppressWarnings({"rawtypes", "unchecked"})
     private Unit<?> resolveUnit(AnnotatedType type) {
         SimpleType quantityType = (SimpleType) type.getType();
-        Class<?> quantityBoundType = (quantityType.getBindings().getBoundType(0).getRawClass());
+        Class<?> quantityBoundType = quantityType.getBindings().getBoundType(0).getRawClass();
         Unit<?> unit = UnitsApiService.getInstance().getUnit((Class) quantityBoundType);
         JsonUnit jsonUnit = resolveJsonUnit(type);
-        if (jsonUnit == null) return unit;
+        if (jsonUnit == null) {
+            return unit;
+        }
         Unit<?> resolvedUnit = JsonUnitHelper.getUnitInstance(jsonUnit);
         return resolvedUnit != null ? resolvedUnit : unit;
     }
