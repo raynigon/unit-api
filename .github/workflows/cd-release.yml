@@ -42,11 +42,12 @@ jobs:
       - name: Copy Assets
         run: |
           mkdir -p build/jars/
-          cp jackson-module/build/libs/*.jar build/jars/
-          cp jackson-starter/build/libs/*.jar build/jars/
-          cp jpa-starter/build/libs/*.jar build/jars/
-          cp springdoc-starter/build/libs/*.jar build/jars/
+          cp spring-boot-core-starter/build/libs/*.jar build/jars/
+          cp spring-boot-jackson-starter/build/libs/*.jar build/jars/
+          cp spring-boot-jpa-starter/build/libs/*.jar build/jars/
+          cp spring-boot-springdoc-starter/build/libs/*.jar build/jars/
           cp unit-api-core/build/libs/*.jar build/jars/
+          cp unit-api-jackson/build/libs/*.jar build/jars/
           cp unit-api-kotlin/build/libs/*.jar build/jars/
       - id: content
         name: Create Release Content
