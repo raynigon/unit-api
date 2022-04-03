@@ -9,6 +9,9 @@ import com.raynigon.unit.api.core.annotation.QuantityShape
 import com.raynigon.unit.api.core.units.si.length.Metre
 import com.raynigon.unit.api.core.units.si.speed.KilometrePerHour
 import com.raynigon.unit.api.core.units.si.temperature.Celsius
+import com.raynigon.unit.api.jackson.UnitApiModule
+import com.raynigon.unit.api.jackson.annotation.JsonUnit
+import com.raynigon.unit.api.jackson.config.UnitApiConfig
 import spock.lang.Specification
 
 import javax.measure.Quantity
@@ -19,13 +22,14 @@ import javax.measure.quantity.Temperature
 import static com.raynigon.unit.api.core.units.si.SISystemUnitsConstants.Celsius
 import static com.raynigon.unit.api.core.units.si.SISystemUnitsConstants.KilometrePerHour
 import static com.raynigon.unit.api.core.units.si.SISystemUnitsConstants.Metre
+import static com.raynigon.unit.api.jackson.annotation.JsonUnit.*
 
 class QuantitySerializerSpec extends Specification {
 
     def 'quantity deserialization with null unit'() {
 
         given:
-        def serializer = new QuantitySerializer(new com.raynigon.unit.api.jackson.config.UnitApiConfig(0))
+        def serializer = new QuantitySerializer(new UnitApiConfig(0))
 
         and:
         SerializerProvider prov = Mock()
@@ -39,10 +43,10 @@ class QuantitySerializerSpec extends Specification {
         boundType.getRawClass() >> DummyQuantity.class
 
         and:
-        def jsonUnit = Mock(com.raynigon.unit.api.jackson.annotation.JsonUnit)
-        property.getAnnotation(com.raynigon.unit.api.jackson.annotation.JsonUnit.class) >> jsonUnit
-        jsonUnit.value() >> com.raynigon.unit.api.jackson.annotation.JsonUnit.NoneUnit
-        jsonUnit.unit() >> com.raynigon.unit.api.jackson.annotation.JsonUnit.NoneUnit
+        def jsonUnit = Mock(JsonUnit)
+        property.getAnnotation(JsonUnit.class) >> jsonUnit
+        jsonUnit.value() >> NoneUnit
+        jsonUnit.unit() >> NoneUnit
 
         when:
         serializer.createContextual(prov, property)
@@ -58,7 +62,7 @@ class QuantitySerializerSpec extends Specification {
 
         given:
         def mapper = new ObjectMapper()
-        mapper.registerModule(new com.raynigon.unit.api.jackson.UnitApiModule())
+        mapper.registerModule(new UnitApiModule())
 
         and:
         def source = new BasicNumberEntity()
@@ -79,7 +83,7 @@ class QuantitySerializerSpec extends Specification {
 
         given:
         def mapper = new ObjectMapper()
-        mapper.registerModule(new com.raynigon.unit.api.jackson.UnitApiModule())
+        mapper.registerModule(new UnitApiModule())
 
         and:
         def source = new BasicNumericEntity()
@@ -100,7 +104,7 @@ class QuantitySerializerSpec extends Specification {
 
         given:
         def mapper = new ObjectMapper()
-        mapper.registerModule(new com.raynigon.unit.api.jackson.UnitApiModule())
+        mapper.registerModule(new UnitApiModule())
 
         and:
         def source = new BasicStringEntity()
@@ -121,7 +125,7 @@ class QuantitySerializerSpec extends Specification {
 
         given:
         def mapper = new ObjectMapper()
-        mapper.registerModule(new com.raynigon.unit.api.jackson.UnitApiModule())
+        mapper.registerModule(new UnitApiModule())
 
         and:
         def source = new BasicObjectEntity()
@@ -151,7 +155,7 @@ class QuantitySerializerSpec extends Specification {
 
         public String id;
 
-        @com.raynigon.unit.api.jackson.annotation.JsonUnit(unit = KilometrePerHour)
+        @JsonUnit(unit = KilometrePerHour)
         public Quantity<Speed> speed;
     }
 
@@ -159,7 +163,7 @@ class QuantitySerializerSpec extends Specification {
 
         public String id;
 
-        @com.raynigon.unit.api.jackson.annotation.JsonUnit(unit = KilometrePerHour, shape = QuantityShape.NUMERIC_STRING)
+        @JsonUnit(unit = KilometrePerHour, shape = QuantityShape.NUMERIC_STRING)
         public Quantity<Speed> speed;
     }
 
@@ -168,7 +172,7 @@ class QuantitySerializerSpec extends Specification {
 
         public String id;
 
-        @com.raynigon.unit.api.jackson.annotation.JsonUnit(unit = Celsius, shape = QuantityShape.STRING)
+        @JsonUnit(unit = Celsius, shape = QuantityShape.STRING)
         public Quantity<Temperature> temperature;
     }
 
@@ -176,7 +180,7 @@ class QuantitySerializerSpec extends Specification {
 
         public String id;
 
-        @com.raynigon.unit.api.jackson.annotation.JsonUnit(unit = Metre, shape = QuantityShape.OBJECT)
+        @JsonUnit(unit = Metre, shape = QuantityShape.OBJECT)
         public Quantity<Length> distance;
     }
 }
