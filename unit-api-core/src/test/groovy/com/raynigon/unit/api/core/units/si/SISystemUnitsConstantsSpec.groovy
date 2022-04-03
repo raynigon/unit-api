@@ -1,6 +1,6 @@
 package com.raynigon.unit.api.core.units.si
 
-
+import com.raynigon.unit.api.core.units.si.dimensionless.One
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -63,7 +63,7 @@ class SISystemUnitsConstantsSpec extends Specification {
                 .getUnits()
                 .stream()
                 .map({ it.getClass() })
-                .filter({ it != com.raynigon.unit.api.core.units.si.dimensionless.One.class })
+                .filter({ it != One.class })
                 .sorted(Comparator.comparing({ it.getSimpleName() }))
                 .distinct()
                 .collect(Collectors.toList())

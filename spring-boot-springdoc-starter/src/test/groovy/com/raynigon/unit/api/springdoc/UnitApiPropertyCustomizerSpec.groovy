@@ -26,6 +26,7 @@ class UnitApiPropertyCustomizerSpec extends Specification {
         def property = new Schema()
         property.name = "speed"
         def annotatedType = new AnnotatedType()
+        annotatedType.propertyName = "speed"
         annotatedType.type = new SimpleType(
                 Quantity.class,
                 TypeBindings.create(
@@ -52,6 +53,7 @@ class UnitApiPropertyCustomizerSpec extends Specification {
         def property = new Schema()
         property.name = "speed"
         def annotatedType = new AnnotatedType()
+        annotatedType.propertyName = "speed"
         annotatedType.type = new SimpleType(
                 Quantity.class,
                 TypeBindings.create(
@@ -86,6 +88,7 @@ class UnitApiPropertyCustomizerSpec extends Specification {
         def property = new Schema()
         property.name = "speed"
         def annotatedType = new AnnotatedType()
+        annotatedType.propertyName = "speed"
         annotatedType.type = new SimpleType(
                 Quantity.class,
                 TypeBindings.create(
@@ -123,6 +126,7 @@ class UnitApiPropertyCustomizerSpec extends Specification {
         property.name = "speed"
         property.description(input)
         def annotatedType = new AnnotatedType()
+        annotatedType.propertyName = "speed"
         annotatedType.type = new SimpleType(
                 Quantity.class,
                 TypeBindings.create(
