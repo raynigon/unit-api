@@ -9,7 +9,9 @@ import com.raynigon.unit.api.core.annotation.QuantityShape
 import com.raynigon.unit.api.core.units.si.length.Metre
 import com.raynigon.unit.api.core.units.si.speed.KilometrePerHour
 import com.raynigon.unit.api.core.units.si.temperature.Celsius
+import com.raynigon.unit.api.jackson.UnitApiModule
 import com.raynigon.unit.api.jackson.annotation.JsonUnit
+import com.raynigon.unit.api.jackson.config.UnitApiConfig
 import spock.lang.Specification
 
 import javax.measure.Quantity
@@ -27,7 +29,7 @@ class QuantitySerializerSpec extends Specification {
     def 'quantity deserialization with null unit'() {
 
         given:
-        def serializer = new QuantitySerializer(new com.raynigon.unit.api.jackson.config.UnitApiConfig(0))
+        def serializer = new QuantitySerializer(new UnitApiConfig(0))
 
         and:
         SerializerProvider prov = Mock()

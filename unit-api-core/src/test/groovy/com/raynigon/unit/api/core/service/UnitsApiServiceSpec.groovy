@@ -1,6 +1,7 @@
 package com.raynigon.unit.api.core.service
 
 import com.raynigon.unit.api.core.service.testdata.DummySystemOfUnits
+import com.raynigon.unit.api.core.service.testdata.DummyUnit
 import com.raynigon.unit.api.core.units.si.energy.Joule
 import com.raynigon.unit.api.core.units.si.length.Metre
 import spock.lang.Specification
@@ -35,7 +36,7 @@ class UnitsApiServiceSpec extends Specification {
 
     def 'service loader works'(){
         expect:
-        UnitsApiService.getInstance().getUnit("WTF") == new Metre()
+        UnitsApiService.getInstance().getUnit("WTF") == new DummyUnit()
     }
 
     def 'add SystemOfUnits'(){
