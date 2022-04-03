@@ -28,7 +28,7 @@ nav:
   - Spring Boot:
       - General: spring-boot/index.md
       - Jackson: spring-boot/jackson.md
-      - Hibernate: spring-boot/hibernate.md
+      - JPA: spring-boot/jpa.md
       - Springdoc: spring-boot/springdoc.md
   - Kotlin: kotlin/index.md
   #- Examples: examples.md

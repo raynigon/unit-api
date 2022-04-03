@@ -6,10 +6,7 @@ import com.raynigon.unit.api.core.units.si.SISystem;
 import com.raynigon.unit.api.core.quantities.NumberQuantity;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.ServiceLoader;
-import java.util.Set;
+import java.util.*;
 import javax.measure.Quantity;
 import javax.measure.Unit;
 import javax.measure.spi.SystemOfUnits;
@@ -55,6 +52,21 @@ public class DefaultUnitsApiService implements UnitsApiService {
         for (SystemOfUnits system : serviceLoader) {
             systems.add(system);
         }
+    }
+
+    @Override
+    public SystemOfUnits getSystemOfUnits() {
+        return baseSystem;
+    }
+
+    @Override
+    public SystemOfUnits getSystemOfUnits(String name) {
+        return systems.stream().filter(system -> Objects.equals(system.getName(), name)).findFirst().orElse(null);
+    }
+
+    @Override
+    public Collection<SystemOfUnits> getAvailableSystemsOfUnits() {
+        return systems;
     }
 
     @Override

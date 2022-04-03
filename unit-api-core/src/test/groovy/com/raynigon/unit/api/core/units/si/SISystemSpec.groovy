@@ -1,6 +1,22 @@
 package com.raynigon.unit.api.core.units.si
 
-
+import com.raynigon.unit.api.core.units.si.acceleration.MetrePerSquaredSecond
+import com.raynigon.unit.api.core.units.si.energy.Joule
+import com.raynigon.unit.api.core.units.si.energy.KiloWattHour
+import com.raynigon.unit.api.core.units.si.energy.WattHour
+import com.raynigon.unit.api.core.units.si.force.Newton
+import com.raynigon.unit.api.core.units.si.length.Kilometre
+import com.raynigon.unit.api.core.units.si.length.Metre
+import com.raynigon.unit.api.core.units.si.length.Millimetre
+import com.raynigon.unit.api.core.units.si.mass.Kilogram
+import com.raynigon.unit.api.core.units.si.power.Watt
+import com.raynigon.unit.api.core.units.si.speed.KilometrePerHour
+import com.raynigon.unit.api.core.units.si.speed.MetrePerSecond
+import com.raynigon.unit.api.core.units.si.temperature.Celsius
+import com.raynigon.unit.api.core.units.si.temperature.Kelvin
+import com.raynigon.unit.api.core.units.si.time.Hour
+import com.raynigon.unit.api.core.units.si.time.Minute
+import com.raynigon.unit.api.core.units.si.time.Second
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -23,31 +39,31 @@ class SISystemSpec extends Specification {
         where:
         symbol   | expectedUnit
         // acceleration
-        "m/s²"   | new com.raynigon.unit.api.core.units.si.acceleration.MetrePerSquaredSecond()
+        "m/s²"   | new MetrePerSquaredSecond()
         // energy
-        "J"      | new com.raynigon.unit.api.core.units.si.energy.Joule()
-        "Wh"     | new com.raynigon.unit.api.core.units.si.energy.WattHour()
-        "kWh"    | new com.raynigon.unit.api.core.units.si.energy.KiloWattHour()
+        "J"      | new Joule()
+        "Wh"     | new WattHour()
+        "kWh"    | new KiloWattHour()
         // force
-        "N"      | new com.raynigon.unit.api.core.units.si.force.Newton()
+        "N"      | new Newton()
         // length
-        "m"      | new com.raynigon.unit.api.core.units.si.length.Metre()
-        "km"     | new com.raynigon.unit.api.core.units.si.length.Kilometre()
-        "mm"     | new com.raynigon.unit.api.core.units.si.length.Millimetre()
+        "m"      | new Metre()
+        "km"     | new Kilometre()
+        "mm"     | new Millimetre()
         // mass
-        "kg"     | new com.raynigon.unit.api.core.units.si.mass.Kilogram()
+        "kg"     | new Kilogram()
         // power
-        "W"      | new com.raynigon.unit.api.core.units.si.power.Watt()
+        "W"      | new Watt()
         // speed
-        "m/s"    | new com.raynigon.unit.api.core.units.si.speed.MetrePerSecond()
-        "km/h"   | new com.raynigon.unit.api.core.units.si.speed.KilometrePerHour()
+        "m/s"    | new MetrePerSecond()
+        "km/h"   | new KilometrePerHour()
         // temperature
-        "K"      | new com.raynigon.unit.api.core.units.si.temperature.Kelvin()
-        "\u2103" | new com.raynigon.unit.api.core.units.si.temperature.Celsius()
+        "K"      | new Kelvin()
+        "\u2103" | new Celsius()
         // time
-        "s"      | new com.raynigon.unit.api.core.units.si.time.Second()
-        "min"    | new com.raynigon.unit.api.core.units.si.time.Minute()
-        "h"      | new com.raynigon.unit.api.core.units.si.time.Hour()
+        "s"      | new Second()
+        "min"    | new Minute()
+        "h"      | new Hour()
     }
 
     def 'metre conversion'() {
@@ -56,13 +72,13 @@ class SISystemSpec extends Specification {
         def quantity = quantity(initialValue, unit)
 
         then:
-        expectedValue == quantity.to(new com.raynigon.unit.api.core.units.si.length.Metre()).value.intValue()
+        expectedValue == quantity.to(new Metre()).value.intValue()
 
         where:
         unit             | initialValue | expectedValue
-        new com.raynigon.unit.api.core.units.si.length.Metre()      | 1    | 1
-        new com.raynigon.unit.api.core.units.si.length.Millimetre() | 1000 | 1
-        new com.raynigon.unit.api.core.units.si.length.Kilometre()  | 1    | 1000
+        new Metre()      | 1    | 1
+        new Millimetre() | 1000 | 1
+        new Kilometre()  | 1    | 1000
     }
 
     def 'energy conversion'() {
@@ -71,13 +87,13 @@ class SISystemSpec extends Specification {
         def quantity = quantity(initialValue, unit)
 
         then:
-        expectedValue == quantity.to(new com.raynigon.unit.api.core.units.si.energy.Joule()).value.intValue()
+        expectedValue == quantity.to(new Joule()).value.intValue()
 
         where:
         unit               | initialValue | expectedValue
-        new com.raynigon.unit.api.core.units.si.energy.Joule()        | 1 | 1
-        new com.raynigon.unit.api.core.units.si.energy.WattHour()     | 1 | 3600
-        new com.raynigon.unit.api.core.units.si.energy.KiloWattHour() | 1 | 3600000
+        new Joule()        | 1 | 1
+        new WattHour()     | 1 | 3600
+        new KiloWattHour() | 1 | 3600000
     }
 
     def 'speed conversion'() {
@@ -86,11 +102,11 @@ class SISystemSpec extends Specification {
         def quantity = quantity(initialValue, unit)
 
         then:
-        expectedValue == quantity.to(new com.raynigon.unit.api.core.units.si.speed.MetrePerSecond()).value.intValue()
+        expectedValue == quantity.to(new MetrePerSecond()).value.intValue()
 
         where:
         unit                   | initialValue | expectedValue
-        new com.raynigon.unit.api.core.units.si.speed.MetrePerSecond()   | 1  | 1
-        new com.raynigon.unit.api.core.units.si.speed.KilometrePerHour() | 36 | 10
+        new MetrePerSecond()   | 1  | 1
+        new KilometrePerHour() | 36 | 10
     }
 }

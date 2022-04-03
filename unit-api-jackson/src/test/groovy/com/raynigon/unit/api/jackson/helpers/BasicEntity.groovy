@@ -4,6 +4,7 @@ import com.raynigon.unit.api.core.annotation.QuantityShape
 import com.raynigon.unit.api.core.units.si.length.Kilometre
 import com.raynigon.unit.api.core.units.si.speed.KilometrePerHour
 import com.raynigon.unit.api.core.units.si.temperature.Celsius
+import com.raynigon.unit.api.jackson.annotation.JsonUnit
 
 import javax.measure.Quantity
 import javax.measure.quantity.Length
@@ -14,13 +15,12 @@ class BasicEntity {
 
     public String id;
 
-    @com.raynigon.unit.api.jackson.annotation.JsonUnit(unit = KilometrePerHour)
+    @JsonUnit(unit = KilometrePerHour)
     public Quantity<Speed> speed;
 
-    @com.raynigon.unit.api.jackson.annotation.JsonUnit(unit = Celsius, shape = QuantityShape.STRING)
+    @JsonUnit(unit = Celsius, shape = QuantityShape.STRING)
     public Quantity<Temperature> temperature;
 
-    @com.raynigon.unit.api.jackson.annotation.JsonUnit(unit = Kilometre)
+    @JsonUnit(unit = Kilometre)
     public Quantity<Length> distance;
-
 }
