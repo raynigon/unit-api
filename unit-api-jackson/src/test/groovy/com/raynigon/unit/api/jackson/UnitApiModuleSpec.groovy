@@ -1,7 +1,11 @@
 package com.raynigon.unit.api.jackson
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.raynigon.unit.api.jackson.helpers.BasicEntity
 import spock.lang.Specification
+
+import static com.raynigon.unit.api.jackson.config.UnitApiFeature.SYSTEM_UNIT_ON_MISSING_ANNOTATION
+import static com.raynigon.unit.api.jackson.helpers.BasicEntity.*
 
 class UnitApiModuleSpec extends Specification {
 
@@ -20,8 +24,10 @@ class UnitApiModuleSpec extends Specification {
     def 'basic deserialization'() {
 
         given:
-        def mapper = new ObjectMapper()
+        // init_unit_api_jackson_basic {
+        ObjectMapper mapper = new ObjectMapper()
         mapper.registerModule(new UnitApiModule())
+        // }
 
         and:
         def source = mapper.writeValueAsString([
@@ -31,7 +37,7 @@ class UnitApiModuleSpec extends Specification {
         ])
 
         when:
-        def result = mapper.readValue(source, com.raynigon.unit.api.jackson.helpers.BasicEntity.class)
+        def result = mapper.readValue(source, BasicEntity.class)
 
         then:
         noExceptionThrown()
@@ -43,27 +49,29 @@ class UnitApiModuleSpec extends Specification {
     def 'basic builder works'() {
 
         when:
-        def module = UnitApiModule.create().enable(com.raynigon.unit.api.jackson.config.UnitApiFeature.SYSTEM_UNIT_ON_MISSING_ANNOTATION).build()
+        UnitApiModule module = UnitApiModule.create().enable(SYSTEM_UNIT_ON_MISSING_ANNOTATION).build()
 
         then:
-        module.getConfig().isEnabled(com.raynigon.unit.api.jackson.config.UnitApiFeature.SYSTEM_UNIT_ON_MISSING_ANNOTATION)
+        module.getConfig().isEnabled(SYSTEM_UNIT_ON_MISSING_ANNOTATION)
     }
 
     def 'withFeatures builder works'() {
 
         when:
-        def module = UnitApiModule.withFeatures(com.raynigon.unit.api.jackson.config.UnitApiFeature.SYSTEM_UNIT_ON_MISSING_ANNOTATION)
+        // init_unit_api_jackson_with_features {
+        UnitApiModule module = UnitApiModule.withFeatures(SYSTEM_UNIT_ON_MISSING_ANNOTATION)
+        // }
 
         then:
-        module.getConfig().isEnabled(com.raynigon.unit.api.jackson.config.UnitApiFeature.SYSTEM_UNIT_ON_MISSING_ANNOTATION)
+        module.getConfig().isEnabled(SYSTEM_UNIT_ON_MISSING_ANNOTATION)
     }
 
     def 'withoutFeatures builder works'() {
 
         when:
-        def module = UnitApiModule.withoutFeatures(com.raynigon.unit.api.jackson.config.UnitApiFeature.SYSTEM_UNIT_ON_MISSING_ANNOTATION)
+        def module = UnitApiModule.withoutFeatures(SYSTEM_UNIT_ON_MISSING_ANNOTATION)
 
         then:
-        !module.getConfig().isEnabled(com.raynigon.unit.api.jackson.config.UnitApiFeature.SYSTEM_UNIT_ON_MISSING_ANNOTATION)
+        !module.getConfig().isEnabled(SYSTEM_UNIT_ON_MISSING_ANNOTATION)
     }
 }

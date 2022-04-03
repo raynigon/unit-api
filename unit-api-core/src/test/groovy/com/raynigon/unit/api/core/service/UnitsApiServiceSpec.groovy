@@ -1,6 +1,9 @@
 package com.raynigon.unit.api.core.service
 
-
+import com.raynigon.unit.api.core.service.testdata.DummySystemOfUnits
+import com.raynigon.unit.api.core.service.testdata.DummyUnit
+import com.raynigon.unit.api.core.units.si.energy.Joule
+import com.raynigon.unit.api.core.units.si.length.Metre
 import spock.lang.Specification
 
 import javax.measure.Unit
@@ -17,7 +20,7 @@ class UnitsApiServiceSpec extends Specification {
 
     def 'joule to watt-hour works'() {
         given:
-        def joule1 = quantity(3600, new com.raynigon.unit.api.core.units.si.energy.Joule())
+        def joule1 = quantity(3600, new Joule())
 
         when:
         def result = joule1.to(UnitsApiService.getInstance().getUnit("Wh") as Unit<Energy>)
@@ -33,6 +36,13 @@ class UnitsApiServiceSpec extends Specification {
 
     def 'service loader works'(){
         expect:
-        UnitsApiService.getInstance().getUnit("WTF") == new com.raynigon.unit.api.core.units.si.length.Metre()
+        UnitsApiService.getInstance().getUnit("WTF") == new DummyUnit()
+    }
+
+    def 'add SystemOfUnits'(){
+        expect:
+        // add_system_of_units {
+        UnitsApiService.getInstance().addSystemOfUnits(new DummySystemOfUnits())
+        // }
     }
 }

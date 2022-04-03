@@ -8,8 +8,9 @@ import org.jetbrains.annotations.NotNull;
 import javax.measure.Quantity;
 import javax.measure.Unit;
 import javax.measure.spi.SystemOfUnits;
+import javax.measure.spi.SystemOfUnitsService;
 
-public interface UnitsApiService {
+public interface UnitsApiService extends SystemOfUnitsService {
 
     static @NotNull UnitsApiService getInstance() {
         return DefaultUnitsApiService.getInstance();
