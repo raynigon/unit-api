@@ -2,6 +2,7 @@ package com.raynigon.unit.api.core.units.si;
 
 import static com.raynigon.unit.api.core.service.UnitsApiService.quantity;
 
+import com.raynigon.unit.api.core.quantities.Torque;
 import com.raynigon.unit.api.core.units.si.area.SquareMetre;
 import com.raynigon.unit.api.core.units.si.mass.Kilogram;
 import com.raynigon.unit.api.core.units.si.acceleration.MetrePerSquaredSecond;
@@ -29,6 +30,7 @@ import com.raynigon.unit.api.core.units.si.speed.KilometrePerHour;
 import com.raynigon.unit.api.core.units.si.speed.MetrePerSecond;
 import com.raynigon.unit.api.core.units.si.temperature.Celsius;
 import com.raynigon.unit.api.core.units.si.temperature.Kelvin;
+import com.raynigon.unit.api.core.units.si.torque.NewtonMetre;
 import com.raynigon.unit.api.core.units.si.volume.CubicMetre;
 import com.raynigon.unit.api.core.units.si.volume.Litre;
 import com.raynigon.unit.api.core.units.si.time.Hour;
@@ -87,6 +89,7 @@ public class SISystemUnitsConstants {
     public static final Minute Minute = new Minute();
     public static final NanoSecond NanoSecond = new NanoSecond();
     public static final Newton Newton = new Newton();
+    public static final NewtonMetre NewtonMetre = new NewtonMetre();
     public static final One One = new One();
     public static final Percent Percent = new Percent();
     public static final Second Second = new Second();
@@ -166,6 +169,11 @@ public class SISystemUnitsConstants {
     @SuppressWarnings("PMD.MethodNamingConventions")
     public static @NotNull Quantity<Force> Newton(@NotNull Number value) {
         return quantity(value, Newton);
+    }
+
+    @SuppressWarnings("PMD.MethodNamingConventions")
+    public static @NotNull Quantity<Torque> NewtonMetre(@NotNull Number value) {
+        return quantity(value, NewtonMetre);
     }
 
     @SuppressWarnings("PMD.MethodNamingConventions")
