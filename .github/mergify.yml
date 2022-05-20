@@ -9,7 +9,7 @@ pull_request_rules:
         - label=dependencies
         - author=dependabot[bot]
         - check-success=javadoc
-        - check-success=Codacy Static Code Analysis
+        - check-success=test
     actions:
       merge:
         method: merge
