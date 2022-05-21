@@ -16,9 +16,12 @@ theme:
 repo_name: 'unit-api'
 repo_url: 'https://github.com/raynigon/unit-api'
 markdown_extensions:
-  - pymdownx.tabbed
-  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true 
+  - pymdownx.highlight
+  - pymdownx.inlinehilite
   - pymdownx.snippets
+  - pymdownx.superfences
   - admonition
 nav:
   - Home: index.md
