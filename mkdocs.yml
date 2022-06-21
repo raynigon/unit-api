@@ -16,9 +16,12 @@ theme:
 repo_name: 'unit-api'
 repo_url: 'https://github.com/raynigon/unit-api'
 markdown_extensions:
-  - pymdownx.tabbed
-  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true 
+  - pymdownx.highlight
+  - pymdownx.inlinehilite
   - pymdownx.snippets
+  - pymdownx.superfences
   - admonition
 nav:
   - Home: index.md
@@ -35,4 +38,4 @@ nav:
   - JavaDoc: javadoc-ref.md
   - Contribution: contribution.md
 extra:
-  latest_version: 1.1.7
+  latest_version: 2.0.1
