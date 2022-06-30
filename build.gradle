@@ -9,7 +9,7 @@ plugins {
     id 'signing'
     id 'maven-publish'
     id 'org.springframework.boot' version '2.7.1'
-    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.12.RELEASE'
 
     // Auto Update Versions
     id 'se.patrikerdes.use-latest-versions' version '0.2.18'
