@@ -41,14 +41,14 @@ jobs:
           ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.SIGNING_KEY_PASSPHRASE }}
       - name: Copy Assets
         run: |
-          mkdir -p build/jars/
-          cp spring-boot-core-starter/build/libs/*.jar build/jars/
-          cp spring-boot-jackson-starter/build/libs/*.jar build/jars/
-          cp spring-boot-jpa-starter/build/libs/*.jar build/jars/
-          cp spring-boot-springdoc-starter/build/libs/*.jar build/jars/
-          cp unit-api-core/build/libs/*.jar build/jars/
-          cp unit-api-jackson/build/libs/*.jar build/jars/
-          cp unit-api-kotlin/build/libs/*.jar build/jars/
+          mkdir -p build/libs/
+          cp spring-boot-core-starter/build/libs/*.jar build/libs/
+          cp spring-boot-jackson-starter/build/libs/*.jar build/libs/
+          cp spring-boot-jpa-starter/build/libs/*.jar build/libs/
+          cp spring-boot-springdoc-starter/build/libs/*.jar build/libs/
+          cp unit-api-core/build/libs/*.jar build/libs/
+          cp unit-api-jackson/build/libs/*.jar build/libs/
+          cp unit-api-kotlin/build/libs/*.jar build/libs/
       - id: content
         name: Create Release Content
         uses: raynigon/release-documentation@main
