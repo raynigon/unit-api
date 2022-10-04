@@ -10,6 +10,6 @@ dependencies {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
     testImplementation("org.postgresql:postgresql:42.5.0")
-    testImplementation("org.testcontainers:postgresql:1.17.4")
+    testImplementation("org.testcontainers:postgresql:1.17.5")
     testImplementation 'org.spockframework:spock-spring'
 }
