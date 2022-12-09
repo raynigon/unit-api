@@ -5,7 +5,7 @@
 ## About
 
 The (Raynigon) Unit API provides an Implementation of [JSR-385](https://www.jcp.org/en/jsr/detail?id=385) 
-with focus on the SI System redefinition, modularity and support for Java SE 8/9 and above.
+with focus on the SI System redefinition, modularity and support for Java SE 17 and above.
 It integrates into various Frameworks, Libraries and Languages, such as Spring Boot, Hibernate, Jackson, Kotlin and more.  
 Spring Boot integrations are available as "-starter" modules. 
 The Spring Boot Starter modules will allow you to use the unit-api directly in Spring Boot without configuration.

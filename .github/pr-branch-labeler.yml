@@ -7,3 +7,6 @@ bug:
   
 housekeeping:
   head: "housekeeping/*"
+
+documentation:
+  head: "docs/*"
