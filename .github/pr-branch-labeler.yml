@@ -1,6 +1,9 @@
 # Apply label "feature" if head matches "feature/*"
-enhancement:
+feature:
   head: "feature/*"
 
 bug:
   head: "bugfix/*"
+  
+housekeeping:
+  head: "housekeeping/*"
