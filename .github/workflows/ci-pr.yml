@@ -80,3 +80,47 @@ jobs:
         with:
           name: "Website"
           path: "build/site/"
+
+  owasp:
+    name: "OWASP check"
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    concurrency:
+      group: "owasp-check-${{ github.ref }}"
+      cancel-in-progress: true
+    steps:
+      - name: "Checkout Code"
+        uses: actions/checkout@v3
+      - name: "Setup Java JDK"
+        uses: actions/setup-java@v3.8.0
+        with:
+          java-version: 17
+          distribution: adopt
+      - name: Cache Dependency Database
+        uses: actions/cache@v3
+        with:
+          path: "~/.gradle/dependency-check-data/"
+          key: "owasp-check"
+      - name: "Execute dependencyCheckUpdate"
+        uses: eskatos/gradle-command-action@v2.3.3
+        continue-on-error: true
+        with:
+          arguments: dependencyCheckUpdate
+      - name: "Execute dependencyCheckAnalyze"
+        uses: eskatos/gradle-command-action@v2.3.3
+        continue-on-error: true
+        with:
+          arguments: dependencyCheckAnalyze
+      - id: "eval"
+        name: "Evaluate OWASP report"
+        uses: raynigon/gradle-owasp-parser@main
+        with:
+          fail_on_vulnerabilities: "true"
+          path_report: "build/reports/dependency-check-report.json"
+          path_build_gradle: "build.gradle.kts"
+      - name: Add comment to PR
+        if: ${{ failure() }}
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          message: "${{ steps.eval.outputs.report_markdown }}"
+          comment_tag: 'Comment-ID: owasp-report-${{ github.ref }}'
