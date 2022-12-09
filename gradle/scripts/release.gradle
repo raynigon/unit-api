@@ -7,7 +7,7 @@ release {
     buildTasks = ['publish']
 
     git {
-        requireBranch = "release"
+        requireBranch.set("release")
     }
 }
 
