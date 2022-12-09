@@ -8,6 +8,8 @@ import com.raynigon.unit.api.jackson.helpers.WeatherEntity
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
+import org.springframework.test.context.ContextConfiguration
+import org.springframework.test.context.TestPropertySource
 import spock.lang.Ignore
 import spock.lang.Specification
 
@@ -21,7 +23,9 @@ import static com.raynigon.unit.api.core.units.si.SISystemUnitsConstants.Percent
                 BasicApplicationConfig,
                 BasicRestController,
                 BasicService
-        ],
+        ]
+)
+@TestPropertySource(
         properties = [
                 "spring.jackson.unit-api.features.SYSTEM_UNIT_ON_MISSING_ANNOTATION=true"
         ]
