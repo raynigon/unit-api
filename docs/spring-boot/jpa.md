@@ -22,19 +22,14 @@ Currently the Raynigon Unit API JPA integration only works for hibernate.
 
 ## Usage
 To use the Raynigon Unit API with JPA, an Entity needs to be created.
-This Entity needs to have a `@TypeDef` annotation with a definition for the `QuantityType`.
+This Entity needs to have a `@Type` annotation with a definition for the `QuantityType`.
 
 !!! warning
-    You need to have the `@TypeDef` annotation on every Entity due to a missing feature in hibernate 
+    You need to have the `@Type` annotation on every Entity due to a missing feature in hibernate 
     (see [here](https://hibernate.atlassian.net/browse/HHH-11110)).
 ```java
 @Entity
 @Table("basic_entity")
-@TypeDef(
-        name = "quantity",
-        typeClass = QuantityType.class,
-        defaultForType = Quantity.class
-)
 public class BasicEntity {
 
     @Id
@@ -42,6 +37,7 @@ public class BasicEntity {
     public String id;
     
     @JpaUnit(KilometrePerHour.class)
+    @Type(QuantityType.class)
     @Column(name="speed")
     public Quantity<Speed> speed;
 }
