@@ -30,7 +30,6 @@ import static com.raynigon.unit.api.core.units.si.SISystemUnitsConstants.Percent
                 "spring.jackson.unit-api.features.SYSTEM_UNIT_ON_MISSING_ANNOTATION=true"
         ]
 )
-//@ContextConfiguration(classes = [UnitApiJacksonConfiguration])
 class JacksonStarterApplicationSpec extends Specification {
 
     @Autowired

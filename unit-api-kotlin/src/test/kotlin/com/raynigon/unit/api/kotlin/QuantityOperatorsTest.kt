@@ -53,8 +53,9 @@ internal class QuantityOperatorsTest {
         * language is "Note: this class has a natural ordering that is
         * inconsistent with equals."*/
     }
-
+    
     @Test
+    @Suppress("UNCHECKED_CAST")
     fun `invalid comparison fails`() {
         val a = Metre(3) as Quantity<*>
         val b = Watt(4) as Quantity<*>
