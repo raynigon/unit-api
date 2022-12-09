@@ -123,7 +123,7 @@ jobs:
         with:
           fail_on_vulnerabilities: "true"
           path_report: "build/reports/dependency-check-report.json"
-          path_build_gradle: "build.gradle.kts"
+          path_build_gradle: "build.gradle"
       - name: Add comment to PR
         if: ${{ failure() }}
         uses: thollander/actions-comment-pull-request@v2
