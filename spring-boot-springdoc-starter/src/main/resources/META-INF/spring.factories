@@ -1,2 +1,0 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.raynigon.unit.api.springdoc.UnitApiSpringdocConfiguration

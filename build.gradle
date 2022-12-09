@@ -11,7 +11,7 @@ plugins {
     id 'java-library'
     id 'signing'
     id 'maven-publish'
-    id 'org.springframework.boot' version '2.7.5'
+    id 'org.springframework.boot' version '3.0.0'
     id 'io.spring.dependency-management' version '1.1.0'
 
     // Auto Update Versions
@@ -31,7 +31,7 @@ plugins {
 allprojects {
     group = 'com.raynigon.unit-api'
     // version = project.version
-    sourceCompatibility = '1.8'
+    sourceCompatibility = JavaLanguageVersion.of(17)
     repositories {
         mavenCentral()
     }
@@ -51,8 +51,8 @@ subprojects {
     apply plugin: 'pmd'
     apply plugin: 'com.github.spotbugs'
 
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
+    sourceCompatibility = JavaLanguageVersion.of(17)
+    targetCompatibility = JavaLanguageVersion.of(17)
     compileJava.options.encoding = 'UTF-8'
     compileTestJava.options.encoding = 'UTF-8'
 
@@ -86,11 +86,11 @@ subprojects {
         annotationProcessor 'org.projectlombok:lombok:1.18.22'
 
         testCompileOnly 'org.projectlombok:lombok:1.18.22'
-        testImplementation 'org.codehaus.groovy:groovy:3.0.13'
-        testImplementation platform("org.spockframework:spock-bom:2.1-groovy-3.0")
-        testImplementation 'org.spockframework:spock-core'
+        testImplementation 'org.apache.groovy:groovy:4.0.6'
+        testImplementation 'org.spockframework:spock-core:2.4-M1-groovy-4.0'
         testRuntimeOnly "net.bytebuddy:byte-buddy:1.12.19"
         testAnnotationProcessor 'org.projectlombok:lombok:1.18.22'
+
     }
 
 

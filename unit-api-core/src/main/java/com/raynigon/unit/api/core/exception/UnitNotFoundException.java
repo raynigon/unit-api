@@ -7,7 +7,7 @@ import java.util.Objects;
 
 public class UnitNotFoundException extends RuntimeException {
     public UnitNotFoundException(@NotNull String symbol) {
-        super("No Unit was found for symbol" + symbol);
+        super("No Unit was found for symbol: " + symbol);
         Objects.requireNonNull(symbol);
     }
 
@@ -16,6 +16,7 @@ public class UnitNotFoundException extends RuntimeException {
         Objects.requireNonNull(quantityType);
     }
 
+    @SuppressWarnings("unused")
     public UnitNotFoundException(Class<?> quantityType, String message) {
         super("No Unit was found for QuantityType " + quantityType.getName() + "\n" + message);
         Objects.requireNonNull(quantityType);

@@ -1,6 +1,7 @@
 package com.raynigon.unit.api.jpa
 
-
+import com.raynigon.unit.api.jpa.helpers.BasicApplicationConfig
+import com.raynigon.unit.api.jpa.helpers.BasicEntity
 import com.raynigon.unit.api.jpa.helpers.BasicRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -15,8 +16,8 @@ import static com.raynigon.unit.api.core.units.si.SISystemUnitsConstants.Metre
 @Transactional
 @SpringBootTest(
         classes = [
-                com.raynigon.unit.api.jpa.helpers.BasicApplicationConfig,
-                com.raynigon.unit.api.jpa.helpers.BasicEntity,
+                BasicApplicationConfig,
+                BasicEntity,
                 BasicRepository
         ],
         properties = [
@@ -38,7 +39,7 @@ class JpaStarterApplicationSpec extends Specification {
 
     def 'simple save'() {
         given:
-        def entity = new com.raynigon.unit.api.jpa.helpers.BasicEntity()
+        def entity = new BasicEntity()
         entity.id = "1"
         entity.speed = KilometrePerHour(10)
         entity.distance = Metre(10)
@@ -48,7 +49,7 @@ class JpaStarterApplicationSpec extends Specification {
         repository.save(entity)
 
         and:
-        def result = repository.getOne(entity.id)
+        def result = repository.getReferenceById(entity.id)
 
         then:
         result.id == entity.id

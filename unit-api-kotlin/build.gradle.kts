@@ -2,7 +2,7 @@ import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.5.10"
+    kotlin("jvm") version "1.7.22"
     id("org.jlleitschuh.gradle.ktlint") version "11.0.0"
 
     // Auto Update Versions
@@ -22,7 +22,7 @@ tasks.test {
 
 tasks.withType<KotlinCompile>().all {
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
 }
 /**

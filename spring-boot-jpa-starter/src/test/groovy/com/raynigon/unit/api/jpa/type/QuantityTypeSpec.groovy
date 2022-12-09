@@ -4,6 +4,8 @@ import com.raynigon.unit.api.core.annotation.QuantityShape
 import com.raynigon.unit.api.core.exception.UnitNotFoundException
 import com.raynigon.unit.api.core.units.general.IUnit
 import com.raynigon.unit.api.core.units.si.length.Metre
+import com.raynigon.unit.api.jpa.annotation.JpaUnit
+import com.raynigon.unit.api.jpa.annotation.NoneQuantity
 import com.raynigon.unit.api.jpa.exception.MissingUnitAnnotationException
 import org.hibernate.usertype.DynamicParameterizedType
 import spock.lang.Specification
@@ -14,15 +16,7 @@ import java.lang.annotation.Annotation
 
 class QuantityTypeSpec extends Specification {
 
-    def 'registration keys are valid'() {
-
-        expect:
-        QuantityType.INSTANCE.getRegistrationKeys().contains(QuantityType.class.getSimpleName())
-        QuantityType.INSTANCE.getRegistrationKeys().contains(Quantity.class.getName())
-    }
-
-    def 'successfully resolve unit'() {
-
+    def "successfully resolve unit"() {
         given:
         QuantityType type = new QuantityType()
 
@@ -32,7 +26,7 @@ class QuantityTypeSpec extends Specification {
         props.put(DynamicParameterizedType.PARAMETER_TYPE, params)
 
         and:
-        com.raynigon.unit.api.jpa.annotation.JpaUnit jpaUnit = Mock()
+        JpaUnit jpaUnit = Mock()
         jpaUnit.value() >> value
         jpaUnit.unit() >> unit
         jpaUnit.quantityType() >> quantityType
@@ -42,19 +36,16 @@ class QuantityTypeSpec extends Specification {
         when:
         type.setParameterValues(props)
 
-        and:
-        QuantityJavaDescriptor javaType = type.getJavaTypeDescriptor() as QuantityJavaDescriptor
-
         then:
-        expectedUnit == javaType.getUnit()
-        expectedShape == javaType.getQuantityShape()
+        expectedUnit == type.getUnit()
+        expectedShape == type.getQuantityShape()
 
         where:
         value            | unit             | quantityType       | shape                | expectedUnit | expectedShape
-        Metre                                                 | com.raynigon.unit.api.jpa.annotation.JpaUnit.NoneUnit | com.raynigon.unit.api.jpa.annotation.NoneQuantity.class | QuantityShape.NUMBER | new Metre() | QuantityShape.NUMBER
-        com.raynigon.unit.api.jpa.annotation.JpaUnit.NoneUnit | Metre                                                 | com.raynigon.unit.api.jpa.annotation.NoneQuantity.class | QuantityShape.NUMBER | new Metre() | QuantityShape.NUMBER
-        com.raynigon.unit.api.jpa.annotation.JpaUnit.NoneUnit | com.raynigon.unit.api.jpa.annotation.JpaUnit.NoneUnit | Length.class                                            | QuantityShape.NUMBER | new Metre() | QuantityShape.NUMBER
-        com.raynigon.unit.api.jpa.annotation.JpaUnit.NoneUnit | com.raynigon.unit.api.jpa.annotation.JpaUnit.NoneUnit | Length.class                                            | QuantityShape.STRING | new Metre() | QuantityShape.STRING
+        Metre            | JpaUnit.NoneUnit | NoneQuantity.class | QuantityShape.NUMBER | new Metre() | QuantityShape.NUMBER
+        JpaUnit.NoneUnit | Metre            | NoneQuantity.class | QuantityShape.NUMBER | new Metre()  | QuantityShape.NUMBER
+        JpaUnit.NoneUnit | JpaUnit.NoneUnit | Length.class       | QuantityShape.NUMBER | new Metre() | QuantityShape.NUMBER
+        JpaUnit.NoneUnit | JpaUnit.NoneUnit | Length.class       | QuantityShape.STRING | new Metre()  | QuantityShape.STRING
     }
 
     def 'resolve unit failure with missing annotation'() {
@@ -86,10 +77,10 @@ class QuantityTypeSpec extends Specification {
         props.put(DynamicParameterizedType.PARAMETER_TYPE, params)
 
         and:
-        com.raynigon.unit.api.jpa.annotation.JpaUnit jpaUnit = Mock()
-        jpaUnit.value() >> com.raynigon.unit.api.jpa.annotation.JpaUnit.NoneUnit
-        jpaUnit.unit() >> com.raynigon.unit.api.jpa.annotation.JpaUnit.NoneUnit
-        jpaUnit.quantityType() >> com.raynigon.unit.api.jpa.annotation.NoneQuantity.class
+        JpaUnit jpaUnit = Mock()
+        jpaUnit.value() >> JpaUnit.NoneUnit
+        jpaUnit.unit() >> JpaUnit.NoneUnit
+        jpaUnit.quantityType() >> NoneQuantity.class
         jpaUnit.shape() >> QuantityShape.NUMBER
         params.getAnnotationsMethod() >> ([jpaUnit] as Annotation[])
 
@@ -111,10 +102,10 @@ class QuantityTypeSpec extends Specification {
         props.put(DynamicParameterizedType.PARAMETER_TYPE, params)
 
         and:
-        com.raynigon.unit.api.jpa.annotation.JpaUnit jpaUnit = Mock()
+        JpaUnit jpaUnit = Mock()
         jpaUnit.value() >> DummyUnit.class
-        jpaUnit.unit() >> com.raynigon.unit.api.jpa.annotation.JpaUnit.NoneUnit
-        jpaUnit.quantityType() >> com.raynigon.unit.api.jpa.annotation.NoneQuantity.class
+        jpaUnit.unit() >> JpaUnit.NoneUnit
+        jpaUnit.quantityType() >> NoneQuantity.class
         jpaUnit.shape() >> QuantityShape.NUMBER
         params.getAnnotationsMethod() >> ([jpaUnit] as Annotation[])
 
@@ -136,9 +127,9 @@ class QuantityTypeSpec extends Specification {
         props.put(DynamicParameterizedType.PARAMETER_TYPE, params)
 
         and:
-        com.raynigon.unit.api.jpa.annotation.JpaUnit jpaUnit = Mock()
-        jpaUnit.value() >> com.raynigon.unit.api.jpa.annotation.JpaUnit.NoneUnit
-        jpaUnit.unit() >> com.raynigon.unit.api.jpa.annotation.JpaUnit.NoneUnit
+        JpaUnit jpaUnit = Mock()
+        jpaUnit.value() >> JpaUnit.NoneUnit
+        jpaUnit.unit() >> JpaUnit.NoneUnit
         jpaUnit.quantityType() >> DummyQuantity.class
         jpaUnit.shape() >> QuantityShape.NUMBER
         params.getAnnotationsMethod() >> ([jpaUnit] as Annotation[])
