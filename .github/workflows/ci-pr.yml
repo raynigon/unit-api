@@ -11,15 +11,15 @@ jobs:
         with:
           java-version: 11
       - name: Kotlin Linter
-        uses: eskatos/gradle-command-action@v1.3.2
+        uses: eskatos/gradle-command-action@3fbe033aaae657f011f88f29be9e65ed26bd29ef
         with:
           arguments: ktlintCheck
       - name: Checkstyle Linter
-        uses: eskatos/gradle-command-action@v1.3.2
+        uses: eskatos/gradle-command-action@3fbe033aaae657f011f88f29be9e65ed26bd29ef
         with:
           arguments: checkstyleMain
       - name: PMD Linter
-        uses: eskatos/gradle-command-action@v1.3.2
+        uses: eskatos/gradle-command-action@3fbe033aaae657f011f88f29be9e65ed26bd29ef
         with:
           arguments: pmdMain
       - uses: jwgmeligmeyling/checkstyle-github-action@master
@@ -41,11 +41,11 @@ jobs:
         with:
           java-version: 11
       - name: Ktlint
-        uses: eskatos/gradle-command-action@v1.3.2
+        uses: eskatos/gradle-command-action@3fbe033aaae657f011f88f29be9e65ed26bd29ef
         with:
           arguments: ktlintCheck
       - name: Unit Tests
-        uses: eskatos/gradle-command-action@v1.3.2
+        uses: eskatos/gradle-command-action@3fbe033aaae657f011f88f29be9e65ed26bd29ef
         with:
           arguments: test
       - name: Codacy Publish
@@ -62,7 +62,7 @@ jobs:
         with:
           java-version: 11
       - name: Generate javadoc
-        uses: eskatos/gradle-command-action@v1.3.2
+        uses: eskatos/gradle-command-action@3fbe033aaae657f011f88f29be9e65ed26bd29ef
         with:
           arguments: globalJavadoc
 
@@ -102,12 +102,12 @@ jobs:
           path: "~/.gradle/dependency-check-data/"
           key: "owasp-check"
       - name: "Execute dependencyCheckUpdate"
-        uses: eskatos/gradle-command-action@v2.3.3
+        uses: eskatos/gradle-command-action@3fbe033aaae657f011f88f29be9e65ed26bd29ef
         continue-on-error: true
         with:
           arguments: dependencyCheckUpdate
       - name: "Execute dependencyCheckAnalyze"
-        uses: eskatos/gradle-command-action@v2.3.3
+        uses: eskatos/gradle-command-action@3fbe033aaae657f011f88f29be9e65ed26bd29ef
         continue-on-error: true
         with:
           arguments: dependencyCheckAnalyze
