@@ -1,0 +1,6 @@
+# Apply label "feature" if head matches "feature/*"
+enhancement:
+  head: "feature/*"
+
+bug:
+  head: "bugfix/*"
