@@ -25,6 +25,7 @@ jobs:
         with:
           arguments: pmdMain
       - uses: jwgmeligmeyling/checkstyle-github-action@master
+        if: github.actor != 'dependabot[bot]'
         with:
           path: '**/checkstyle/main.xml'
       - name: Run Codacy Analysis CLI
