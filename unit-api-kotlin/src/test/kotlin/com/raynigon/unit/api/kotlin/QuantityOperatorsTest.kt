@@ -55,6 +55,7 @@ internal class QuantityOperatorsTest {
     }
 
     @Test
+    @Suppress("UNCHECKED_CAST")
     fun `invalid comparison fails`() {
         val a = Metre(3) as Quantity<*>
         val b = Watt(4) as Quantity<*>

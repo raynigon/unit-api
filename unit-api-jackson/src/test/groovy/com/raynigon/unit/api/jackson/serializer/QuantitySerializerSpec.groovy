@@ -12,6 +12,7 @@ import com.raynigon.unit.api.core.units.si.temperature.Celsius
 import com.raynigon.unit.api.jackson.UnitApiModule
 import com.raynigon.unit.api.jackson.annotation.JsonUnit
 import com.raynigon.unit.api.jackson.config.UnitApiConfig
+import com.raynigon.unit.api.jackson.exception.UnknownUnitException
 import spock.lang.Specification
 
 import javax.measure.Quantity
@@ -52,7 +53,7 @@ class QuantitySerializerSpec extends Specification {
         serializer.createContextual(prov, property)
 
         then:
-        thrown(NullPointerException)
+        thrown(UnknownUnitException)
 
         and:
         1 * property.getType() >> propertyJavaType
@@ -146,41 +147,41 @@ class QuantitySerializerSpec extends Specification {
 
     abstract class DummyType extends JavaType {
 
-        public DummyType() {
+        DummyType() {
             super(DummyQuantity.class, 0, null, null, false)
         }
     }
 
     class BasicNumberEntity {
 
-        public String id;
+        public String id
 
         @JsonUnit(unit = KilometrePerHour)
-        public Quantity<Speed> speed;
+        public Quantity<Speed> speed
     }
 
     class BasicNumericEntity {
 
-        public String id;
+        public String id
 
         @JsonUnit(unit = KilometrePerHour, shape = QuantityShape.NUMERIC_STRING)
-        public Quantity<Speed> speed;
+        public Quantity<Speed> speed
     }
 
 
     class BasicStringEntity {
 
-        public String id;
+        public String id
 
         @JsonUnit(unit = Celsius, shape = QuantityShape.STRING)
-        public Quantity<Temperature> temperature;
+        public Quantity<Temperature> temperature
     }
 
     class BasicObjectEntity {
 
-        public String id;
+        public String id
 
         @JsonUnit(unit = Metre, shape = QuantityShape.OBJECT)
-        public Quantity<Length> distance;
+        public Quantity<Length> distance
     }
 }

@@ -11,5 +11,5 @@ dependencies {
     }
     testImplementation("org.postgresql:postgresql:42.5.1")
     testImplementation("org.testcontainers:postgresql:1.17.6")
-    testImplementation 'org.spockframework:spock-spring'
+    testImplementation 'org.spockframework:spock-spring:2.4-M1-groovy-4.0'
 }

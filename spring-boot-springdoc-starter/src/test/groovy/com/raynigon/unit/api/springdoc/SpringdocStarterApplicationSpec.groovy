@@ -1,13 +1,13 @@
 package com.raynigon.unit.api.springdoc
 
-
+import com.raynigon.unit.api.springdoc.helpers.BasicApplicationConfig
 import org.springdoc.core.customizers.PropertyCustomizer
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import spock.lang.Specification
 
 @SpringBootTest(classes = [
-        com.raynigon.unit.api.springdoc.helpers.BasicApplicationConfig.class
+        BasicApplicationConfig.class
 ])
 class SpringdocStarterApplicationSpec extends Specification {
 
