@@ -87,7 +87,11 @@ public class QuantityType implements UserType<Quantity<?>>, DynamicParameterized
 
     @Override
     @SuppressWarnings({"unchecked", "rawtypes"})
-    public Quantity<?> nullSafeGet(ResultSet rs, int position, SharedSessionContractImplementor session, Object owner) throws SQLException {
+    public Quantity<?> nullSafeGet(
+            ResultSet rs, int position,
+            SharedSessionContractImplementor session,
+            Object owner
+    ) throws SQLException {
         Objects.requireNonNull(unit, "The unit definition is missing");
         if (shape == QuantityShape.NUMBER) {
             return UnitsApiService.quantity(rs.getDouble(position), unit);
@@ -107,7 +111,12 @@ public class QuantityType implements UserType<Quantity<?>>, DynamicParameterized
 
     @Override
     @SuppressWarnings({"unchecked", "rawtypes"})
-    public void nullSafeSet(PreparedStatement st, Quantity<?> value, int index, SharedSessionContractImplementor session) throws SQLException {
+    public void nullSafeSet(
+            PreparedStatement st,
+            Quantity<?> value,
+            int index,
+            SharedSessionContractImplementor session
+    ) throws SQLException {
         Objects.requireNonNull(unit, "The unit definition is missing");
         if (value == null) {
             st.setNull(index, Types.DOUBLE);
