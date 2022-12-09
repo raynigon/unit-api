@@ -1,8 +1,39 @@
 # Basic set up for gradle package manager
 version: 2
 updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "daily"
   - package-ecosystem: "gradle"
     directory: "/"
     schedule:
       interval: "daily"
-
+  - package-ecosystem: "gradle"
+    directory: "/spring-boot-core-starter/"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "gradle"
+    directory: "/spring-boot-jackson-starter/"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "gradle"
+    directory: "/spring-boot-jpa-starter/"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "gradle"
+    directory: "/spring-boot-springdoc-starter/"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "gradle"
+    directory: "/unit-api-core/"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "gradle"
+    directory: "/unit-api-jackson/"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "gradle"
+    directory: "/unit-api-kotlin/"
+    schedule:
+      interval: "daily"
