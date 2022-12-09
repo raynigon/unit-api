@@ -1,7 +1,7 @@
 site_name: Unit API
 plugins:
   - search
-#  - markdownextradata
+  - markdownextradata
 #  - mkdocs_pymdownx_material_extras
   - codeinclude:
       title_mode: pymdownx.tabbed
