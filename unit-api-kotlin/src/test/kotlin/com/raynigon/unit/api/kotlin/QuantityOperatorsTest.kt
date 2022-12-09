@@ -53,7 +53,7 @@ internal class QuantityOperatorsTest {
         * language is "Note: this class has a natural ordering that is
         * inconsistent with equals."*/
     }
-    
+
     @Test
     @Suppress("UNCHECKED_CAST")
     fun `invalid comparison fails`() {
