@@ -1,3 +1,6 @@
+import static org.owasp.dependencycheck.reporting.ReportGenerator.Format.HTML
+import static org.owasp.dependencycheck.reporting.ReportGenerator.Format.JSON
+
 buildscript {
     repositories {
         mavenCentral()
@@ -116,7 +119,7 @@ subprojects {
         cveValidForHours = 1
         skipTestGroups = true
         suppressionFile = "${parent.projectDir}/gradle/config/dependency-check-suppression.xml"
-        formats = listOf(JSON, HTML)
+        formats = [JSON, HTML]
 
         analyzers.nodeEnabled = false
         analyzers.nuspecEnabled = false
