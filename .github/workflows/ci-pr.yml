@@ -83,7 +83,7 @@ jobs:
       - run: pip3 install -r requirements.txt
       - run: mkdocs build -d build/site/
       - name: Upload artifact
-        uses: actions/upload-artifact@v3.1.1
+        uses: actions/upload-artifact@v3.1.2
         with:
           name: "Website"
           path: "build/site/"
