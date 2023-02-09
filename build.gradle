@@ -86,7 +86,7 @@ subprojects {
         annotationProcessor 'org.projectlombok:lombok:1.18.26'
 
         testCompileOnly 'org.projectlombok:lombok:1.18.22'
-        testImplementation 'org.apache.groovy:groovy:4.0.8'
+        testImplementation 'org.apache.groovy:groovy:4.0.9'
         testImplementation 'org.spockframework:spock-core:2.4-M1-groovy-4.0'
         testRuntimeOnly "net.bytebuddy:byte-buddy:1.12.23"
         testAnnotationProcessor 'org.projectlombok:lombok:1.18.22'
