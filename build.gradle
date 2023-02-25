@@ -85,11 +85,11 @@ subprojects {
         implementation 'org.jetbrains:annotations:24.0.0'
         annotationProcessor 'org.projectlombok:lombok:1.18.26'
 
-        testCompileOnly 'org.projectlombok:lombok:1.18.22'
+        testCompileOnly 'org.projectlombok:lombok:1.18.26'
         testImplementation 'org.apache.groovy:groovy:4.0.9'
         testImplementation 'org.spockframework:spock-core:2.4-M1-groovy-4.0'
         testRuntimeOnly "net.bytebuddy:byte-buddy:1.14.0"
-        testAnnotationProcessor 'org.projectlombok:lombok:1.18.22'
+        testAnnotationProcessor 'org.projectlombok:lombok:1.18.26'
 
     }
 
