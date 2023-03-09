@@ -25,6 +25,7 @@ tasks.withType<KotlinCompile>().all {
         jvmTarget = "17"
     }
 }
+
 /**
  * Checks if the given version is stable or not.
  * A version is stable, if it is semver conform,
