@@ -14,8 +14,9 @@ import com.raynigon.unit.api.core.units.si.SISystemUnitsConstants.Second as cSec
  * @return the Quantity<Time> object with nano second resolution
  */
 fun Duration.toQuantity(): Quantity<Time> {
-    if (this.nano == 0)
+    if (this.nano == 0) {
         return cSecond(this.seconds)
+    }
     return (cSecond(this.seconds) + cNanoSecond(this.nano))
 }
 
