@@ -9,10 +9,13 @@ import com.raynigon.unit.api.jpa.annotation.NoneQuantity
 import com.raynigon.unit.api.jpa.exception.MissingUnitAnnotationException
 import org.hibernate.usertype.DynamicParameterizedType
 import spock.lang.Specification
+import spock.lang.Unroll
 
 import javax.measure.Quantity
 import javax.measure.quantity.Length
 import java.lang.annotation.Annotation
+
+import static com.raynigon.unit.api.core.units.si.SISystemUnitsConstants.Metre
 
 class QuantityTypeSpec extends Specification {
 
@@ -42,9 +45,9 @@ class QuantityTypeSpec extends Specification {
 
         where:
         value            | unit             | quantityType       | shape                | expectedUnit | expectedShape
-        Metre            | JpaUnit.NoneUnit | NoneQuantity.class | QuantityShape.NUMBER | new Metre() | QuantityShape.NUMBER
+        Metre            | JpaUnit.NoneUnit | NoneQuantity.class | QuantityShape.NUMBER | new Metre()  | QuantityShape.NUMBER
         JpaUnit.NoneUnit | Metre            | NoneQuantity.class | QuantityShape.NUMBER | new Metre()  | QuantityShape.NUMBER
-        JpaUnit.NoneUnit | JpaUnit.NoneUnit | Length.class       | QuantityShape.NUMBER | new Metre() | QuantityShape.NUMBER
+        JpaUnit.NoneUnit | JpaUnit.NoneUnit | Length.class       | QuantityShape.NUMBER | new Metre()  | QuantityShape.NUMBER
         JpaUnit.NoneUnit | JpaUnit.NoneUnit | Length.class       | QuantityShape.STRING | new Metre()  | QuantityShape.STRING
     }
 
@@ -139,6 +142,47 @@ class QuantityTypeSpec extends Specification {
 
         then:
         thrown(UnitNotFoundException)
+    }
+
+    @Unroll
+    def 'compare quantities - #q0 == #q1 => #expected'() {
+        given:
+        QuantityType type = new QuantityType()
+
+        when:
+        def result = type.equals(q0, q1)
+
+        then:
+        result == expected
+
+        where:
+        q0       | q1       | expected
+        null     | null     | true
+        null     | Metre(0) | false
+        Metre(0) | null     | false
+        Metre(0) | Metre(0) | true
+    }
+
+    def 'generate quantity hash code'() {
+        given:
+        QuantityType type = new QuantityType()
+
+        when:
+        def result = type.hashCode(Metre(0))
+
+        then:
+        result != 0
+    }
+
+    def 'generate quantity hash code for null'() {
+        given:
+        QuantityType type = new QuantityType()
+
+        when:
+        def result = type.hashCode(null)
+
+        then:
+        result == 0
     }
 
     static interface DummyQuantity extends Quantity<DummyQuantity> {}
