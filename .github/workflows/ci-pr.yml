@@ -30,6 +30,7 @@ jobs:
           path: '**/checkstyle/main.xml'
       - name: Run Codacy Analysis CLI
         uses: codacy/codacy-analysis-cli-action@master
+        if: github.actor != 'dependabot[bot]'
         with:
           tool: spotbugs
           project-token: ${{ secrets.CODACY_TOKEN }}
