@@ -76,14 +76,24 @@ public class QuantityType implements UserType<Quantity<?>>, DynamicParameterized
 
     @Override
     public boolean equals(Quantity<?> x, Quantity<?> y) {
+        // return true if both are null
+        if (x == null && y == null) {
+            return true;
+        }
+        // return false if one is null
+        if (x == null || y == null) {
+            return false;
+        }
         return x.equals(y);
     }
 
     @Override
     public int hashCode(Quantity<?> x) {
+        if (x == null) {
+            return 0;
+        }
         return x.hashCode();
     }
-
 
     @Override
     @SuppressWarnings({"unchecked", "rawtypes"})
