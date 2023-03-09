@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") version "1.8.10"
-    id("org.jlleitschuh.gradle.ktlint") version "11.1.0"
+    id("org.jlleitschuh.gradle.ktlint") version "11.3.1"
 
     // Auto Update Versions
     id("se.patrikerdes.use-latest-versions")
@@ -25,6 +25,7 @@ tasks.withType<KotlinCompile>().all {
         jvmTarget = "17"
     }
 }
+
 /**
  * Checks if the given version is stable or not.
  * A version is stable, if it is semver conform,

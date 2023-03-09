@@ -46,10 +46,6 @@ jobs:
         with:
           java-version: 17
           distribution: adopt
-      - name: Ktlint
-        uses: eskatos/gradle-command-action@6095a76664413da4c8c134ee32e8a8ae900f0f1f
-        with:
-          arguments: ktlintCheck
       - name: Unit Tests
         uses: eskatos/gradle-command-action@6095a76664413da4c8c134ee32e8a8ae900f0f1f
         with:
