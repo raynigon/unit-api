@@ -28,7 +28,7 @@ jobs:
           git config --global user.name "raynigon[bot]"
           git checkout -b release
       - name: "Publish Artifacts"
-        uses: eskatos/gradle-command-action@6095a76664413da4c8c134ee32e8a8ae900f0f1f #v1.3.3
+        uses: eskatos/gradle-command-action@5056fa9d50478a14af3c9925c12ca02318659d3e #v1.3.3
         with:
           arguments: ":release -Prelease.useAutomaticVersion=true build -x test"
           wrapper-cache-enabled: true
