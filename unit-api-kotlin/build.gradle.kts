@@ -13,7 +13,7 @@ plugins {
 dependencies {
     implementation(project(":unit-api-core"))
     implementation(kotlin("stdlib-jdk8"))
-    testImplementation("org.junit.jupiter:junit-jupiter:5.9.2")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.9.3")
 }
 
 tasks.test {
