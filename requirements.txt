@@ -5,4 +5,4 @@ mkdocs-pymdownx-material-extras==2.0.3
 mkdocs-codeinclude-plugin==0.2.0
 markdown==3.3.7
 # Needed for compatibility to codeinclude
-pymdown-extensions==9.4
+pymdown-extensions==10.0
