@@ -9,7 +9,6 @@ import com.raynigon.unit.api.jpa.annotation.JpaUnitHelper;
 import com.raynigon.unit.api.jpa.cache.CachedQuantity;
 import com.raynigon.unit.api.jpa.exception.MissingUnitAnnotationException;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.cfg.NotYetImplementedException;
 import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.type.SqlTypes;
 import org.hibernate.usertype.DynamicParameterizedType;
@@ -53,7 +52,7 @@ public class QuantityType implements UserType<Quantity<?>>, DynamicParameterized
         String entity = (String) parameters.get(ENTITY);
         String property = (String) parameters.get(PROPERTY);
         ParameterType reader = (ParameterType) parameters.get(PARAMETER_TYPE);
-        if (reader == null) throw new NotYetImplementedException();
+        if (reader == null) throw new IllegalArgumentException("A reader needs to be specified");
         JpaUnit jpaUnit = getJpaUnitAnnotation(reader, entity, property);
         unit = resolveUnit(jpaUnit, entity, property);
         shape = JpaUnitHelper.getShape(jpaUnit);
