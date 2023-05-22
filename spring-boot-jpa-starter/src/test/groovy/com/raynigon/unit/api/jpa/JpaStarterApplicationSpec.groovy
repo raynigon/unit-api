@@ -21,9 +21,9 @@ import static com.raynigon.unit.api.core.units.si.SISystemUnitsConstants.Metre
                 BasicRepository
         ],
         properties = [
-                "spring.datasource.url=jdbc:tc:postgresql:11:///unitapi",
+                "spring.datasource.url=jdbc:tc:postgresql:15:///unitapi",
                 "spring.datasource.driverClassName=org.testcontainers.jdbc.ContainerDatabaseDriver",
-                "spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.PostgreSQL95Dialect",
+                "spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.PostgreSQLDialect",
                 "spring.jpa.hibernate.ddl-auto=create"
         ]
 )
