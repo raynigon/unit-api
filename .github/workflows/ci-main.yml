@@ -14,7 +14,7 @@ jobs:
           java-version: 17
           distribution: adopt
       - name: Unit Tests
-        uses: eskatos/gradle-command-action@749f47bda3e44aa060e82d7b3ef7e40d953bd629
+        uses: eskatos/gradle-command-action@8e02c8272aba4650563824b7012f8a86158901c6
         with:
           arguments: test
       - name: Codacy Publish
@@ -33,7 +33,7 @@ jobs:
           java-version: 17
           distribution: adopt
       - name: Generate javadoc
-        uses: eskatos/gradle-command-action@749f47bda3e44aa060e82d7b3ef7e40d953bd629
+        uses: eskatos/gradle-command-action@8e02c8272aba4650563824b7012f8a86158901c6
         with:
           arguments: globalJavadoc
       - name: Upload javadoc
