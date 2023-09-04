@@ -81,7 +81,7 @@ subprojects {
         compileOnly 'org.projectlombok:lombok:1.18.28'
         implementation 'javax.measure:unit-api:2.2'
         implementation 'org.apache.commons:commons-lang3:3.13.0'
-        implementation 'org.slf4j:slf4j-api:2.0.7'
+        implementation 'org.slf4j:slf4j-api:2.0.9'
         implementation 'org.jetbrains:annotations:24.0.1'
         annotationProcessor 'org.projectlombok:lombok:1.18.28'
 
