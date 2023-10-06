@@ -50,6 +50,7 @@ jobs:
           cp unit-api-core/build/libs/*.jar build/libs/
           cp unit-api-jackson/build/libs/*.jar build/libs/
           cp unit-api-kotlin/build/libs/*.jar build/libs/
+          cp unit-api-validation/build/libs/*.jar build/libs/
       - id: content
         name: Create Release Content
         uses: raynigon/release-documentation@main
