@@ -37,6 +37,18 @@ class UnitMinValidatorSpec extends Specification {
         10    | 0
     }
 
+    def "validate message is correct"() {
+        given:
+        DummyEntity entity = new DummyEntity(SISystemUnitsConstants.Watt(8))
+
+        when:
+        def result = validator.validate(entity)
+
+        then:
+        result.size() == 1
+        result.first().message == "must be greater than or equal to 9.0 class com.raynigon.unit.api.core.units.si.power.Watt"
+    }
+
     static class DummyEntity {
 
         @UnitMin(value = 9.0, unit = Watt.class)
