@@ -1,6 +1,7 @@
 package com.raynigon.unit.api.validation.validator;
 
 import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 
 import javax.measure.Quantity;
 import javax.measure.Unit;
@@ -22,7 +23,7 @@ abstract class AbstractUnitValidator<A extends Annotation>
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})
-    protected boolean check(Quantity<?> quantity, BiPredicate<Double, Double> comparator) {
+    protected boolean check(ConstraintValidatorContext context, Quantity<?> quantity, BiPredicate<Double, Double> comparator) {
         if (quantity == null) return true;
         if (unit == null) return false;
         double quantityAsNumber = ((Quantity) quantity)

@@ -36,6 +36,19 @@ class UnitMaxValidatorSpec extends Specification {
         11    | 1
     }
 
+    def "validate message is correct"() {
+        given:
+        DummyEntity entity = new DummyEntity(SISystemUnitsConstants.Watt(10))
+
+        when:
+        def result = validator.validate(entity)
+
+        then:
+        result.size() == 1
+        result.first().message == "must be less than or equal to 9.0 class com.raynigon.unit.api.core.units.si.power.Watt"
+    }
+
+
     static class DummyEntity {
 
         @UnitMax(value = 9.0, unit = Watt.class)

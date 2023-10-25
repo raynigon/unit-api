@@ -20,6 +20,6 @@ public class UnitMaxValidator extends AbstractUnitValidator<UnitMax> {
 
     @Override
     public boolean isValid(Quantity<?> value, ConstraintValidatorContext context) {
-        return check(value, ((q, v) -> q <= v));
+        return check(context, value, ((q, v) -> q <= v));
     }
 }
