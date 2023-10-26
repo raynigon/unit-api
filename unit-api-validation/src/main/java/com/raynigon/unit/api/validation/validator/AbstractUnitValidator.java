@@ -10,7 +10,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.function.BiPredicate;
 
-abstract class AbstractUnitValidator<A extends Annotation>
+abstract public class AbstractUnitValidator<A extends Annotation>
         implements ConstraintValidator<A, Quantity<?>> {
 
     private Unit<?> unit = null;
@@ -35,7 +35,7 @@ abstract class AbstractUnitValidator<A extends Annotation>
 
     protected abstract double getValue(A constraintAnnotation);
 
-    private static Unit<?> createUnit(Class<? extends Unit<?>> unitType) {
+    public static Unit<?> createUnit(Class<? extends Unit<?>> unitType) {
         try {
             Constructor<? extends Unit<?>> ctor = unitType.getConstructor();
             return ctor.newInstance();

@@ -1,8 +1,9 @@
 dependencies {
     compileOnly 'org.springframework.boot:spring-boot-starter'
     compileOnly 'org.springdoc:springdoc-openapi-webmvc-core:1.7.0'
-    implementation project(":unit-api-jackson")
     implementation project(":unit-api-core")
+    implementation project(":unit-api-jackson")
+    implementation project(":unit-api-validation")
     implementation project(":spring-boot-core-starter")
 
     testImplementation 'org.springdoc:springdoc-openapi-webmvc-core:1.7.0'

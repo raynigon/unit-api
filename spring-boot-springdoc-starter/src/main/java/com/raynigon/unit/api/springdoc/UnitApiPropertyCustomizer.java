@@ -5,18 +5,23 @@ import com.raynigon.unit.api.core.annotation.QuantityShape;
 import com.raynigon.unit.api.core.service.UnitsApiService;
 import com.raynigon.unit.api.jackson.annotation.JsonUnit;
 import com.raynigon.unit.api.jackson.annotation.JsonUnitHelper;
+import com.raynigon.unit.api.validation.annotation.UnitMax;
+import com.raynigon.unit.api.validation.annotation.UnitMin;
+import com.raynigon.unit.api.validation.validator.AbstractUnitValidator;
 import io.swagger.v3.core.converter.AnnotatedType;
 import io.swagger.v3.oas.models.media.NumberSchema;
 import io.swagger.v3.oas.models.media.Schema;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.measure.Quantity;
 import javax.measure.Unit;
 
 import io.swagger.v3.oas.models.media.StringSchema;
+import lombok.val;
 import org.springdoc.core.customizers.PropertyCustomizer;
 
 public class UnitApiPropertyCustomizer implements PropertyCustomizer {
@@ -26,6 +31,7 @@ public class UnitApiPropertyCustomizer implements PropertyCustomizer {
     public Schema<?> customize(Schema property, AnnotatedType type) {
         if (isApplicable(type.getType())) {
             Unit<?> unit = resolveUnit(type);
+            Set<Annotation> constraints = resolveConstraints(type);
             QuantityShape shape = resolveShape(type);
             switch (shape) {
                 case OBJECT:
@@ -42,17 +48,11 @@ public class UnitApiPropertyCustomizer implements PropertyCustomizer {
                     property.setType("string");
                     property.setProperties(null);
             }
-            property.setDescription(
-                    buildDescription(type.getPropertyName(), unit, property.getDescription()));
+            String description = buildDescription(type, property, unit, constraints);
+            property.setDescription(description);
             property.setExample("1" + (unit.getSymbol() != null ? " " + unit.getSymbol() : ""));
         }
         return property;
-    }
-
-    private QuantityShape resolveShape(AnnotatedType type) {
-        JsonUnit jsonUnit = resolveJsonUnit(type);
-        if (jsonUnit == null) return QuantityShape.NUMBER;
-        return JsonUnitHelper.getShape(jsonUnit);
     }
 
 
@@ -79,12 +79,26 @@ public class UnitApiPropertyCustomizer implements PropertyCustomizer {
         return jsonUnit;
     }
 
+    private QuantityShape resolveShape(AnnotatedType type) {
+        JsonUnit jsonUnit = resolveJsonUnit(type);
+        if (jsonUnit == null) return QuantityShape.NUMBER;
+        return JsonUnitHelper.getShape(jsonUnit);
+    }
+
+    private Set<Annotation> resolveConstraints(AnnotatedType type) {
+        return Arrays.stream(type.getCtxAnnotations())
+                .filter(it -> UnitMin.class.isAssignableFrom(it.annotationType()) || UnitMax.class.isAssignableFrom(it.annotationType()))
+                .collect(Collectors.toSet());
+    }
+
     private boolean isApplicable(Type type) {
         return (type instanceof SimpleType)
                 && Quantity.class.isAssignableFrom(((SimpleType) type).getRawClass());
     }
 
-    private String buildDescription(String name, Unit<?> unit, String description) {
+    private String buildDescription(AnnotatedType type, Schema property, Unit<?> unit, Set<Annotation> constraints) {
+        String name = type.getPropertyName();
+        String description = property.getDescription();
         String result = "";
         if (unit != null) {
             String unitName = unit.getName();
@@ -96,13 +110,44 @@ public class UnitApiPropertyCustomizer implements PropertyCustomizer {
                 result += " (" + unitSymbol + ")";
             }
         }
+        if (constraints != null) {
+            if (constraints.size() == 2) {
+                // Case 1: UnitMin and UnitMax are present in the constraints set
+                UnitMin min = getAnnotation(constraints, UnitMin.class);
+                Unit<?> minUnit = AbstractUnitValidator.createUnit(min.unit());
+                UnitMax max = getAnnotation(constraints, UnitMax.class);
+                Unit<?> maxUnit = AbstractUnitValidator.createUnit(max.unit());
+
+                result += " and must be between " + min.value() + " " + minUnit.getSymbol() + " and " + max.value() + " " + maxUnit.getSymbol();
+            } else if (constraints.stream().anyMatch(it -> UnitMin.class.isAssignableFrom(it.annotationType()))) {
+                // Case 2: UnitMin is present in the constraints set
+                UnitMin min = getAnnotation(constraints, UnitMin.class);
+                Unit<?> minUnit = AbstractUnitValidator.createUnit(min.unit());
+
+                result += " and must be greater than " + min.value() + " " + minUnit.getSymbol();
+            } else if (constraints.stream().anyMatch(it -> UnitMax.class.isAssignableFrom(it.annotationType()))) {
+                // Case 2: UnitMax is present in the constraints set
+                UnitMax max = getAnnotation(constraints, UnitMax.class);
+                Unit<?> maxUnit = AbstractUnitValidator.createUnit(max.unit());
+
+                result += " and must be less than " + max.value() + " " + maxUnit.getSymbol();
+            }
+        }
         if (description != null) {
-            if (!result.equals("")) {
+            if (!result.isEmpty()) {
                 result += "\n";
             }
             result += description;
         }
         return result;
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T> T getAnnotation(Collection<Annotation> events, Class<T> clazz) {
+        return (T) events.stream()
+                .filter(it -> clazz.isAssignableFrom(it.annotationType()))
+                .findFirst()
+                .orElse(null);
     }
 
     private Map<String, Schema<?>> buildQuantityObjectProperties() {
