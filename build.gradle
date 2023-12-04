@@ -24,7 +24,7 @@ plugins {
     // Linting
     id 'checkstyle'
     id 'pmd'
-    id 'com.github.spotbugs' version '5.2.5'
+    id 'com.github.spotbugs' version '6.0.1'
     id 'org.owasp.dependencycheck' version '8.4.3'
 }
 
