@@ -9,7 +9,6 @@ import com.raynigon.unit.api.core.units.si.SISystemUnitsConstants.NanoSecond as 
 import com.raynigon.unit.api.core.units.si.SISystemUnitsConstants.Second as cSecond
 
 internal class DurationExtensionTest {
-
     @Test
     fun `duration with seconds to quantity`() {
         val duration = Duration.ofSeconds(10)

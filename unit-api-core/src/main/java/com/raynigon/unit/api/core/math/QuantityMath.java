@@ -8,6 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * This class contains only static methods,
+ * which can be used for mathematical operations on Quantity objects.
+ */
 public class QuantityMath {
 
     /**

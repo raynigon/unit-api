@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test
 import com.raynigon.unit.api.core.units.si.length.Metre as MetreUnit
 
 internal class GeometryTest {
-
     @Test
     fun `pythagorean theorem`() {
         val a = Metre(3)
