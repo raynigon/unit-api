@@ -58,8 +58,7 @@ operator fun <T : Quantity<T>> Quantity<T>.minus(value: Quantity<T>): Quantity<T
  * @return <code>this * value</code>.
  */
 @Contract(pure = true)
-operator fun <T : Quantity<T>, U : Quantity<U>> Quantity<T>.times(value: Quantity<U>): Quantity<*> =
-    this.multiply(value)
+operator fun <T : Quantity<T>, U : Quantity<U>> Quantity<T>.times(value: Quantity<U>): Quantity<*> = this.multiply(value)
 
 /**
  * Returns the quotient of this {@code Quantity} divided by the {@code Quantity}

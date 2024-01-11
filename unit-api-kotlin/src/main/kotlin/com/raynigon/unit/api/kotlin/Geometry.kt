@@ -14,7 +14,10 @@ import kotlin.math.sqrt
  *  @param b   length of second cathete in the triangle
  *  @return length of hypotenuse in the triangle (c)
  */
-fun pythagoreanTheorem(a: Quantity<Length>, b: Quantity<Length>): Quantity<Length> {
+fun pythagoreanTheorem(
+    a: Quantity<Length>,
+    b: Quantity<Length>,
+): Quantity<Length> {
     val aInMetre = a.toSystemUnit().value.toDouble()
     val bInMetre = b.toSystemUnit().value.toDouble()
     val cInMetre = sqrt(aInMetre.pow(2.0) + bInMetre.pow(2.0))

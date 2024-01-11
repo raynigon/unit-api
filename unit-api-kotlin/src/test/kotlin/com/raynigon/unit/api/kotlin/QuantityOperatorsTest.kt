@@ -16,7 +16,6 @@ import kotlin.math.sign
 import com.raynigon.unit.api.core.units.si.length.Metre as MetreUnit
 
 internal class QuantityOperatorsTest {
-
     @Test
     fun `comparison operator`() {
         val a = Metre(3)
@@ -37,21 +36,21 @@ internal class QuantityOperatorsTest {
 
         // Definition 2:
         assertTrue(a < b && b < c)
-        /* => */
+        // =>
         assertTrue(a < c)
 
         // Definition 3:
 
         /* <p>Finally, the implementor must ensure that {@code x.compareTo(y)==0}
-        * implies that {@code sgn(x.compareTo(z)) == sgn(y.compareTo(z))}, for
-        * all {@code z}.*/
-
-        /* <p>It is strongly recommended, but <i>not</i> strictly required that
-        * {@code (x.compareTo(y)==0) == (x.equals(y))}.  Generally speaking, any
-        * class that implements the {@code Comparable} interface and violates
-        * this condition should clearly indicate this fact.  The recommended
-        * language is "Note: this class has a natural ordering that is
-        * inconsistent with equals."*/
+         * implies that {@code sgn(x.compareTo(z)) == sgn(y.compareTo(z))}, for
+         * all {@code z}.
+         *
+         * <p>It is strongly recommended, but <i>not</i> strictly required that
+         * {@code (x.compareTo(y)==0) == (x.equals(y))}.  Generally speaking, any
+         * class that implements the {@code Comparable} interface and violates
+         * this condition should clearly indicate this fact.  The recommended
+         * language is "Note: this class has a natural ordering that is
+         * inconsistent with equals."*/
     }
 
     @Test

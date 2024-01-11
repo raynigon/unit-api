@@ -3,4 +3,5 @@
     <suppress><cve>CVE-2022-42920</cve></suppress>
     <suppress><cve>CVE-2021-37533</cve></suppress>
     <suppress><cve>CVE-2020-8908</cve></suppress>
+    <suppress><cve>CVE-2023-2976</cve></suppress>
 </suppressions>
