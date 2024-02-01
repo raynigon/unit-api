@@ -116,7 +116,6 @@ subprojects {
 
     dependencyCheck {
         autoUpdate = false
-        cveValidForHours = 1
         skipTestGroups = true
         suppressionFile = "${parent.projectDir}/gradle/config/dependency-check-suppression.xml"
         formats = [JSON, HTML]
