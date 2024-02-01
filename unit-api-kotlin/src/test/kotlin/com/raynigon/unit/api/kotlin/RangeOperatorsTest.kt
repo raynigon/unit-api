@@ -1,21 +1,11 @@
 package com.raynigon.unit.api.kotlin
 
 import com.raynigon.unit.api.core.quantities.ComparableQuantity
-import com.raynigon.unit.api.core.service.UnitsApiService.quantity
 import com.raynigon.unit.api.core.units.si.SISystemUnitsConstants.Metre
-import com.raynigon.unit.api.core.units.si.SISystemUnitsConstants.Watt
-import com.raynigon.unit.api.core.units.si.dimensionless.One
-import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
-import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
-import javax.measure.Quantity
-import javax.measure.UnconvertibleException
 import javax.measure.quantity.Length
-import javax.measure.quantity.Speed
-import kotlin.math.sign
-import com.raynigon.unit.api.core.units.si.length.Metre as MetreUnit
 
 internal class RangeOperatorsTest {
     @Test

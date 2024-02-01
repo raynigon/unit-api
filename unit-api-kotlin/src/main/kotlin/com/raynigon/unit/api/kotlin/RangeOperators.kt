@@ -1,8 +1,8 @@
 package com.raynigon.unit.api.kotlin
 
 import com.raynigon.unit.api.core.quantities.ComparableQuantity
-import javax.measure.Quantity
 import org.jetbrains.annotations.Contract
+import javax.measure.Quantity
 import kotlin.jvm.Throws
 
 /**
@@ -12,7 +12,7 @@ import kotlin.jvm.Throws
  *
  * @param other     the end of the range.
  * @return the closed range for this Quantity objects
- * @throws  IllegalArgumentException if the given quantities are not comparable
+ * @throws IllegalArgumentException if the given quantities are not comparable
  */
 @Contract(pure = true)
 @Throws(IllegalArgumentException::class)
@@ -28,7 +28,7 @@ operator fun <T : Quantity<T>> Quantity<T>.rangeTo(other: Quantity<T>): ClosedRa
  */
 data class ClosedQuantityRange<T : Quantity<T>>(
     override val start: ComparableQuantity<T>,
-    override val endInclusive: ComparableQuantity<T>
+    override val endInclusive: ComparableQuantity<T>,
 ) : ClosedRange<ComparableQuantity<T>>
 
 /**
@@ -38,7 +38,7 @@ data class ClosedQuantityRange<T : Quantity<T>>(
  *
  * @param other     the end of the range.
  * @return the open end range for this Quantity objects
- * @throws  IllegalArgumentException if the given quantities are not comparable
+ * @throws IllegalArgumentException if the given quantities are not comparable
  */
 @Contract(pure = true)
 @Throws(IllegalArgumentException::class)
@@ -54,5 +54,5 @@ operator fun <T : Quantity<T>> Quantity<T>.rangeUntil(other: Quantity<T>): OpenE
  */
 data class OpenEndQuantityRange<T : Quantity<T>>(
     override val start: ComparableQuantity<T>,
-    override val endExclusive: ComparableQuantity<T>
+    override val endExclusive: ComparableQuantity<T>,
 ) : OpenEndRange<ComparableQuantity<T>>
