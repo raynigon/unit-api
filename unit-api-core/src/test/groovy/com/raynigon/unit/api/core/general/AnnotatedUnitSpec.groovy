@@ -1,9 +1,9 @@
-package com.raynigon.unit_api.core.function
+package com.raynigon.unit.api.core.general
 
 import spock.lang.Ignore
 import spock.lang.Specification
 
-class CompositionTaskArrayAdapterSpec extends Specification {
+class AnnotatedUnitSpec extends Specification {
 
     @Ignore
     def 'test'() {

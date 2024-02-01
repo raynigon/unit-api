@@ -1,4 +1,4 @@
-package com.raynigon.unit_api.core.units.general
+package com.raynigon.unit.api.core.general
 
 import spock.lang.Ignore
 import spock.lang.Specification

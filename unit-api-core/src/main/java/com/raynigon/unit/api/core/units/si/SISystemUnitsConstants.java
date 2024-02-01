@@ -122,7 +122,17 @@ public class SISystemUnitsConstants {
     }
 
     @SuppressWarnings("PMD.MethodNamingConventions")
+    public static @NotNull Quantity<ElectricCurrent> MilliAmperes(@NotNull Number value) {
+        return quantity(value, MilliAmpere);
+    }
+
+    @SuppressWarnings("PMD.MethodNamingConventions")
     public static @NotNull Quantity<ElectricCurrent> Ampere(@NotNull Number value) {
+        return quantity(value, Ampere);
+    }
+
+    @SuppressWarnings("PMD.MethodNamingConventions")
+    public static @NotNull Quantity<ElectricCurrent> Amperes(@NotNull Number value) {
         return quantity(value, Ampere);
     }
 
@@ -132,12 +142,28 @@ public class SISystemUnitsConstants {
     }
 
     @SuppressWarnings("PMD.MethodNamingConventions")
+    public static @NotNull Quantity<ElectricPotential> MilliVolts(@NotNull Number value) {
+        return quantity(value, MilliVolt);
+    }
+
+    @SuppressWarnings("PMD.MethodNamingConventions")
     public static @NotNull Quantity<ElectricPotential> Volt(@NotNull Number value) {
         return quantity(value, Volt);
     }
 
     @SuppressWarnings("PMD.MethodNamingConventions")
+    public static @NotNull Quantity<ElectricPotential> Volts(@NotNull Number value) {
+        return quantity(value, Volt);
+    }
+
+
+    @SuppressWarnings("PMD.MethodNamingConventions")
     public static @NotNull Quantity<ElectricCharge> AmpereHour(@NotNull Number value) {
+        return quantity(value, AmpereHour);
+    }
+
+    @SuppressWarnings("PMD.MethodNamingConventions")
+    public static @NotNull Quantity<ElectricCharge> AmpereHours(@NotNull Number value) {
         return quantity(value, AmpereHour);
     }
 
@@ -147,12 +173,29 @@ public class SISystemUnitsConstants {
     }
 
     @SuppressWarnings("PMD.MethodNamingConventions")
+    public static @NotNull Quantity<ElectricCharge> Coulombs(@NotNull Number value) {
+        return quantity(value, Coulomb);
+    }
+
+
+    @SuppressWarnings("PMD.MethodNamingConventions")
     public static @NotNull Quantity<Energy> Joule(@NotNull Number value) {
         return quantity(value, Joule);
     }
 
     @SuppressWarnings("PMD.MethodNamingConventions")
+    public static @NotNull Quantity<Energy> Joules(@NotNull Number value) {
+        return quantity(value, Joule);
+    }
+
+
+    @SuppressWarnings("PMD.MethodNamingConventions")
     public static @NotNull Quantity<Energy> KiloWattHour(@NotNull Number value) {
+        return quantity(value, KiloWattHour);
+    }
+
+    @SuppressWarnings("PMD.MethodNamingConventions")
+    public static @NotNull Quantity<Energy> KiloWattHours(@NotNull Number value) {
         return quantity(value, KiloWattHour);
     }
 
@@ -162,7 +205,17 @@ public class SISystemUnitsConstants {
     }
 
     @SuppressWarnings("PMD.MethodNamingConventions")
+    public static @NotNull Quantity<Energy> WattHours(@NotNull Number value) {
+        return quantity(value, WattHour);
+    }
+
+    @SuppressWarnings("PMD.MethodNamingConventions")
     public static @NotNull Quantity<Energy> MilliWattHour(@NotNull Number value) {
+        return quantity(value, MilliWattHour);
+    }
+
+    @SuppressWarnings("PMD.MethodNamingConventions")
+    public static @NotNull Quantity<Energy> MilliWattHours(@NotNull Number value) {
         return quantity(value, MilliWattHour);
     }
 
@@ -172,7 +225,17 @@ public class SISystemUnitsConstants {
     }
 
     @SuppressWarnings("PMD.MethodNamingConventions")
+    public static @NotNull Quantity<Force> Newtons(@NotNull Number value) {
+        return quantity(value, Newton);
+    }
+
+    @SuppressWarnings("PMD.MethodNamingConventions")
     public static @NotNull Quantity<Torque> NewtonMetre(@NotNull Number value) {
+        return quantity(value, NewtonMetre);
+    }
+
+    @SuppressWarnings("PMD.MethodNamingConventions")
+    public static @NotNull Quantity<Torque> NewtonMetres(@NotNull Number value) {
         return quantity(value, NewtonMetre);
     }
 
@@ -187,7 +250,17 @@ public class SISystemUnitsConstants {
     }
 
     @SuppressWarnings("PMD.MethodNamingConventions")
+    public static @NotNull Quantity<Length> Millimetres(@NotNull Number value) {
+        return quantity(value, Millimetre);
+    }
+
+    @SuppressWarnings("PMD.MethodNamingConventions")
     public static @NotNull Quantity<Length> Centimetre(@NotNull Number value) {
+        return quantity(value, Centimetre);
+    }
+
+    @SuppressWarnings("PMD.MethodNamingConventions")
+    public static @NotNull Quantity<Length> Centimetres(@NotNull Number value) {
         return quantity(value, Centimetre);
     }
 
@@ -197,7 +270,17 @@ public class SISystemUnitsConstants {
     }
 
     @SuppressWarnings("PMD.MethodNamingConventions")
+    public static @NotNull Quantity<Length> Metres(@NotNull Number value) {
+        return quantity(value, Metre);
+    }
+
+    @SuppressWarnings("PMD.MethodNamingConventions")
     public static @NotNull Quantity<Length> Kilometre(@NotNull Number value) {
+        return quantity(value, Kilometre);
+    }
+
+    @SuppressWarnings("PMD.MethodNamingConventions")
+    public static @NotNull Quantity<Length> Kilometres(@NotNull Number value) {
         return quantity(value, Kilometre);
     }
 
@@ -207,12 +290,27 @@ public class SISystemUnitsConstants {
     }
 
     @SuppressWarnings("PMD.MethodNamingConventions")
+    public static @NotNull Quantity<Mass> Kilograms(@NotNull Number value) {
+        return quantity(value, Kilogram);
+    }
+
+    @SuppressWarnings("PMD.MethodNamingConventions")
     public static @NotNull Quantity<Power> MilliWatt(@NotNull Number value) {
         return quantity(value, MilliWatt);
     }
 
     @SuppressWarnings("PMD.MethodNamingConventions")
+    public static @NotNull Quantity<Power> MilliWatts(@NotNull Number value) {
+        return quantity(value, MilliWatt);
+    }
+
+    @SuppressWarnings("PMD.MethodNamingConventions")
     public static @NotNull Quantity<Power> Watt(@NotNull Number value) {
+        return quantity(value, Watt);
+    }
+
+    @SuppressWarnings("PMD.MethodNamingConventions")
+    public static @NotNull Quantity<Power> Watts(@NotNull Number value) {
         return quantity(value, Watt);
     }
 
@@ -242,7 +340,17 @@ public class SISystemUnitsConstants {
     }
 
     @SuppressWarnings("PMD.MethodNamingConventions")
+    public static @NotNull Quantity<Time> Hours(@NotNull Number value) {
+        return quantity(value, Hour);
+    }
+
+    @SuppressWarnings("PMD.MethodNamingConventions")
     public static @NotNull Quantity<Time> Minute(@NotNull Number value) {
+        return quantity(value, Minute);
+    }
+
+    @SuppressWarnings("PMD.MethodNamingConventions")
+    public static @NotNull Quantity<Time> Minutes(@NotNull Number value) {
         return quantity(value, Minute);
     }
 
@@ -252,7 +360,17 @@ public class SISystemUnitsConstants {
     }
 
     @SuppressWarnings("PMD.MethodNamingConventions")
+    public static @NotNull Quantity<Time> Seconds(@NotNull Number value) {
+        return quantity(value, Second);
+    }
+
+    @SuppressWarnings("PMD.MethodNamingConventions")
     public static @NotNull Quantity<Time> MilliSecond(@NotNull Number value) {
+        return quantity(value, MilliSecond);
+    }
+
+    @SuppressWarnings("PMD.MethodNamingConventions")
+    public static @NotNull Quantity<Time> MilliSeconds(@NotNull Number value) {
         return quantity(value, MilliSecond);
     }
 
@@ -262,7 +380,17 @@ public class SISystemUnitsConstants {
     }
 
     @SuppressWarnings("PMD.MethodNamingConventions")
+    public static @NotNull Quantity<Time> MicroSeconds(@NotNull Number value) {
+        return quantity(value, MicroSecond);
+    }
+
+    @SuppressWarnings("PMD.MethodNamingConventions")
     public static @NotNull Quantity<Time> NanoSecond(@NotNull Number value) {
+        return quantity(value, NanoSecond);
+    }
+
+    @SuppressWarnings("PMD.MethodNamingConventions")
+    public static @NotNull Quantity<Time> NanoSeconds(@NotNull Number value) {
         return quantity(value, NanoSecond);
     }
 
@@ -272,12 +400,27 @@ public class SISystemUnitsConstants {
     }
 
     @SuppressWarnings("PMD.MethodNamingConventions")
+    public static @NotNull Quantity<Area> SquareMetres(@NotNull Number value) {
+        return quantity(value, SquareMetre);
+    }
+
+    @SuppressWarnings("PMD.MethodNamingConventions")
     public static @NotNull Quantity<Volume> CubicMetre(@NotNull Number value) {
         return quantity(value, CubicMetre);
     }
 
     @SuppressWarnings("PMD.MethodNamingConventions")
+    public static @NotNull Quantity<Volume> CubicMetres(@NotNull Number value) {
+        return quantity(value, CubicMetre);
+    }
+
+    @SuppressWarnings("PMD.MethodNamingConventions")
     public static @NotNull Quantity<Volume> Litre(@NotNull Number value) {
+        return quantity(value, Litre);
+    }
+
+    @SuppressWarnings("PMD.MethodNamingConventions")
+    public static @NotNull Quantity<Volume> Litres(@NotNull Number value) {
         return quantity(value, Litre);
     }
 }

@@ -1,5 +1,6 @@
 package com.raynigon.unit.api.core.units.si
 
+import com.raynigon.unit.api.core.service.UnitsApiService
 import com.raynigon.unit.api.core.units.si.dimensionless.One
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -7,9 +8,17 @@ import spock.lang.Unroll
 import java.lang.reflect.Method
 import java.util.stream.Collectors
 
-import static com.raynigon.unit.api.core.service.UnitsApiService.quantity
-
 class SISystemUnitsConstantsSpec extends Specification {
+
+    static List<String> pluralBlacklist = [
+            "Celsius",
+            "Kelvin",
+            "Hertz",
+            "Percent",
+            "KilometrePerHour",
+            "MetrePerSecond",
+            "MetrePerSquaredSecond",
+    ]
 
     @Unroll
     def "constant #unit.getSimpleName() exists"() {
@@ -42,6 +51,21 @@ class SISystemUnitsConstantsSpec extends Specification {
     }
 
     @Unroll
+    def "factory method #unit.getSimpleName() as plural exists"() {
+        given:
+        Class constantsClass = SISystemUnitsConstants.class
+
+        when:
+        constantsClass.getMethod(unit.getSimpleName() + "s", Number.class)
+
+        then:
+        noExceptionThrown()
+
+        where:
+        unit << units().findAll { !pluralBlacklist.contains(it.getSimpleName()) }
+    }
+
+    @Unroll
     def "create a #unit.getSimpleName() quantity"() {
         given:
         Class constantsClass = SISystemUnitsConstants.class
@@ -52,7 +76,7 @@ class SISystemUnitsConstantsSpec extends Specification {
         def result = factoryMethod.invoke(null, 1)
 
         then:
-        result == quantity(1, unitInstance)
+        result == UnitsApiService.quantity(1, unitInstance)
 
         where:
         unit << units()

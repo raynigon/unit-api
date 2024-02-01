@@ -1,9 +1,9 @@
-package com.raynigon.unit_api.core.function
+package com.raynigon.unit.api.core.function
 
 import spock.lang.Ignore
 import spock.lang.Specification
 
-class StandardModelSpec extends Specification {
+class CompositionTaskSpec extends Specification {
 
     @Ignore
     def 'test'() {

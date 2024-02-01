@@ -1,9 +1,9 @@
-package com.raynigon.unit_api.core.function.unitconverter
+package com.raynigon.unit.api.core.function
 
 import spock.lang.Ignore
 import spock.lang.Specification
 
-class MultiplyConverterSpec extends Specification {
+class UnitComparatorSpec extends Specification {
 
     @Ignore
     def 'test'() {
