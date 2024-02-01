@@ -25,7 +25,7 @@ plugins {
     id 'checkstyle'
     id 'pmd'
     id 'com.github.spotbugs' version '6.0.7'
-    id 'org.owasp.dependencycheck' version '8.4.3'
+    id 'org.owasp.dependencycheck' version '9.0.9'
 }
 
 allprojects {
@@ -116,7 +116,6 @@ subprojects {
 
     dependencyCheck {
         autoUpdate = false
-        cveValidForHours = 1
         skipTestGroups = true
         suppressionFile = "${parent.projectDir}/gradle/config/dependency-check-suppression.xml"
         formats = [JSON, HTML]
