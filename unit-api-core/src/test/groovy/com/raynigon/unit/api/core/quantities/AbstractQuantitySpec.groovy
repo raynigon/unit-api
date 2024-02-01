@@ -1,4 +1,4 @@
-package com.raynigon.unit_api.core.quantities
+package com.raynigon.unit.api.core.quantities
 
 import com.raynigon.unit.api.core.quantities.AbstractQuantity
 import com.raynigon.unit.api.core.quantities.ComparableQuantity

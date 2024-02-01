@@ -1,9 +1,9 @@
-package com.raynigon.unit_api.core.units.general
+package com.raynigon.unit.api.core.function
 
 import spock.lang.Ignore
 import spock.lang.Specification
 
-class AnnotatedUnitSpec extends Specification {
+class StandardModelSpec extends Specification {
 
     @Ignore
     def 'test'() {
