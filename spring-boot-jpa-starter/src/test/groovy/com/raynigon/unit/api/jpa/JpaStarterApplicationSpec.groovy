@@ -24,7 +24,9 @@ import static com.raynigon.unit.api.core.units.si.SISystemUnitsConstants.Metre
                 "spring.datasource.url=jdbc:tc:postgresql:15:///unitapi",
                 "spring.datasource.driverClassName=org.testcontainers.jdbc.ContainerDatabaseDriver",
                 "spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.PostgreSQLDialect",
-                "spring.jpa.hibernate.ddl-auto=create"
+                "spring.jpa.hibernate.ddl-auto=create",
+                // This is needed to import a multi line sql file...
+                "spring.jpa.properties.hibernate.hbm2ddl.import_files_sql_extractor=org.hibernate.tool.schema.internal.script.MultiLineSqlScriptExtractor"
         ]
 )
 class JpaStarterApplicationSpec extends Specification {
@@ -71,5 +73,6 @@ class JpaStarterApplicationSpec extends Specification {
         result.speed == KilometrePerHour(12)
         result.distance == Kilometre(100)
         result.temperature == Celsius(30)
+        result.power == null
     }
 }
