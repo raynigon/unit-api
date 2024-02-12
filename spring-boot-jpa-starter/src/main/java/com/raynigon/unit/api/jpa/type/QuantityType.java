@@ -103,7 +103,11 @@ public class QuantityType implements UserType<Quantity<?>>, DynamicParameterized
     ) throws SQLException {
         Objects.requireNonNull(unit, "The unit definition is missing");
         if (shape == QuantityShape.NUMBER) {
-            return UnitsApiService.quantity(rs.getDouble(position), unit);
+            double value = rs.getDouble(position);
+            if (rs.wasNull()) {
+                return null;
+            }
+            return UnitsApiService.quantity(value, unit);
         } else if (shape == QuantityShape.NUMERIC_STRING || shape == QuantityShape.STRING) {
             String value = rs.getString(position);
             if (value == null) {
