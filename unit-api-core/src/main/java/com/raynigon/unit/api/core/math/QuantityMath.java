@@ -89,7 +89,7 @@ public class QuantityMath {
 
     /**
      * Clamp the value between min and max.
-     * This method returns a values that conforms to min <= value <= max
+     * This method returns a values that conforms to min &lt;= value &lt;= max
      *
      * @param min   the first quantity which should be compared
      * @param value the first quantity which should be compared

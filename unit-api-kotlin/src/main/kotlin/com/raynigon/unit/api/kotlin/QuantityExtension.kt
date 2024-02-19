@@ -24,7 +24,7 @@ fun <T : Quantity<T>> Quantity<T>.toDouble(unit: IUnit<T>): Double {
 
 /**
  * Clamp this Quantity between min and max.
- * This method returns a values that conforms to min <= value <= max
+ * This method returns a values that conforms to min &lt;= value &lt;= max
  *
  * @param min   the first quantity which should be compared
  * @param max   the other quantities which should be compared
