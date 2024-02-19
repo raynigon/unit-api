@@ -1,5 +1,6 @@
 package com.raynigon.unit.api.kotlin
 
+import com.raynigon.unit.api.core.math.QuantityMath
 import com.raynigon.unit.api.core.units.general.IUnit
 import javax.measure.Quantity
 
@@ -19,4 +20,19 @@ fun <T : Quantity<T>> Quantity<T>.toValue(unit: IUnit<T>): Number {
  */
 fun <T : Quantity<T>> Quantity<T>.toDouble(unit: IUnit<T>): Double {
     return this.to(unit).value.toDouble()
+}
+
+/**
+ * Clamp this Quantity between min and max.
+ * This method returns a values that conforms to min <= value <= max
+ *
+ * @param min   the first quantity which should be compared
+ * @param max   the other quantities which should be compared
+ * @return a value between min and max
+ */
+fun <T : Quantity<T>> Quantity<T>.clamp(
+    min: Quantity<T>,
+    max: Quantity<T>,
+): Quantity<T> {
+    return QuantityMath.clamp(min, this, max)
 }

@@ -77,4 +77,51 @@ class QuantityMathSpec extends Specification {
         Metre(0) | null
         null     | Metre(0)
     }
+
+    def "clamp - #min, #value, #max"() {
+        when:
+        QuantityMath.clamp(min, value, max)
+
+        then:
+        thrown(NullPointerException)
+
+        where:
+        min      | value    | max
+        null     | null     | null
+        Metre(0) | null     | null
+        null     | Metre(0) | null
+        null     | null     | Metre(0)
+        Metre(0) | Metre(0) | null
+        null     | Metre(0) | Metre(0)
+    }
+
+    def "clamp handles min greater than max"() {
+        given:
+        def min = Metre(10)
+        def value = Metre(5)
+        def max = Metre(9)
+
+        when:
+        QuantityMath.clamp(min, value, max)
+
+        then:
+        thrown(IllegalArgumentException)
+    }
+
+    def "clamp with null"() {
+        when:
+        QuantityMath.clamp(min, value, max)
+
+        then:
+        thrown(NullPointerException)
+
+        where:
+        min      | value    | max
+        null     | null     | null
+        Metre(0) | null     | null
+        null     | Metre(0) | null
+        null     | null     | Metre(0)
+        Metre(0) | Metre(0) | null
+        null     | Metre(0) | Metre(0)
+    }
 }
