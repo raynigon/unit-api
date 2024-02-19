@@ -17,12 +17,19 @@ internal class QuantityExtensionTest {
     }
 
     @Test
-    fun `range until operator`() {
+    fun `quantity to double`() {
         assertEquals(1.0, Kilometre(0.001).toDouble(Metre()))
         assertEquals(10.0, Kilometre(0.01).toDouble(Metre()))
         assertEquals(100.0, Kilometre(0.1).toDouble(Metre()))
         assertEquals(1000.0, Kilometre(1).toDouble(Metre()))
         assertEquals(1200.0, Kilometre(1.2).toDouble(Metre()))
         assertEquals(1234.5, Kilometre(1.2345).toDouble(Metre()))
+    }
+
+    @Test
+    fun `clamp quantity`() {
+        assertEquals(Kilometre(5), Kilometre(5).clamp(Kilometre(1), Kilometre(10)))
+        assertEquals(Kilometre(1), Kilometre(0).clamp(Kilometre(1), Kilometre(10)))
+        assertEquals(Kilometre(10), Kilometre(11).clamp(Kilometre(1), Kilometre(10)))
     }
 }

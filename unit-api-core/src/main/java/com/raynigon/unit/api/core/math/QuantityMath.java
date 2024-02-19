@@ -86,4 +86,32 @@ public class QuantityMath {
                 .max((a, b) -> ((ComparableQuantity<Q>) a).compareTo(b))
                 .orElse(arg0);
     }
+
+    /**
+     * Clamp the value between min and max.
+     * This method returns a values that conforms to min <= value <= max
+     *
+     * @param min   the first quantity which should be compared
+     * @param value the first quantity which should be compared
+     * @param max   the other quantities which should be compared
+     * @return a value between min and max
+     */
+    public static <Q extends Quantity<Q>> Quantity<Q> clamp(@NotNull Quantity<Q> min, @NotNull Quantity<Q> value, @NotNull Quantity<Q> max) {
+        Objects.requireNonNull(min);
+        Objects.requireNonNull(value);
+        Objects.requireNonNull(max);
+        ComparableQuantity<Q> minComparable = (ComparableQuantity<Q>) min;
+        ComparableQuantity<Q> valueComparable = (ComparableQuantity<Q>) value;
+        ComparableQuantity<Q> maxComparable = (ComparableQuantity<Q>) max;
+        if (minComparable.compareTo(maxComparable) > 0) {
+            throw new IllegalArgumentException("The minimum has to be less than or equal to maximum");
+        }
+        if (minComparable.compareTo(valueComparable) > 0) {
+            return minComparable;
+        }
+        if (maxComparable.compareTo(valueComparable) < 0) {
+            return maxComparable;
+        }
+        return value;
+    }
 }
