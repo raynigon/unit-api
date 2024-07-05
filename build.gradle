@@ -78,18 +78,18 @@ subprojects {
     }
 
     dependencies {
-        compileOnly 'org.projectlombok:lombok:1.18.32'
+        compileOnly 'org.projectlombok:lombok:1.18.34'
         implementation 'javax.measure:unit-api:2.2'
         implementation 'org.apache.commons:commons-lang3:3.14.0'
         implementation 'org.slf4j:slf4j-api:2.0.13'
         implementation 'org.jetbrains:annotations:24.1.0'
-        annotationProcessor 'org.projectlombok:lombok:1.18.32'
+        annotationProcessor 'org.projectlombok:lombok:1.18.34'
 
-        testCompileOnly 'org.projectlombok:lombok:1.18.32'
+        testCompileOnly 'org.projectlombok:lombok:1.18.34'
         testImplementation 'org.apache.groovy:groovy:4.0.21'
         testImplementation 'org.spockframework:spock-core:2.4-M4-groovy-4.0'
         testRuntimeOnly "net.bytebuddy:byte-buddy:1.14.13"
-        testAnnotationProcessor 'org.projectlombok:lombok:1.18.32'
+        testAnnotationProcessor 'org.projectlombok:lombok:1.18.34'
 
     }
 
