@@ -1,21 +1,28 @@
 import java.time.OffsetDateTime
 import java.util.regex.Pattern
 
-task generateVersionClass() {
-    mustRunAfter(clean)
-    group = 'build'
-    doFirst {
-        def targetDirectory = projectDir.toPath().resolve("build/generated/sources/version/java")
+plugins {
+    java
+}
+
+val generateVersionClass = tasks.register("generateVersionClass") {
+    val outputDir = layout.buildDirectory.dir("generated/sources/version/java/main")
+    outputs.dir(outputDir)
+    outputs.cacheIf { false } // Always regenerate for current time
+    mustRunAfter(tasks.named("clean"))
+    group = "build"
+
+    doLast {
         // change package name
-        def packageName = project.group.replace("-", "_") + "." + project.name.replace("-", "_")
-        targetDirectory = targetDirectory.resolve(packageName.replace(".", "/"))
-        targetDirectory.toFile().mkdirs()
-        String version = project.version
-        Pattern versionPattern = Pattern.compile("^[0-9]+\\.[0-9]+\\.[0-9]+(?>-SNAPSHOT)?\$")
+        val packageName = project.group.toString().replace("-", "_") + "." + project.name.replace("-", "_")
+        val targetDirectory = outputDir.get().dir(packageName.replace(".", "/")).asFile
+        targetDirectory.mkdirs()
+        var version = project.version.toString()
+        val versionPattern = Pattern.compile("^[0-9]+\\.[0-9]+\\.[0-9]+(?>-SNAPSHOT)?\$")
         if (!versionPattern.matcher(version).find()) {
             version = "0.0.1-SNAPSHOT"
         }
-        new File(targetDirectory.toFile(), "BuildVersion.java").text = """package ${packageName};
+        File(targetDirectory, "BuildVersion.java").writeText("""package ${packageName};
 import java.time.OffsetDateTime;
 
 /**
@@ -42,17 +49,17 @@ public class BuildVersion {
     /**
      * The major part for the version of this artifact as an integer
      */
-    public static final int MAJOR_VERSION = ${version.split("\\.")[0]};
+    public static final int MAJOR_VERSION = ${version.split(".")[0]};
 
     /**
      * The minor part for the version of this artifact as an integer
      */
-    public static final int MINOR_VERSION = ${version.split("\\.")[1]};
+    public static final int MINOR_VERSION = ${version.split(".")[1]};
 
     /**
      * The patch part for the version of this artifact as an integer
      */
-    public static final int PATCH_VERSION = ${version.split("\\.")[2].split('-')[0]};
+    public static final int PATCH_VERSION = ${version.split(".")[2].split('-')[0]};
 
     /**
      * Indicates if this artifact is a snapshot version
@@ -62,10 +69,20 @@ public class BuildVersion {
     /**
      * The date time when this artifact was created
      */
-    public static final OffsetDateTime BUILD_DATE = OffsetDateTime.parse("${OffsetDateTime.now().toString()}");
+    public static final OffsetDateTime BUILD_DATE = OffsetDateTime.parse("${OffsetDateTime.now()}");
 }
-"""
+""")
     }
 }
 
-tasks.getByName('compileJava').dependsOn(generateVersionClass)
+sourceSets {
+    main {
+        java {
+            srcDir(generateVersionClass)
+        }
+    }
+}
+
+tasks.named("compileJava") {
+    dependsOn(generateVersionClass)
+}

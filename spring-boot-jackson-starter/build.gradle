@@ -1,15 +1,12 @@
-dependencies {
-    compileOnly 'org.springframework.boot:spring-boot-starter'
-    compileOnly 'org.springframework.boot:spring-boot-starter-web'
-    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
-    implementation project(':unit-api-jackson')
-    implementation project(":unit-api-core")
-    implementation project(":spring-boot-core-starter")
+plugins {
+    id 'unit-api.spring-conventions'
+}
 
-    testImplementation 'org.springframework.boot:spring-boot-starter'
+dependencies {
+    compileOnly 'org.springframework.boot:spring-boot-starter-web'
+    api project(':unit-api-jackson')
+    api project(":unit-api-core")
+    api project(":spring-boot-core-starter")
+
     testImplementation 'org.springframework.boot:spring-boot-starter-web'
-    testImplementation('org.springframework.boot:spring-boot-starter-test') {
-        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-    }
-    testImplementation 'org.spockframework:spock-spring:2.4-M4-groovy-4.0'
 }
