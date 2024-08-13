@@ -1,6 +1,3 @@
-import static org.owasp.dependencycheck.reporting.ReportGenerator.Format.HTML
-import static org.owasp.dependencycheck.reporting.ReportGenerator.Format.JSON
-
 buildscript {
     repositories {
         mavenCentral()
@@ -8,129 +5,42 @@ buildscript {
 }
 
 plugins {
-    id 'java-library'
-    id 'signing'
-    id 'maven-publish'
-    id 'org.springframework.boot' version '3.2.5'
-    id 'io.spring.dependency-management' version '1.1.4'
-
     // Auto Update Versions
     id 'se.patrikerdes.use-latest-versions' version '0.2.18'
     id 'com.github.ben-manes.versions' version '0.51.0'
 
-    // Auto Release
-    id('net.researchgate.release') version '3.0.2'
-
-    // Linting
-    id 'checkstyle'
-    id 'pmd'
-    id 'com.github.spotbugs' version '6.0.12'
-    id 'org.owasp.dependencycheck' version '9.1.0'
+    id 'maven-publish'
+    id "net.researchgate.release" version "3.0.2"
 }
+
+evaluationDependsOnChildren()
 
 allprojects {
     group = 'com.raynigon.unit-api'
-    // version = project.version
-    sourceCompatibility = JavaLanguageVersion.of(17)
-    repositories {
-        mavenCentral()
+}
+
+release {
+    preTagCommitMessage = "[Release] Version:"
+    tagCommitMessage = "[Release] Version:"
+    newVersionCommitMessage = "[Release] Update Version:"
+    tagTemplate = 'v${version}'
+    buildTasks = ['publish']
+
+    git {
+        requireBranch.set("release")
     }
 }
 
-subprojects {
-    apply plugin: 'org.springframework.boot'
-    apply plugin: 'io.spring.dependency-management'
-    apply plugin: 'java-library'
-    apply plugin: 'java'
-    apply plugin: 'groovy'
-    apply plugin: 'maven-publish'
-    apply plugin: 'jacoco'
-    apply plugin: 'signing'
-    apply plugin: 'net.researchgate.release'
-    apply plugin: 'checkstyle'
-    apply plugin: 'pmd'
-    apply plugin: 'com.github.spotbugs'
-
-    sourceCompatibility = JavaLanguageVersion.of(17)
-    targetCompatibility = JavaLanguageVersion.of(17)
-    compileJava.options.encoding = 'UTF-8'
-    compileTestJava.options.encoding = 'UTF-8'
-
-
-    apply from: "$rootDir/gradle/scripts/versionClass.gradle"
-    apply from: "$rootDir/gradle/scripts/javadoc.gradle"
-    apply from: "$rootDir/gradle/scripts/test.gradle"
-    apply from: "$rootDir/gradle/scripts/publishing.gradle"
-
-    bootJar {
-        enabled = false
-    }
-
-    jar {
-        enabled = true
-        archiveClassifier.set("")
-    }
-
-    sourceSets {
-        main {
-            java.srcDirs += "build/generated/sources/version/java"
-        }
-    }
-
-    dependencies {
-        compileOnly 'org.projectlombok:lombok:1.18.32'
-        implementation 'javax.measure:unit-api:2.2'
-        implementation 'org.apache.commons:commons-lang3:3.14.0'
-        implementation 'org.slf4j:slf4j-api:2.0.13'
-        implementation 'org.jetbrains:annotations:24.1.0'
-        annotationProcessor 'org.projectlombok:lombok:1.18.32'
-
-        testCompileOnly 'org.projectlombok:lombok:1.18.32'
-        testImplementation 'org.apache.groovy:groovy:4.0.21'
-        testImplementation 'org.spockframework:spock-core:2.4-M4-groovy-4.0'
-        testRuntimeOnly "net.bytebuddy:byte-buddy:1.14.13"
-        testAnnotationProcessor 'org.projectlombok:lombok:1.18.32'
-
-    }
-
-
-    tasks.withType(Checkstyle) {
-        configFile = new File(rootProject.projectDir, "gradle/config/checkstyle.xml")
-        reports {
-            xml.required = true
-            html.required = true
-        }
-    }
-
-
-    pmd {
-        consoleOutput = true
-        ignoreFailures = true
-        toolVersion = "6.41.0"
-        rulesMinimumPriority = 3
-    }
-
-    spotbugs {
-        ignoreFailures = true
-    }
-
-    dependencyCheck {
-        autoUpdate = false
-        skipTestGroups = true
-        suppressionFile = "${parent.projectDir}/gradle/config/dependency-check-suppression.xml"
-        formats = [JSON, HTML]
-
-        analyzers.nodeEnabled = false
-        analyzers.nuspecEnabled = false
-        analyzers.nugetconfEnabled = false
-        analyzers.assemblyEnabled = false
-        analyzers.retirejs.enabled = false
+def updateMkdocsConfig = tasks.register("updateMkdocsConfig") {
+    doFirst {
+        def cfg = project.file(project.file('mkdocs.yml'))
+        cfg.text = cfg.text.replaceAll(/(?m)latest_version:.*/, "latest_version: ${project.version}")
     }
 }
 
-bootJar {
-    enabled = false
+tasks.named("afterReleaseBuild").configure {
+    dependsOn(
+            subprojects.collect { it.tasks.named("publish") },
+            updateMkdocsConfig
+    )
 }
-
-apply from: "$rootDir/gradle/scripts/updateMkdocsConfig.gradle"
-apply from: "$rootDir/gradle/scripts/release.gradle"

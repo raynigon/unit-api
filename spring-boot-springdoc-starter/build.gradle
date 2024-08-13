@@ -1,15 +1,13 @@
+plugins {
+    id 'unit-api.spring-conventions'
+}
+
 dependencies {
-    compileOnly 'org.springframework.boot:spring-boot-starter'
     compileOnly 'org.springdoc:springdoc-openapi-webmvc-core:1.8.0'
-    implementation project(":unit-api-core")
-    implementation project(":unit-api-jackson")
-    implementation project(":unit-api-validation")
-    implementation project(":spring-boot-core-starter")
+    api project(":unit-api-core")
+    api project(":unit-api-jackson")
+    api project(":unit-api-validation")
+    api project(":spring-boot-core-starter")
 
     testImplementation 'org.springdoc:springdoc-openapi-webmvc-core:1.8.0'
-    testImplementation 'org.springframework.boot:spring-boot-starter'
-    testImplementation('org.springframework.boot:spring-boot-starter-test') {
-        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-    }
-    testImplementation 'org.spockframework:spock-spring:2.4-M4-groovy-4.0'
 }

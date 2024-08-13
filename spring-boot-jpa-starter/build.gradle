@@ -1,15 +1,13 @@
-dependencies {
-    compileOnly 'org.springframework.boot:spring-boot-starter'
-    compileOnly 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation project(":unit-api-core")
-    implementation project(":spring-boot-core-starter")
+plugins {
+    id 'unit-api.spring-conventions'
+}
 
-    testImplementation 'org.springframework.boot:spring-boot-starter'
+dependencies {
+    compileOnly 'org.springframework.boot:spring-boot-starter-data-jpa'
+    api project(":unit-api-core")
+    api project(":spring-boot-core-starter")
+
     testImplementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    testImplementation('org.springframework.boot:spring-boot-starter-test') {
-        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-    }
     testImplementation("org.postgresql:postgresql:42.7.3")
     testImplementation("org.testcontainers:postgresql:1.19.7")
-    testImplementation 'org.spockframework:spock-spring:2.4-M4-groovy-4.0'
 }
