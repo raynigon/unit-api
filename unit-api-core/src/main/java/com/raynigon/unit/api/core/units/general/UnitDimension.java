@@ -31,6 +31,7 @@ package com.raynigon.unit.api.core.units.general;
 
 import com.raynigon.unit.api.core.exception.UnitNotFoundException;
 import com.raynigon.unit.api.core.service.UnitsApiService;
+import com.raynigon.unit.api.core.units.binary.BinarySystem;
 import com.raynigon.unit.api.core.units.si.SISystem;
 import com.raynigon.unit.api.core.units.si.dimensionless.One;
 import lombok.extern.slf4j.Slf4j;
@@ -123,6 +124,10 @@ public class UnitDimension implements Dimension, Serializable {
      * Holds luminous intensity dimension (J).
      */
     public static final Dimension LUMINOUS_INTENSITY = new UnitDimension('J');
+
+    public static final Dimension DATA = new UnitDimension(
+            new BaseUnit<>(BinarySystem.ID, "\uD83D\uDCBE", "\uD83D\uDCBE", Quantity.class, NONE)
+    );
 
     /**
      * Holds the pseudo unit associated to this dimension.
