@@ -1,4 +1,4 @@
-package com.raynigon.unit.api.core.units.si.binary;
+package com.raynigon.unit.api.core.units.binary.bytes;
 
 import com.raynigon.unit.api.core.function.unitconverter.MultiplyConverter;
 import com.raynigon.unit.api.core.units.general.TransformedUnit;
