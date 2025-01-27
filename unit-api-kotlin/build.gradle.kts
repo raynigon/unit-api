@@ -1,7 +1,7 @@
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 
 plugins {
-    kotlin("jvm") version "2.1.0"
+    kotlin("jvm") version "2.1.10"
     id("org.jlleitschuh.gradle.ktlint") version "12.1.2"
 
     id("unit-api.java-conventions")
