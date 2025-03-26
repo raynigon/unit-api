@@ -14,5 +14,5 @@ dependencies {
     implementation("com.github.spotbugs.snom:spotbugs-gradle-plugin:6.0.1")
     implementation("org.owasp:dependency-check-gradle:10.0.3")
 
-    implementation("org.springframework.boot:spring-boot-gradle-plugin:3.4.2")
+    implementation("org.springframework.boot:spring-boot-gradle-plugin:3.4.4")
 }
