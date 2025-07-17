@@ -38,22 +38,28 @@ public class UnitApiPropertyCustomizer implements PropertyCustomizer {
             switch (shape) {
                 case OBJECT:
                     property.setType("quantity");
-                    property.getTypes().clear();
-                    property.getTypes().add("quantity");
+                    if (property.getTypes() != null) {
+                        property.getTypes().clear();
+                    }
+                    property.addType("quantity");
                     property.setProperties(buildQuantityObjectProperties());
                     break;
                 case NUMBER:
                     property.setType("number");
-                    property.getTypes().clear();
-                    property.getTypes().add("number");
+                    if (property.getTypes() != null) {
+                        property.getTypes().clear();
+                    }
+                    property.addType("number");
                     property.setProperties(null);
                     break;
                 case NUMERIC_STRING:
                 case STRING:
                 default:
                     property.setType("string");
-                    property.getTypes().clear();
-                    property.getTypes().add("string");
+                    if (property.getTypes() != null) {
+                        property.getTypes().clear();
+                    }
+                    property.addType("string");
                     property.setProperties(null);
             }
             String description = buildDescription(type, property, unit, constraints);
