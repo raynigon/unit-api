@@ -33,19 +33,33 @@ public class UnitApiPropertyCustomizer implements PropertyCustomizer {
             Unit<?> unit = resolveUnit(type);
             Set<Annotation> constraints = resolveConstraints(type);
             QuantityShape shape = resolveShape(type);
+            // Also clear types and add type to types set, otherwise io.swagger.v3.core.util.AnnotationsUtils.clone
+            // will not work correctly, and we get a property with type=null and types=[object].
             switch (shape) {
                 case OBJECT:
                     property.setType("quantity");
+                    if (property.getTypes() != null) {
+                        property.getTypes().clear();
+                    }
+                    property.addType("quantity");
                     property.setProperties(buildQuantityObjectProperties());
                     break;
                 case NUMBER:
                     property.setType("number");
+                    if (property.getTypes() != null) {
+                        property.getTypes().clear();
+                    }
+                    property.addType("number");
                     property.setProperties(null);
                     break;
                 case NUMERIC_STRING:
                 case STRING:
                 default:
                     property.setType("string");
+                    if (property.getTypes() != null) {
+                        property.getTypes().clear();
+                    }
+                    property.addType("string");
                     property.setProperties(null);
             }
             String description = buildDescription(type, property, unit, constraints);
