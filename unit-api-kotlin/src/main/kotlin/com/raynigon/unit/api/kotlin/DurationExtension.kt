@@ -27,6 +27,7 @@ fun Duration.toQuantity(): Quantity<Time> {
 fun Quantity<Time>.toDuration(): Duration {
     val seconds: Long = this.to(Second()).value.toLong()
     val nanos: Long = (this - cSecond(seconds)).to(NanoSecond()).value.toLong()
-    return Duration.of(seconds, ChronoUnit.SECONDS)
+    return Duration
+        .of(seconds, ChronoUnit.SECONDS)
         .plus(Duration.of(nanos, ChronoUnit.NANOS))
 }

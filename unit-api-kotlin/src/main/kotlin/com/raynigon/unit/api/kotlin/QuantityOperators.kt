@@ -14,9 +14,7 @@ import javax.measure.Quantity
  * @throws NullPointerException if the quantity is null
  */
 @Contract(pure = true)
-operator fun <T : Quantity<T>> Quantity<T>.compareTo(that: Quantity<T>): Int {
-    return (this as ComparableQuantity<T>).compareTo(that)
-}
+operator fun <T : Quantity<T>> Quantity<T>.compareTo(that: Quantity<T>): Int = (this as ComparableQuantity<T>).compareTo(that)
 
 /**
  * Returns the sum of this {@code Quantity} with the one specified.
