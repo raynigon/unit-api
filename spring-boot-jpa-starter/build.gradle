@@ -8,6 +8,6 @@ dependencies {
     api project(":spring-boot-core-starter")
 
     testImplementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    testImplementation("org.postgresql:postgresql:42.7.5")
-    testImplementation("org.testcontainers:postgresql:1.20.6")
+    testImplementation("org.postgresql:postgresql:42.7.7")
+    testImplementation("org.testcontainers:postgresql:1.21.3")
 }
