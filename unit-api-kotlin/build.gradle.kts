@@ -14,7 +14,7 @@ plugins {
 dependencies {
     implementation(project(":unit-api-core"))
     implementation(kotlin("stdlib-jdk8"))
-    testImplementation("org.junit.jupiter:junit-jupiter:5.11.4")
+    testImplementation("org.junit.jupiter:junit-jupiter:6.0.0")
 }
 
 kotlin {
