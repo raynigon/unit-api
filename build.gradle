@@ -7,7 +7,7 @@ buildscript {
 plugins {
     // Auto Update Versions
     id 'se.patrikerdes.use-latest-versions' version '0.2.19'
-    id 'com.github.ben-manes.versions' version '0.52.0'
+    id 'com.github.ben-manes.versions' version '0.53.0'
 
     id 'maven-publish'
     id "net.researchgate.release" version "3.1.0"
