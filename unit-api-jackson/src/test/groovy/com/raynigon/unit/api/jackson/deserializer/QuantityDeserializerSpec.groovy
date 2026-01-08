@@ -1,11 +1,14 @@
 package com.raynigon.unit.api.jackson.deserializer
 
-import com.fasterxml.jackson.databind.JsonMappingException
-import com.fasterxml.jackson.databind.ObjectMapper
+import com.raynigon.unit.api.jackson.UnitApiModule
+import com.raynigon.unit.api.jackson.config.UnitApiFeature
+import tools.jackson.databind.DatabindException
+import tools.jackson.databind.ObjectMapper
 import com.raynigon.unit.api.core.units.si.speed.KilometrePerHour
 import com.raynigon.unit.api.core.units.si.speed.MetrePerSecond
 import spock.lang.Specification
 import spock.lang.Unroll
+import tools.jackson.databind.json.JsonMapper
 
 import javax.measure.Quantity
 import javax.measure.quantity.Speed
@@ -15,12 +18,13 @@ class QuantityDeserializerSpec extends Specification {
     ObjectMapper mapper
 
     def setup() {
-        mapper = new ObjectMapper()
-        mapper.registerModule(
-                com.raynigon.unit.api.jackson.UnitApiModule.create()
-                        .enable(com.raynigon.unit.api.jackson.config.UnitApiFeature.SYSTEM_UNIT_ON_MISSING_ANNOTATION)
-                        .build()
-        )
+        mapper = JsonMapper.builder()
+                .addModule(
+                        UnitApiModule.create()
+                                .enable(UnitApiFeature.SYSTEM_UNIT_ON_MISSING_ANNOTATION)
+                                .build()
+                )
+                .build()
     }
 
     def 'metric speed with number deserialization'() {
@@ -103,7 +107,7 @@ class QuantityDeserializerSpec extends Specification {
         mapper.readValue(source, SystemSpeedEntity.class)
 
         then:
-        thrown(JsonMappingException)
+        thrown(DatabindException)
 
         where:
         name | input

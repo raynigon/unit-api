@@ -1,12 +1,14 @@
 package com.raynigon.unit.api.jackson.deserializer.extractor
 
-import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.core.JsonTokenId
-import com.fasterxml.jackson.databind.DeserializationContext
-import com.fasterxml.jackson.databind.deser.DeserializerFactory
+import tools.jackson.core.JsonParser
+import tools.jackson.core.JsonTokenId
+import tools.jackson.databind.DeserializationConfig
+import tools.jackson.databind.DeserializationContext
+import tools.jackson.databind.deser.DeserializerFactory
 import com.raynigon.unit.api.jackson.helpers.DummyContext
 import spock.lang.Specification
 import spock.lang.Unroll
+import tools.jackson.databind.json.JsonMapper
 
 class NumberExtractorSpec extends Specification {
 
@@ -26,7 +28,7 @@ class NumberExtractorSpec extends Specification {
         result == expectedResult
 
         and:
-        1 * parser.getCurrentTokenId() >> tokenId
+        1 * parser.currentTokenId() >> tokenId
         longValueCalls * parser.getLongValue() >> 123
         doubleValueCalls * parser.getDoubleValue() >> 123.0
 

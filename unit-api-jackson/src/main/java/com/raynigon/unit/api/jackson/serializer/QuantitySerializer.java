@@ -1,11 +1,9 @@
 package com.raynigon.unit.api.jackson.serializer;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.BeanProperty;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.JsonSerializer;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.ser.ContextualSerializer;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.databind.BeanProperty;
+import tools.jackson.databind.SerializationContext;
+import tools.jackson.databind.ValueSerializer;
 import com.raynigon.unit.api.core.annotation.QuantityShape;
 import com.raynigon.unit.api.core.exception.UnitNotFoundException;
 import com.raynigon.unit.api.core.io.QuantityWriter;
@@ -15,7 +13,7 @@ import com.raynigon.unit.api.jackson.annotation.JsonQuantityWriter;
 import com.raynigon.unit.api.jackson.annotation.JsonUnit;
 import com.raynigon.unit.api.jackson.config.UnitApiConfig;
 import com.raynigon.unit.api.jackson.exception.IncompatibleUnitException;
-import com.raynigon.unit.api.jackson.exception.UnknownUnitException;
+import com.raynigon.unit.api.jackson.exception.InvalidUnitException;
 import com.raynigon.unit.api.jackson.annotation.JsonQuantityHelper;
 import com.raynigon.unit.api.jackson.annotation.JsonUnitHelper;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +25,7 @@ import java.util.Objects;
 
 @Slf4j
 @SuppressWarnings("rawtypes")
-public class QuantitySerializer extends JsonSerializer<Quantity> implements ContextualSerializer {
+public class QuantitySerializer extends ValueSerializer<Quantity> {
 
     private final UnitApiConfig config;
     private final Unit<?> unit;
@@ -48,10 +46,9 @@ public class QuantitySerializer extends JsonSerializer<Quantity> implements Cont
     }
 
     @Override
-    public JsonSerializer<?> createContextual(SerializerProvider prov, BeanProperty property)
-            throws JsonMappingException {
+    public ValueSerializer<?> createContextual(SerializationContext ctxt, BeanProperty property) {
         UnitApiConfig config = this.config;
-        Unit<?> unit = getSystemUnit(prov, property);
+        Unit<?> unit = getSystemUnit(ctxt, property);
         QuantityShape shape = this.shape;
         QuantityWriter writer = this.writer;
         log.trace("Property {} has system unit {}", property.getName(), unit);
@@ -59,7 +56,7 @@ public class QuantitySerializer extends JsonSerializer<Quantity> implements Cont
         JsonUnit unitWrapper = property.getAnnotation(JsonUnit.class);
         if (unitWrapper == null) return new QuantitySerializer(config, unit, shape, writer);
         shape = JsonUnitHelper.getShape(unitWrapper);
-        unit = getAnnotatedUnit(prov, property, unit, unitWrapper);
+        unit = getAnnotatedUnit(ctxt, property, unit, unitWrapper);
 
         JsonQuantityWriter writerWrapper = property.getAnnotation(JsonQuantityWriter.class);
         if (writerWrapper != null) {
@@ -73,9 +70,8 @@ public class QuantitySerializer extends JsonSerializer<Quantity> implements Cont
 
     @Override
     @SuppressWarnings({"unchecked", "rawtypes"})
-    public void serialize(Quantity quantity, JsonGenerator gen, SerializerProvider serializers)
-            throws IOException {
-        log.debug("Prepare {} with unit={} shape={} for write to {}", quantity, unit, shape, gen.getOutputContext());
+    public void serialize(Quantity quantity, JsonGenerator gen, SerializationContext ctxt) {
+        log.debug("Prepare {} with unit={} shape={} for write to {}", quantity, unit, shape, gen.objectWriteContext());
         Quantity convertedQuantity = quantity;
         if (this.unit != null) {
             convertedQuantity = quantity.to(unit);
@@ -92,10 +88,8 @@ public class QuantitySerializer extends JsonSerializer<Quantity> implements Cont
                 break;
             case OBJECT:
                 gen.writeStartObject();
-                gen.writeFieldName("value");
-                gen.writeNumber(convertedQuantity.getValue().doubleValue());
-                gen.writeFieldName("unit");
-                gen.writeString(convertedQuantity.getUnit().getSymbol());
+                gen.writeNumberProperty("value", convertedQuantity.getValue().doubleValue());
+                gen.writeStringProperty("unit", convertedQuantity.getUnit().getSymbol());
                 gen.writeEndObject();
                 break;
             default:
@@ -103,28 +97,24 @@ public class QuantitySerializer extends JsonSerializer<Quantity> implements Cont
         }
     }
 
-    private Unit<?> getAnnotatedUnit(SerializerProvider prov, BeanProperty property, Unit<?> systemUnit, JsonUnit unitWrapper) throws IncompatibleUnitException {
+    private Unit<?> getAnnotatedUnit(SerializationContext ctxt, BeanProperty property, Unit<?> systemUnit, JsonUnit unitWrapper) {
         IUnit<?> annotatedUnit = JsonUnitHelper.getUnitInstance(unitWrapper);
         if (annotatedUnit == null) {
             return systemUnit;
         }
         log.trace("Property {} is using annotated unit {}", property.getName(), systemUnit);
         if (!systemUnit.isCompatible(annotatedUnit)) {
-            throw new IncompatibleUnitException(prov.getGenerator(), systemUnit, annotatedUnit);
+            throw new IncompatibleUnitException(ctxt.getGenerator(), systemUnit, annotatedUnit);
         }
         return annotatedUnit;
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
-    private Unit<?> getSystemUnit(SerializerProvider prov, BeanProperty property) throws UnknownUnitException {
+    private Unit<?> getSystemUnit(SerializationContext ctxt, BeanProperty property) {
         Class<Quantity> quantityType = (Class<Quantity>) property.getType()
                 .getBindings()
                 .getBoundType(0)
                 .getRawClass();
-        try {
-            return UnitsApiService.getInstance().getUnit(quantityType);
-        } catch (UnitNotFoundException exception) {
-            throw new UnknownUnitException(prov.getGenerator(), quantityType);
-        }
+        return UnitsApiService.getInstance().getUnit(quantityType);
     }
 }

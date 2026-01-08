@@ -1,7 +1,6 @@
 package com.raynigon.unit.api.springdoc
 
 import com.fasterxml.jackson.databind.JavaType
-import com.fasterxml.jackson.databind.type.SimpleType
 import com.fasterxml.jackson.databind.type.TypeBindings
 import com.raynigon.unit.api.core.annotation.QuantityShape
 import com.raynigon.unit.api.core.units.si.power.Watt
@@ -36,8 +35,6 @@ class UnitApiPropertyCustomizerSpec extends Specification {
                         Quantity.class,
                         [new SimpleType(Speed.class)] as JavaType[],
                 ),
-                null,
-                null
         )
         annotatedType.ctxAnnotations([] as Annotation[])
 
@@ -63,8 +60,6 @@ class UnitApiPropertyCustomizerSpec extends Specification {
                         Quantity.class,
                         [new SimpleType(Speed.class)] as JavaType[],
                 ),
-                null,
-                null
         )
         JsonUnit jsonUnit = Mock(JsonUnit)
         annotatedType.ctxAnnotations([
@@ -99,8 +94,6 @@ class UnitApiPropertyCustomizerSpec extends Specification {
                         Quantity.class,
                         [new SimpleType(Speed.class)] as JavaType[],
                 ),
-                null,
-                null
         )
         JsonUnit jsonUnit = Mock(JsonUnit)
         annotatedType.ctxAnnotations([
@@ -138,8 +131,6 @@ class UnitApiPropertyCustomizerSpec extends Specification {
                         Quantity.class,
                         [new SimpleType(Speed.class)] as JavaType[],
                 ),
-                null,
-                null
         )
         JsonUnit jsonUnit = Mock(JsonUnit)
         annotatedType.ctxAnnotations([
@@ -182,9 +173,8 @@ class UnitApiPropertyCustomizerSpec extends Specification {
                         Quantity.class,
                         [new SimpleType(Speed.class)] as JavaType[],
                 ),
-                null,
-                null
         )
+
         and:
         JsonUnit jsonUnit = Mock(JsonUnit)
         jsonUnit.annotationType() >> JsonUnit.class
@@ -231,8 +221,6 @@ class UnitApiPropertyCustomizerSpec extends Specification {
                         Quantity.class,
                         [new SimpleType(Speed.class)] as JavaType[],
                 ),
-                null,
-                null
         )
         and:
         JsonUnit jsonUnit = Mock(JsonUnit)
@@ -279,9 +267,7 @@ class UnitApiPropertyCustomizerSpec extends Specification {
                 TypeBindings.create(
                         Quantity.class,
                         [new SimpleType(Speed.class)] as JavaType[],
-                ),
-                null,
-                null
+                )
         )
         and:
         JsonUnit jsonUnit = Mock(JsonUnit)
@@ -318,5 +304,125 @@ class UnitApiPropertyCustomizerSpec extends Specification {
         and:
         result.type == "string"
         result.description == "speed is given in Kilometre per Hour (km/h) and must be between 0.0 W and 10.0 W"
+    }
+
+    class SimpleType extends JavaType {
+
+        private TypeBindings bindings
+
+        protected SimpleType(Class<?> raw) {
+            super(raw, 0, null, null, false)
+            this.bindings = null
+        }
+
+        protected SimpleType(Class<?> raw, TypeBindings bindings) {
+            super(raw, 0, null, null, false)
+            this.bindings = bindings
+        }
+
+        @Override
+        JavaType withContentType(JavaType contentType) {
+            return null
+        }
+
+        @Override
+        JavaType withStaticTyping() {
+            return null
+        }
+
+        @Override
+        JavaType withTypeHandler(Object h) {
+            return null
+        }
+
+        @Override
+        JavaType withContentTypeHandler(Object h) {
+            return null
+        }
+
+        @Override
+        JavaType withValueHandler(Object h) {
+            return null
+        }
+
+        @Override
+        JavaType withContentValueHandler(Object h) {
+            return null
+        }
+
+        @Override
+        JavaType refine(Class<?> rawType, TypeBindings bindings, JavaType superClass, JavaType[] superInterfaces) {
+            return null
+        }
+
+        @Override
+        boolean isContainerType() {
+            return false
+        }
+
+        @Override
+        int containedTypeCount() {
+            return 0
+        }
+
+        @Override
+        JavaType containedType(int index) {
+            return null
+        }
+
+        @Override
+        String containedTypeName(int index) {
+            return null
+        }
+
+        @Override
+        String toCanonical() {
+            return null
+        }
+
+        @Override
+        TypeBindings getBindings() {
+            return bindings
+        }
+
+        @Override
+        JavaType findSuperType(Class<?> erasedTarget) {
+            return null
+        }
+
+        @Override
+        JavaType getSuperClass() {
+            return null
+        }
+
+        @Override
+        List<JavaType> getInterfaces() {
+            return null
+        }
+
+        @Override
+        JavaType[] findTypeParameters(Class<?> expType) {
+            return null
+        }
+
+        @Override
+        StringBuilder getGenericSignature(StringBuilder sb) {
+            return null
+        }
+
+        @Override
+        StringBuilder getErasedSignature(StringBuilder sb) {
+            return null
+        }
+
+        @Override
+        String toString() {
+            return null
+        }
+
+        @Override
+        boolean equals(Object o) {
+            return false
+        }
     }
 }

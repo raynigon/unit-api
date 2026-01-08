@@ -9,4 +9,5 @@ dependencies {
     api project(":spring-boot-core-starter")
 
     testImplementation 'org.springframework.boot:spring-boot-starter-web'
+    testImplementation 'org.springframework.boot:spring-boot-starter-restclient'
 }

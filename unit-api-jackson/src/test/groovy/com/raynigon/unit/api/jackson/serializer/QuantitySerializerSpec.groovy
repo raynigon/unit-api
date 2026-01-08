@@ -1,29 +1,35 @@
 package com.raynigon.unit.api.jackson.serializer
 
-import com.fasterxml.jackson.databind.BeanProperty
-import com.fasterxml.jackson.databind.JavaType
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.SerializerProvider
-import com.fasterxml.jackson.databind.type.TypeBindings
+import com.fasterxml.jackson.annotation.ObjectIdGenerator
 import com.raynigon.unit.api.core.annotation.QuantityShape
+import com.raynigon.unit.api.core.exception.UnitNotFoundException
 import com.raynigon.unit.api.core.units.si.length.Metre
 import com.raynigon.unit.api.core.units.si.speed.KilometrePerHour
 import com.raynigon.unit.api.core.units.si.temperature.Celsius
 import com.raynigon.unit.api.jackson.UnitApiModule
 import com.raynigon.unit.api.jackson.annotation.JsonUnit
 import com.raynigon.unit.api.jackson.config.UnitApiConfig
-import com.raynigon.unit.api.jackson.exception.UnknownUnitException
+import com.raynigon.unit.api.jackson.exception.InvalidUnitException
 import spock.lang.Specification
+import tools.jackson.core.JacksonException
+import tools.jackson.databind.*
+import tools.jackson.databind.introspect.Annotated
+import tools.jackson.databind.introspect.BeanPropertyDefinition
+import tools.jackson.databind.json.JsonMapper
+import tools.jackson.databind.ser.SerializerCache
+import tools.jackson.databind.ser.SerializerFactory
+import tools.jackson.databind.ser.WritableObjectId
+import tools.jackson.databind.type.TypeBindings
 
 import javax.measure.Quantity
 import javax.measure.quantity.Length
 import javax.measure.quantity.Speed
 import javax.measure.quantity.Temperature
 
-import static com.raynigon.unit.api.core.units.si.SISystemUnitsConstants.Celsius
-import static com.raynigon.unit.api.core.units.si.SISystemUnitsConstants.KilometrePerHour
-import static com.raynigon.unit.api.core.units.si.SISystemUnitsConstants.Metre
-import static com.raynigon.unit.api.jackson.annotation.JsonUnit.*
+import static com.raynigon.unit.api.core.units.si.SISystemUnitsConstants.Celsius as cCelsius
+import static com.raynigon.unit.api.core.units.si.SISystemUnitsConstants.KilometrePerHour as kmh
+import static com.raynigon.unit.api.core.units.si.SISystemUnitsConstants.Metre as cMetre
+import static com.raynigon.unit.api.jackson.annotation.JsonUnit.NoneUnit
 
 class QuantitySerializerSpec extends Specification {
 
@@ -33,15 +39,14 @@ class QuantitySerializerSpec extends Specification {
         def serializer = new QuantitySerializer(new UnitApiConfig(0))
 
         and:
-        SerializerProvider prov = Mock()
+        SerializationContext ctxt = new SimpleSerializationContext(Mock(SerializerFactory))
         BeanProperty property = Mock()
 
         and:
-        JavaType propertyJavaType = Mock(DummyType)
-        JavaType boundType = Mock(DummyType)
-        TypeBindings propertyTypeBindings = TypeBindings.create(List, List.of(boundType))
-        propertyJavaType.getBindings() >> propertyTypeBindings
-        boundType.getRawClass() >> DummyQuantity.class
+        JavaType propertyJavaType = new SimpleType(
+                Quantity.class,
+                TypeBindings.create(List, List.of( new SimpleType(DummyQuantity.class)))
+        )
 
         and:
         def jsonUnit = Mock(JsonUnit)
@@ -50,25 +55,25 @@ class QuantitySerializerSpec extends Specification {
         jsonUnit.unit() >> NoneUnit
 
         when:
-        serializer.createContextual(prov, property)
+        serializer.createContextual(ctxt, property)
 
         then:
-        thrown(UnknownUnitException)
+        thrown(UnitNotFoundException)
 
         and:
         1 * property.getType() >> propertyJavaType
     }
 
     def 'number deserialization'() {
-
         given:
-        def mapper = new ObjectMapper()
-        mapper.registerModule(new UnitApiModule())
+        def mapper = JsonMapper.builder()
+                .addModule(new UnitApiModule())
+                .build()
 
         and:
         def source = new BasicNumberEntity()
         source.id = "1"
-        source.speed = KilometrePerHour(100)
+        source.speed = kmh(100)
 
         when:
         def result = mapper.writeValueAsString(source)
@@ -83,13 +88,14 @@ class QuantitySerializerSpec extends Specification {
     def 'numeric string deserialization'() {
 
         given:
-        def mapper = new ObjectMapper()
-        mapper.registerModule(new UnitApiModule())
+        def mapper = JsonMapper.builder()
+                .addModule(new UnitApiModule())
+                .build()
 
         and:
         def source = new BasicNumericEntity()
         source.id = "1"
-        source.speed = KilometrePerHour(100)
+        source.speed = kmh(100)
 
         when:
         def result = mapper.writeValueAsString(source)
@@ -104,13 +110,14 @@ class QuantitySerializerSpec extends Specification {
     def 'string deserialization'() {
 
         given:
-        def mapper = new ObjectMapper()
-        mapper.registerModule(new UnitApiModule())
+        def mapper = JsonMapper.builder()
+                .addModule(new UnitApiModule())
+                .build()
 
         and:
         def source = new BasicStringEntity()
         source.id = "1"
-        source.temperature = Celsius(30)
+        source.temperature = cCelsius(30)
 
         when:
         def result = mapper.writeValueAsString(source)
@@ -125,13 +132,14 @@ class QuantitySerializerSpec extends Specification {
     def 'object deserialization'() {
 
         given:
-        def mapper = new ObjectMapper()
-        mapper.registerModule(new UnitApiModule())
+        def mapper = JsonMapper.builder()
+                .addModule(new UnitApiModule())
+                .build()
 
         and:
         def source = new BasicObjectEntity()
         source.id = "1"
-        source.distance = Metre(100)
+        source.distance = cMetre(100)
 
         when:
         def result = mapper.writeValueAsString(source)
@@ -140,7 +148,7 @@ class QuantitySerializerSpec extends Specification {
         noExceptionThrown()
 
         and:
-        result == '{"id":"1","distance":{"value":100.0,"unit":"m"}}'
+        result == '{"distance":{"value":100.0,"unit":"m"},"id":"1"}'
     }
 
     interface DummyQuantity extends Quantity<DummyQuantity> {}
@@ -183,5 +191,159 @@ class QuantitySerializerSpec extends Specification {
 
         @JsonUnit(unit = Metre, shape = QuantityShape.OBJECT)
         public Quantity<Length> distance
+    }
+
+    class SimpleSerializationContext extends SerializationContext {
+
+        protected SimpleSerializationContext(SerializerFactory f) {
+            super(
+                    null,
+                    JsonMapper.builder().build().serializationConfig(),
+                    null,
+                    f,
+                    new SerializerCache(),
+            )
+        }
+
+        @Override
+        WritableObjectId findObjectId(Object forPojo, ObjectIdGenerator<?> generatorType) {
+            return null
+        }
+
+        @Override
+        ValueSerializer<Object> serializerInstance(Annotated annotated, Object serDef) {
+            return null
+        }
+
+        @Override
+        Object includeFilterInstance(BeanPropertyDefinition forProperty, Class<?> filterClass) {
+            return null
+        }
+
+        @Override
+        boolean includeFilterSuppressNulls(Object filter) {
+            return false
+        }
+
+        @Override
+        def <T extends JsonNode> T valueToTree(Object fromValue) throws JacksonException {
+            return null
+        }
+    }
+
+    class SimpleType extends JavaType {
+
+        private TypeBindings bindings
+
+        protected SimpleType(Class<?> raw) {
+            super(raw, 0, null, null, false)
+            this.bindings = null
+        }
+
+        protected SimpleType(Class<?> raw, TypeBindings bindings) {
+            super(raw, 0, null, null, false)
+            this.bindings = bindings
+        }
+
+        @Override
+        JavaType withContentType(JavaType contentType) {
+            return null
+        }
+
+        @Override
+        JavaType withStaticTyping() {
+            return null
+        }
+
+        @Override
+        JavaType withTypeHandler(Object h) {
+            return null
+        }
+
+        @Override
+        JavaType withContentTypeHandler(Object h) {
+            return null
+        }
+
+        @Override
+        JavaType withValueHandler(Object h) {
+            return null
+        }
+
+        @Override
+        JavaType withContentValueHandler(Object h) {
+            return null
+        }
+
+        @Override
+        JavaType refine(Class<?> rawType, TypeBindings bindings, JavaType superClass, JavaType[] superInterfaces) {
+            return null
+        }
+
+        @Override
+        boolean isContainerType() {
+            return false
+        }
+
+        @Override
+        int containedTypeCount() {
+            return 0
+        }
+
+        @Override
+        JavaType containedType(int index) {
+            return null
+        }
+
+
+        @Override
+        String toCanonical() {
+            return null
+        }
+
+        @Override
+        TypeBindings getBindings() {
+            return bindings
+        }
+
+        @Override
+        JavaType findSuperType(Class<?> erasedTarget) {
+            return null
+        }
+
+        @Override
+        JavaType getSuperClass() {
+            return null
+        }
+
+        @Override
+        List<JavaType> getInterfaces() {
+            return null
+        }
+
+        @Override
+        JavaType[] findTypeParameters(Class<?> expType) {
+            return null
+        }
+
+        @Override
+        StringBuilder getGenericSignature(StringBuilder sb) {
+            return null
+        }
+
+        @Override
+        StringBuilder getErasedSignature(StringBuilder sb) {
+            return null
+        }
+
+        @Override
+        String toString() {
+            return null
+        }
+
+        @Override
+        boolean equals(Object o) {
+            return false
+        }
     }
 }

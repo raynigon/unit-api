@@ -1,6 +1,6 @@
 package com.raynigon.unit.api.springdoc;
 
-import com.fasterxml.jackson.databind.type.SimpleType;
+import com.fasterxml.jackson.databind.JavaType;
 import com.raynigon.unit.api.core.annotation.QuantityShape;
 import com.raynigon.unit.api.core.service.UnitsApiService;
 import com.raynigon.unit.api.jackson.annotation.JsonUnit;
@@ -72,7 +72,7 @@ public class UnitApiPropertyCustomizer implements PropertyCustomizer {
 
     @SuppressWarnings({"rawtypes", "unchecked"})
     private Unit<?> resolveUnit(AnnotatedType type) {
-        SimpleType quantityType = (SimpleType) type.getType();
+        JavaType quantityType = (JavaType) type.getType();
         Class<?> quantityBoundType = quantityType.getBindings().getBoundType(0).getRawClass();
         Unit<?> unit = UnitsApiService.getInstance().getUnit((Class) quantityBoundType);
         JsonUnit jsonUnit = resolveJsonUnit(type);
@@ -106,8 +106,8 @@ public class UnitApiPropertyCustomizer implements PropertyCustomizer {
     }
 
     private boolean isApplicable(Type type) {
-        return (type instanceof SimpleType)
-                && Quantity.class.isAssignableFrom(((SimpleType) type).getRawClass());
+        return (type instanceof JavaType)
+                && Quantity.class.isAssignableFrom(((JavaType) type).getRawClass());
     }
 
     private String buildDescription(AnnotatedType type, Schema property, Unit<?> unit, Set<Annotation> constraints) {
