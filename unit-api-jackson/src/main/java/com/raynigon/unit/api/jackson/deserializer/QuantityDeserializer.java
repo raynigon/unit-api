@@ -18,7 +18,6 @@ import com.raynigon.unit.api.jackson.exception.InvalidUnitException;
 
 import javax.measure.Quantity;
 import javax.measure.Unit;
-import java.io.IOException;
 import java.util.Objects;
 
 public class QuantityDeserializer extends ValueDeserializer<Quantity<?>> {
@@ -38,6 +37,7 @@ public class QuantityDeserializer extends ValueDeserializer<Quantity<?>> {
         this.forceUnit = forceUnit;
         this.reader = reader;
     }
+
 
     @Override
     @SuppressWarnings({"unchecked", "rawtypes"})
