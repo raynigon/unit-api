@@ -107,7 +107,7 @@ jobs:
         run: |
           curl -X POST \
             -u "${{ secrets.OSSRH_USERNAME }}:${{ secrets.OSSRH_PASSWORD }}" \
-            https://ossrh-staging-api.central.sonatype.com/manual/upload/defaultRepository/com.raynigon.spring-boot
+            https://ossrh-staging-api.central.sonatype.com/manual/upload/defaultRepository/com.raynigon.unit-api
         env:
           OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
