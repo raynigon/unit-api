@@ -24,6 +24,9 @@ jobs:
 
   javadoc:
     runs-on: ubuntu-latest
+    concurrency:
+        group: "javadoc-upload-main"
+        cancel-in-progress: true
     if: github.ref == 'refs/heads/main' || contains(github.ref, 'refs/tags/')
     steps:
       - uses: actions/checkout@v4
