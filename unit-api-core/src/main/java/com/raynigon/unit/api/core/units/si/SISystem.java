@@ -34,6 +34,10 @@ public class SISystem implements SystemOfUnits {
   private void addUnit(IUnit<?> unit) {
     this.units.add(unit);
     symbolToUnit.put(unit.getSymbol(), unit);
+    // Add Symbols Aliases for Parsing
+    for (String alias : unit.getSymbolAliases()) {
+      symbolToUnit.put(alias, unit);
+    }
     if (unit.isSystemUnit()) {
       systemUnits.put(unit.getQuantityType(), unit);
     }

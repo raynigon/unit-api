@@ -12,7 +12,7 @@ public class Celsius extends TransformedUnit<Temperature> implements IUnit<Tempe
   @SuppressWarnings("unchecked")
   public Celsius() {
     super(
-            "\u2103",
+            "°C",
             "Celsius",
             new Kelvin(),
             new Kelvin(),
@@ -28,4 +28,9 @@ public class Celsius extends TransformedUnit<Temperature> implements IUnit<Tempe
   public Class<Temperature> getQuantityType() {
     return Temperature.class;
   }
+
+    @Override
+    public String[] getSymbolAliases() {
+        return new String[]{"\u2103"};
+    }
 }

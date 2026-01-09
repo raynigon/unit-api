@@ -126,7 +126,7 @@ class QuantitySerializerSpec extends Specification {
         noExceptionThrown()
 
         and:
-        result == '{"id":"1","temperature":"30 ℃"}'
+        result == '{"id":"1","temperature":"30 °C"}'
     }
 
     def 'object deserialization'() {
