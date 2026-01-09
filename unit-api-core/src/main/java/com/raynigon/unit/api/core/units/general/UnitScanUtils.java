@@ -38,7 +38,7 @@ public class UnitScanUtils {
         try {
             return it.newInstance();
         } catch (Exception e) {
-            log.error("Unable to create Unit Instance for " + it.getName(), e);
+            log.error("Unable to create Unit Instance for {}", it.getName(), e);
             return null;
         }
     }

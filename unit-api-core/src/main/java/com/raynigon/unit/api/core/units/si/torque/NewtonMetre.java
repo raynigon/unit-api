@@ -17,6 +17,9 @@ public class NewtonMetre extends AlternateUnit<Torque> {
 
     @Override
     public String[] getSymbolAliases() {
-        return new String[]{"N⋅m"};
+        return new String[]{
+                "N⋅m", // UTF-8 Middle Dot
+                "N·m"  // UTF-8 Interpunct
+        };
     }
 }
