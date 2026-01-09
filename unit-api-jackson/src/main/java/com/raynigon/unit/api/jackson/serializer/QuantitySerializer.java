@@ -112,6 +112,7 @@ public class QuantitySerializer extends ValueSerializer<Quantity> {
                 .getBindings()
                 .getBoundType(0)
                 .getRawClass();
+        // This may throw a UnitNotFoundException, if no unit is registered for the quantity type
         return UnitsApiService.getInstance().getUnit(quantityType);
     }
 }
