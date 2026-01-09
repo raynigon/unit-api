@@ -106,7 +106,7 @@ jobs:
       - name: "Release to Maven Central"
         run: |
           curl \
-            -f -v \
+            -f \
             -X POST \
             -u "${{ secrets.OSSRH_USERNAME }}:${{ secrets.OSSRH_PASSWORD }}" \
             https://ossrh-staging-api.central.sonatype.com/manual/upload/defaultRepository/com.raynigon.unit-api
