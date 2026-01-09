@@ -23,7 +23,9 @@ jobs:
           output: build/results.sarif
           format: sarif
 
-      - name: Upload SARIF results file
-        uses: github/codeql-action/upload-sarif@main
-        with:
-          sarif_file: build/results.sarif
+    # Codacy is currently not working with CodeQL SARIF uploads
+    # See https://github.com/codacy/codacy-analysis-cli-action/issues/142
+    #  - name: Upload SARIF results file
+    #    uses: github/codeql-action/upload-sarif@main
+    #    with:
+    #      sarif_file: build/results.sarif
