@@ -5,7 +5,6 @@ import tools.jackson.databind.BeanProperty;
 import tools.jackson.databind.SerializationContext;
 import tools.jackson.databind.ValueSerializer;
 import com.raynigon.unit.api.core.annotation.QuantityShape;
-import com.raynigon.unit.api.core.exception.UnitNotFoundException;
 import com.raynigon.unit.api.core.io.QuantityWriter;
 import com.raynigon.unit.api.core.service.UnitsApiService;
 import com.raynigon.unit.api.core.units.general.IUnit;
@@ -13,14 +12,12 @@ import com.raynigon.unit.api.jackson.annotation.JsonQuantityWriter;
 import com.raynigon.unit.api.jackson.annotation.JsonUnit;
 import com.raynigon.unit.api.jackson.config.UnitApiConfig;
 import com.raynigon.unit.api.jackson.exception.IncompatibleUnitException;
-import com.raynigon.unit.api.jackson.exception.InvalidUnitException;
 import com.raynigon.unit.api.jackson.annotation.JsonQuantityHelper;
 import com.raynigon.unit.api.jackson.annotation.JsonUnitHelper;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.measure.Quantity;
 import javax.measure.Unit;
-import java.io.IOException;
 import java.util.Objects;
 
 @Slf4j

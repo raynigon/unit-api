@@ -21,7 +21,6 @@ import javax.measure.Quantity;
 import javax.measure.Unit;
 
 import io.swagger.v3.oas.models.media.StringSchema;
-import lombok.val;
 import org.springdoc.core.customizers.PropertyCustomizer;
 
 public class UnitApiPropertyCustomizer implements PropertyCustomizer {
