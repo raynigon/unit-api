@@ -32,3 +32,6 @@ build/
 
 # Codespaces
 pythonenv*
+
+# Ignore .kotlin folder
+.kotlin/
