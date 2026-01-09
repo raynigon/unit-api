@@ -1,8 +1,9 @@
 package com.raynigon.unit.api.jackson
 
-import com.fasterxml.jackson.databind.ObjectMapper
+import tools.jackson.databind.ObjectMapper
 import com.raynigon.unit.api.jackson.helpers.BasicEntity
 import spock.lang.Specification
+import tools.jackson.databind.json.JsonMapper
 
 import static com.raynigon.unit.api.jackson.config.UnitApiFeature.SYSTEM_UNIT_ON_MISSING_ANNOTATION
 import static com.raynigon.unit.api.jackson.helpers.BasicEntity.*
@@ -12,21 +13,24 @@ class UnitApiModuleSpec extends Specification {
     def 'registration works'() {
 
         given:
-        def mapper = new ObjectMapper()
+        JsonMapper.Builder builder = JsonMapper.builder()
 
         when:
-        mapper.registerModule(new UnitApiModule())
+        JsonMapper mapper = builder
+                .addModule(new UnitApiModule())
+                .build()
 
         then:
-        mapper.getRegisteredModuleIds() == ([UnitApiModule.class.getName()] as Set)
+        mapper.registeredModules().any {it instanceof UnitApiModule}
     }
 
     def 'basic deserialization'() {
 
         given:
         // init_unit_api_jackson_basic {
-        ObjectMapper mapper = new ObjectMapper()
-        mapper.registerModule(new UnitApiModule())
+        ObjectMapper mapper = JsonMapper.builder()
+                .addModule(new UnitApiModule())
+                .build()
         // }
 
         and:

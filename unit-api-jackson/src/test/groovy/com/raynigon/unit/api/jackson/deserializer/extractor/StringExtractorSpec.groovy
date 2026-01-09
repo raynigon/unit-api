@@ -1,9 +1,9 @@
 package com.raynigon.unit.api.jackson.deserializer.extractor
 
 
-import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.databind.DeserializationContext
-import com.fasterxml.jackson.databind.deser.DeserializerFactory
+import tools.jackson.core.JsonParser
+import tools.jackson.databind.DeserializationContext
+import tools.jackson.databind.deser.DeserializerFactory
 import com.raynigon.unit.api.jackson.helpers.DummyContext
 import spock.lang.Specification
 

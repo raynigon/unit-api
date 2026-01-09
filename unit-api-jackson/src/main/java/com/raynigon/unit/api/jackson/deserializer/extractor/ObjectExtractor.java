@@ -1,11 +1,12 @@
 package com.raynigon.unit.api.jackson.deserializer.extractor;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonTokenId;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.raynigon.unit.api.jackson.exception.UnknownUnitException;
+import tools.jackson.core.JsonParser;
+import tools.jackson.core.JsonTokenId;
+import tools.jackson.databind.DeserializationContext;
+import com.raynigon.unit.api.jackson.exception.InvalidUnitException;
+import tools.jackson.databind.exc.ValueInstantiationException;
 
+import javax.measure.Quantity;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
@@ -14,7 +15,7 @@ public class ObjectExtractor {
 
     public final static List<Integer> HANDLED_TOKENS = Collections.singletonList(JsonTokenId.ID_START_OBJECT);
 
-    public static String extract(JsonParser parser, DeserializationContext context) throws IOException {
+    public static String extract(JsonParser parser, DeserializationContext context) {
         int tokenId = parser.nextToken().id();
         DeserializationState state = DeserializationState.UNKNOWN;
 
@@ -24,13 +25,13 @@ public class ObjectExtractor {
 
         while (tokenId != JsonTokenId.ID_END_OBJECT) {
             switch (tokenId) {
-                case JsonTokenId.ID_FIELD_NAME:
+                case JsonTokenId.ID_PROPERTY_NAME:
                     if ("value".equalsIgnoreCase(parser.getValueAsString())) {
                         state = DeserializationState.VALUE_FIELD;
                     } else if ("unit".equalsIgnoreCase(parser.getValueAsString())) {
                         state = DeserializationState.UNIT_FIELD;
                     } else {
-                        throw new JsonMappingException(parser, "Unexpected Data");
+                        throw ValueInstantiationException.from(parser, "Unexpected Data", context.constructType(Quantity.class));
                     }
                     break;
                 case JsonTokenId.ID_NUMBER_FLOAT:
@@ -39,7 +40,7 @@ public class ObjectExtractor {
                         valueField = parser.getDoubleValue();
                         valueParsed = true;
                     } else {
-                        throw new JsonMappingException(parser, "Unexpected Data");
+                        throw ValueInstantiationException.from(parser, "Unexpected Data");
                     }
                     state = DeserializationState.UNKNOWN;
                     break;
@@ -47,20 +48,20 @@ public class ObjectExtractor {
                     if (state == DeserializationState.UNIT_FIELD) {
                         unitField = parser.getValueAsString();
                         if (unitField == null) {
-                            throw new UnknownUnitException(parser, parser.getValueAsString());
+                            throw new InvalidUnitException(parser, parser.getValueAsString());
                         }
                     } else {
-                        throw new JsonMappingException(parser, "Unexpected Data");
+                        throw ValueInstantiationException.from(parser, "Unexpected Data", context.constructType(Quantity.class));
                     }
                     state = DeserializationState.UNKNOWN;
                     break;
                 default:
-                    throw new JsonMappingException(parser, "Unexpected Data");
+                    throw ValueInstantiationException.from(parser, "Unexpected Data", context.constructType(Quantity.class));
             }
             tokenId = parser.nextToken().id();
         }
-        if (!valueParsed) throw new JsonMappingException(parser, "Missing Value Field");
-        if (unitField == null) throw new JsonMappingException(parser, "Missing Unit Field");
+        if (!valueParsed) throw ValueInstantiationException.from(parser, "Missing Value Field", context.constructType(Quantity.class));
+        if (unitField == null) throw ValueInstantiationException.from(parser, "Missing Unit Field", context.constructType(Quantity.class));
         return valueField + " " + unitField;
     }
 

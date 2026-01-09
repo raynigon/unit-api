@@ -15,7 +15,7 @@ import javax.measure.Quantity
 import javax.measure.quantity.Length
 import java.lang.annotation.Annotation
 
-import static com.raynigon.unit.api.core.units.si.SISystemUnitsConstants.Metre
+import static com.raynigon.unit.api.core.units.si.SISystemUnitsConstants.Metre as cMetre
 
 class QuantityTypeSpec extends Specification {
 
@@ -158,9 +158,9 @@ class QuantityTypeSpec extends Specification {
         where:
         q0       | q1       | expected
         null     | null     | true
-        null     | Metre(0) | false
-        Metre(0) | null     | false
-        Metre(0) | Metre(0) | true
+        null     | cMetre(0) | false
+        cMetre(0) | null     | false
+        cMetre(0) | cMetre(0) | true
     }
 
     def 'generate quantity hash code'() {
@@ -168,7 +168,7 @@ class QuantityTypeSpec extends Specification {
         QuantityType type = new QuantityType()
 
         when:
-        def result = type.hashCode(Metre(0))
+        def result = type.hashCode(cMetre(0))
 
         then:
         result != 0

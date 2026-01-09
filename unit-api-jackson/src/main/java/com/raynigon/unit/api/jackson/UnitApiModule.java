@@ -1,7 +1,7 @@
 package com.raynigon.unit.api.jackson;
 
-import com.fasterxml.jackson.core.Version;
-import com.fasterxml.jackson.databind.module.SimpleModule;
+import tools.jackson.core.Version;
+import tools.jackson.databind.module.SimpleModule;
 import com.raynigon.unit.api.jackson.config.UnitApiConfig;
 import com.raynigon.unit.api.jackson.config.UnitApiFeature;
 import com.raynigon.unit.api.jackson.deserializer.QuantityDeserializer;

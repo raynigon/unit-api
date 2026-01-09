@@ -1,11 +1,11 @@
 package com.raynigon.unit.api.jackson.exception;
 
-import com.fasterxml.jackson.databind.JsonMappingException;
+import tools.jackson.databind.DatabindException;
 
 import javax.measure.Quantity;
 import java.io.Closeable;
 
-public class MissingUnitException extends JsonMappingException {
+public class MissingUnitException extends DatabindException {
 
     public MissingUnitException(Closeable processor, String unitName) {
         super(processor, "Missing Unit: " + unitName);

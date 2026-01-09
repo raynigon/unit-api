@@ -1,16 +1,15 @@
 package com.raynigon.unit.api.jackson
 
-import com.fasterxml.jackson.databind.ObjectMapper
+import org.springframework.boot.test.web.server.LocalServerPort
+import org.springframework.web.client.RestClient
+import tools.jackson.databind.ObjectMapper
 import com.raynigon.unit.api.jackson.helpers.BasicApplicationConfig
 import com.raynigon.unit.api.jackson.helpers.BasicRestController
 import com.raynigon.unit.api.jackson.helpers.BasicService
 import com.raynigon.unit.api.jackson.helpers.WeatherEntity
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.web.client.TestRestTemplate
-import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
-import spock.lang.Ignore
 import spock.lang.Specification
 
 import static com.raynigon.unit.api.core.units.si.SISystemUnitsConstants.Celsius
@@ -32,18 +31,29 @@ import static com.raynigon.unit.api.core.units.si.SISystemUnitsConstants.Percent
 )
 class JacksonStarterApplicationSpec extends Specification {
 
+    @LocalServerPort
+    int port
+
     @Autowired
     BasicService service
 
     @Autowired
-    TestRestTemplate restTemplate
+    RestClient.Builder restClientBuilder
 
     @Autowired
     ObjectMapper objectMapper
 
+    RestClient restClient
+
+    def setup() {
+        restClient = restClientBuilder
+                .baseUrl("http://localhost:$port")
+                .build()
+    }
+
     def 'context setup works'() {
         expect:
-        objectMapper.getRegisteredModuleIds().contains(new UnitApiModule().getTypeId())
+        objectMapper.registeredModules().any { it instanceof UnitApiModule }
     }
 
     def 'entity creation works'() {
@@ -56,7 +66,12 @@ class JacksonStarterApplicationSpec extends Specification {
         ]
 
         when:
-        def response = restTemplate.postForEntity("/api/basic-entity", data, Map.class)
+        def response = restClient
+                .post()
+                .uri("/api/basic-entity")
+                .body(data)
+                .retrieve()
+                .toEntity(Map.class)
 
         then:
         response.statusCode.'2xxSuccessful'
@@ -96,8 +111,8 @@ class JacksonStarterApplicationSpec extends Specification {
 
         where:
         entity                                        | expected
-        new WeatherEntity(Celsius(30), Percent(10))   | '{"temperature":30.0,"humidity":"10.0%"}'
-        new WeatherEntity(Celsius(30), Percent(10.1)) | '{"temperature":30.0,"humidity":"10.1%"}'
-        new WeatherEntity(Celsius(30), Percent(-10))  | '{"temperature":30.0,"humidity":"-10.0%"}'
+        new WeatherEntity(Celsius(30), Percent(10))   | '{"humidity":"10.0%","temperature":30.0}'
+        new WeatherEntity(Celsius(30), Percent(10.1)) | '{"humidity":"10.1%","temperature":30.0}'
+        new WeatherEntity(Celsius(30), Percent(-10))  | '{"humidity":"-10.0%","temperature":30.0}'
     }
 }
