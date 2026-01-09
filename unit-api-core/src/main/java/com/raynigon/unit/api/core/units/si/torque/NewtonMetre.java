@@ -12,6 +12,6 @@ public class NewtonMetre extends AlternateUnit<Torque> {
 
     @SuppressWarnings("unchecked")
     public NewtonMetre() {
-        super(SISystem.ID, "Nm", "Newton Metre", (Unit<Torque>) new Newton().multiply(new Metre()), Torque.class);
+        super(SISystem.ID, "N⋅m", "Newton Metre", (Unit<Torque>) new Newton().multiply(new Metre()), Torque.class);
     }
 }
