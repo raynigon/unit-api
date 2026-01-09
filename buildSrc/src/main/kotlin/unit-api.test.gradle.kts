@@ -20,8 +20,9 @@ tasks.jacocoTestReport {
 
 dependencies {
     testCompileOnly("org.projectlombok:lombok:1.18.32")
-    testImplementation("org.apache.groovy:groovy:4.0.21")
-    testImplementation("org.spockframework:spock-core:2.4-M4-groovy-4.0")
+    testImplementation("org.apache.groovy:groovy:5.0.3")
+    testImplementation("org.spockframework:spock-core:2.4-groovy-5.0")
     testRuntimeOnly("net.bytebuddy:byte-buddy:1.14.13")
     testAnnotationProcessor("org.projectlombok:lombok:1.18.32")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }

@@ -2,20 +2,28 @@ package com.raynigon.unit.api.jackson.helpers
 
 import com.fasterxml.jackson.annotation.ObjectIdGenerator
 import com.fasterxml.jackson.annotation.ObjectIdResolver
-import com.fasterxml.jackson.databind.DeserializationContext
-import com.fasterxml.jackson.databind.JsonDeserializer
-import com.fasterxml.jackson.databind.JsonMappingException
-import com.fasterxml.jackson.databind.KeyDeserializer
-import com.fasterxml.jackson.databind.deser.DeserializerCache
-import com.fasterxml.jackson.databind.deser.DeserializerFactory
-import com.fasterxml.jackson.databind.deser.UnresolvedForwardReference
-import com.fasterxml.jackson.databind.deser.impl.ReadableObjectId
-import com.fasterxml.jackson.databind.introspect.Annotated
+import tools.jackson.databind.DeserializationConfig
+import tools.jackson.databind.DeserializationContext
+import tools.jackson.databind.KeyDeserializer
+import tools.jackson.databind.ValueDeserializer
+import tools.jackson.databind.deser.DeserializerCache
+import tools.jackson.databind.deser.DeserializerFactory
+import tools.jackson.databind.deser.ReadableObjectId
+import tools.jackson.databind.deser.UnresolvedForwardReference
+import tools.jackson.databind.introspect.Annotated
+import tools.jackson.databind.json.JsonMapper
 
 class DummyContext extends DeserializationContext {
 
-    protected DummyContext(DeserializerFactory df) {
-        super(df, new DeserializerCache())
+    public DummyContext(DeserializerFactory df) {
+        super(
+                null,
+                df,
+                new DeserializerCache(),
+                JsonMapper.builder().build().deserializationConfig(),
+                null,
+                null,
+        )
     }
 
     @Override
@@ -29,12 +37,12 @@ class DummyContext extends DeserializationContext {
     }
 
     @Override
-    JsonDeserializer<Object> deserializerInstance(Annotated annotated, Object deserDef) throws JsonMappingException {
+    ValueDeserializer<Object> deserializerInstance(Annotated annotated, Object deserDef) {
         return null
     }
 
     @Override
-    KeyDeserializer keyDeserializerInstance(Annotated annotated, Object deserDef) throws JsonMappingException {
+    KeyDeserializer keyDeserializerInstance(Annotated annotated, Object deserDef) {
         return null
     }
 }

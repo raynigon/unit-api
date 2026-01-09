@@ -1,9 +1,8 @@
 package com.raynigon.unit.api.jackson.deserializer;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.*;
-import com.fasterxml.jackson.databind.deser.ContextualDeserializer;
-import com.fasterxml.jackson.databind.type.TypeBindings;
+import tools.jackson.core.JsonParser;
+import tools.jackson.databind.*;
+import tools.jackson.databind.type.TypeBindings;
 import com.raynigon.unit.api.core.io.QuantityReader;
 import com.raynigon.unit.api.core.service.UnitsApiService;
 import com.raynigon.unit.api.jackson.annotation.JsonQuantityHelper;
@@ -15,15 +14,13 @@ import com.raynigon.unit.api.jackson.config.UnitApiFeature;
 import com.raynigon.unit.api.jackson.deserializer.extractor.NumberExtractor;
 import com.raynigon.unit.api.jackson.deserializer.extractor.ObjectExtractor;
 import com.raynigon.unit.api.jackson.deserializer.extractor.StringExtractor;
-import com.raynigon.unit.api.jackson.exception.UnknownUnitException;
+import com.raynigon.unit.api.jackson.exception.InvalidUnitException;
 
 import javax.measure.Quantity;
 import javax.measure.Unit;
-import java.io.IOException;
 import java.util.Objects;
 
-public class QuantityDeserializer extends JsonDeserializer<Quantity<?>>
-        implements ContextualDeserializer {
+public class QuantityDeserializer extends ValueDeserializer<Quantity<?>> {
 
     private final UnitApiConfig config;
     private final QuantityReader reader;
@@ -41,10 +38,11 @@ public class QuantityDeserializer extends JsonDeserializer<Quantity<?>>
         this.reader = reader;
     }
 
+
     @Override
     @SuppressWarnings({"unchecked", "rawtypes"})
-    public JsonDeserializer<?> createContextual(DeserializationContext ctxt, BeanProperty property)
-            throws JsonMappingException {
+    public ValueDeserializer<?> createContextual(DeserializationContext ctxt, BeanProperty property)
+            throws DatabindException {
         Unit<?> unit = null;
         TypeBindings bindings = property.getType().getBindings();
         JavaType boundType = bindings.getBoundType(0);
@@ -60,7 +58,7 @@ public class QuantityDeserializer extends JsonDeserializer<Quantity<?>>
         if (unitWrapper != null) {
             unit = JsonUnitHelper.getUnitInstance(unitWrapper);
             if (unit == null) {
-                throw new UnknownUnitException(ctxt.getParser(), quantityType);
+                throw new InvalidUnitException(ctxt.getParser(), quantityType);
             }
             return new QuantityDeserializer(config, unit, true, reader);
         }
@@ -69,7 +67,7 @@ public class QuantityDeserializer extends JsonDeserializer<Quantity<?>>
         if (config.isEnabled(UnitApiFeature.SYSTEM_UNIT_ON_MISSING_ANNOTATION)) {
             unit = UnitsApiService.getInstance().getUnit(quantityType);
             if (unit == null) {
-                throw new UnknownUnitException(ctxt.getParser(), quantityType);
+                throw new InvalidUnitException(ctxt.getParser(), quantityType);
             }
             return new QuantityDeserializer(config, unit, false, reader);
         }
@@ -79,12 +77,12 @@ public class QuantityDeserializer extends JsonDeserializer<Quantity<?>>
 
     @Override
     @SuppressWarnings({"unchecked", "rawtypes"})
-    public Quantity<?> deserialize(JsonParser parser, DeserializationContext ctxt) throws IOException {
+    public Quantity<?> deserialize(JsonParser parser, DeserializationContext ctxt) {
 
         // Handle Number, String and Object Tokens
         // and convert them into either a number,
         // or a String containing a Unit
-        int tokenId = parser.getCurrentTokenId();
+        int tokenId = parser.currentTokenId();
         Object value = null;
         if (NumberExtractor.HANDLED_TOKENS.contains(tokenId)) {
             value = NumberExtractor.extract(parser, ctxt);

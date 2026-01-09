@@ -1,6 +1,6 @@
 package com.raynigon.unit.api.jackson.config;
 
-import com.fasterxml.jackson.core.FormatFeature;
+import tools.jackson.core.FormatFeature;
 
 public enum UnitApiFeature implements FormatFeature {
 
