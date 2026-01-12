@@ -1,8 +1,5 @@
 package com.raynigon.unit.api.jpa.annotation;
 
-import static java.lang.annotation.ElementType.FIELD;
-import static java.lang.annotation.ElementType.METHOD;
-
 import com.raynigon.unit.api.core.annotation.QuantityShape;
 import com.raynigon.unit.api.core.units.general.IUnit;
 
@@ -12,7 +9,9 @@ import java.lang.annotation.Target;
 import javax.measure.Quantity;
 import javax.measure.quantity.Volume;
 
-@Target({METHOD, FIELD})
+import static java.lang.annotation.ElementType.*;
+
+@Target({METHOD, FIELD, PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface JpaUnit {
 
