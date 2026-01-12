@@ -1,8 +1,5 @@
 package com.raynigon.unit.api.jackson.annotation;
 
-import static java.lang.annotation.ElementType.FIELD;
-import static java.lang.annotation.ElementType.METHOD;
-
 import com.raynigon.unit.api.core.annotation.QuantityShape;
 import com.raynigon.unit.api.core.units.general.IUnit;
 
@@ -11,7 +8,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target({METHOD, FIELD})
+import static java.lang.annotation.ElementType.*;
+
+@Target({METHOD, FIELD, PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface JsonUnit {
 
