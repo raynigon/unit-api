@@ -3,11 +3,11 @@ plugins {
 }
 
 dependencies {
-    compileOnly 'org.springdoc:springdoc-openapi-webmvc-core:1.8.0'
+    compileOnly 'org.springdoc:springdoc-openapi-starter-common:3.0.1'
     api project(":unit-api-core")
     api project(":unit-api-jackson")
     api project(":unit-api-validation")
     api project(":spring-boot-core-starter")
 
-    testImplementation 'org.springdoc:springdoc-openapi-webmvc-core:1.8.0'
+    testImplementation 'org.springdoc:springdoc-openapi-starter-common:3.0.1'
 }

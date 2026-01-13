@@ -11,7 +11,7 @@ import javax.measure.quantity.Volume;
 
 import static java.lang.annotation.ElementType.*;
 
-@Target({METHOD, FIELD, PARAMETER})
+@Target({FIELD, METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface JpaUnit {
 

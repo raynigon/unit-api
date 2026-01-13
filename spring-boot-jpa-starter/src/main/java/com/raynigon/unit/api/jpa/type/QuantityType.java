@@ -9,9 +9,10 @@ import com.raynigon.unit.api.jpa.annotation.JpaUnitHelper;
 import com.raynigon.unit.api.jpa.cache.CachedQuantity;
 import com.raynigon.unit.api.jpa.exception.MissingUnitAnnotationException;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.type.SqlTypes;
+import org.hibernate.type.descriptor.WrapperOptions;
 import org.hibernate.usertype.DynamicParameterizedType;
+import org.hibernate.usertype.ParameterizedType;
 import org.hibernate.usertype.UserType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -33,7 +34,8 @@ import java.util.stream.Stream;
  * @see javax.measure.Quantity
  */
 @Slf4j
-public class QuantityType implements UserType<Quantity<?>>, DynamicParameterizedType {
+@SuppressWarnings("removal")
+public class QuantityType implements UserType<Quantity<?>>, ParameterizedType, DynamicParameterizedType {
 
     private Unit<?> unit;
 
@@ -48,10 +50,12 @@ public class QuantityType implements UserType<Quantity<?>>, DynamicParameterized
     }
 
     @Override
+    @SuppressWarnings("removal")
     public void setParameterValues(Properties parameters) {
-        String entity = (String) parameters.get(ENTITY);
-        String property = (String) parameters.get(PROPERTY);
-        ParameterType reader = (ParameterType) parameters.get(PARAMETER_TYPE);
+        // Usage of the ParameterType is deprecated but still necessary, since there is no alternative in Hibernate 7
+        String entity = (String) parameters.get(DynamicParameterizedType.ENTITY);
+        String property = (String) parameters.get(DynamicParameterizedType.PROPERTY);
+        DynamicParameterizedType.ParameterType reader = (DynamicParameterizedType.ParameterType) parameters.get(DynamicParameterizedType.PARAMETER_TYPE);
         if (reader == null) throw new IllegalArgumentException("A reader needs to be specified");
         JpaUnit jpaUnit = getJpaUnitAnnotation(reader, entity, property);
         unit = resolveUnit(jpaUnit, entity, property);
@@ -96,11 +100,7 @@ public class QuantityType implements UserType<Quantity<?>>, DynamicParameterized
 
     @Override
     @SuppressWarnings({"unchecked", "rawtypes"})
-    public Quantity<?> nullSafeGet(
-            ResultSet rs, int position,
-            SharedSessionContractImplementor session,
-            Object owner
-    ) throws SQLException {
+    public Quantity<?> nullSafeGet(ResultSet rs, int position, WrapperOptions options) throws SQLException {
         Objects.requireNonNull(unit, "The unit definition is missing");
         if (shape == QuantityShape.NUMBER) {
             double value = rs.getDouble(position);
@@ -124,12 +124,7 @@ public class QuantityType implements UserType<Quantity<?>>, DynamicParameterized
 
     @Override
     @SuppressWarnings({"unchecked", "rawtypes"})
-    public void nullSafeSet(
-            PreparedStatement st,
-            Quantity<?> value,
-            int index,
-            SharedSessionContractImplementor session
-    ) throws SQLException {
+    public void nullSafeSet(PreparedStatement st, Quantity<?> value, int index, WrapperOptions options) throws SQLException {
         Objects.requireNonNull(unit, "The unit definition is missing");
         if (value == null) {
             st.setNull(index, Types.DOUBLE);
@@ -192,7 +187,8 @@ public class QuantityType implements UserType<Quantity<?>>, DynamicParameterized
         }
     }
 
-    private @NotNull JpaUnit getJpaUnitAnnotation(@NotNull ParameterType reader, @NotNull String entity, @NotNull String property) {
+    @SuppressWarnings("removal")
+    private @NotNull JpaUnit getJpaUnitAnnotation(@NotNull DynamicParameterizedType.ParameterType reader, @NotNull String entity, @NotNull String property) {
         return Stream.of(reader.getAnnotationsMethod())
                 .filter(it -> it instanceof JpaUnit)
                 .map(it -> ((JpaUnit) it))
