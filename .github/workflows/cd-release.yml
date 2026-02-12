@@ -113,3 +113,12 @@ jobs:
         env:
           OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+      - name: Create Pull Request
+        continue-on-error: true
+        if: "always()"
+        run: |
+          gh pr create -B main -H release -t 'Release ${{  steps.vars.outputs.tag }}' \
+          -b 'Release ${{ steps.vars.outputs.tag }} on ${{ steps.vars.outputs.date }}' \
+          -r 'raynigon'
+        env:
+          GH_TOKEN: "${{ secrets.BROSE_GITHUB_TOKEN }}"
