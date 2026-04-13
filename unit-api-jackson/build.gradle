@@ -3,8 +3,8 @@ plugins {
 }
 
 dependencies {
-    compileOnly 'tools.jackson.core:jackson-databind:3.1.1'
+    compileOnly 'tools.jackson.core:jackson-databind:3.1.2'
     api project(":unit-api-core")
 
-    testImplementation 'tools.jackson.core:jackson-databind:3.1.1'
+    testImplementation 'tools.jackson.core:jackson-databind:3.1.2'
 }
